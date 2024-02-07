@@ -56,7 +56,7 @@ namespace SaleAdventure3000
                     this.PosY++;
                 }
                 else if (keyInfo.Key == ConsoleKey.LeftArrow ||
-                    keyInfo.Key == ConsoleKey.A)
+                    keyInfo.Key == ConsoleKey.A && PosY < 0)
                 {
                     this.PosY--;
                 }

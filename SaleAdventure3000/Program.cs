@@ -12,7 +12,7 @@ game.DrawGameBoard();
 while (true)
 {
     player.MovePlayer(game.gameBoard, 5, 5);
-    Console.WriteLine($" NPC{npc.Symbol}, HP{npc.HP}, Power{npc.Power}");
+    //Console.WriteLine($" NPC{npc.Symbol}, HP{npc.HP}, Power{npc.Power}");
 }
 
 
