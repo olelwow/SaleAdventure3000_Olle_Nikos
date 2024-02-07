@@ -15,11 +15,9 @@ namespace SaleAdventure3000
         }
         // När man skapar ett spelar-objekt så lägger man även till symbol.
 
-        
-
         public string[,] ChangePosition(string[,] gameBoard, int posX, int posY)
         {
-            gameBoard[posX, posY] = this.Symbol;
+            gameBoard[posX, posY] = Symbol;
             return gameBoard;
         }
         // Denna funktion tar in gameboard samt position och returnerar ett nytt gameboard med spelarens nya position.
