@@ -15,6 +15,7 @@ namespace SaleAdventure3000
         public int HP { get; set; }
         public string? Symbol { get; set; }
 
+        
 
     }
 }
