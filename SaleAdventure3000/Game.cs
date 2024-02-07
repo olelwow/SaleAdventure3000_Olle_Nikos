@@ -11,24 +11,36 @@ namespace SaleAdventure3000
     {
         public Game() { }
 
-        public string[,] gameBoard = new string[10, 10];
+        public string[,] gameBoard = new string[12, 12];
 
 
 
         public void FillGameBoard ()
         {
 
-            for (int i = 0; i < 10; i++)
+            for (int i = 0; i < 12; i++)
             {
-                for (int j = 0; j < 10; j++)
+                for (int j = 0; j < 12; j++)
                 {
-                    this.gameBoard[i, j] = " - ";
+                    if (i == 0 || i == 11)
+                    {
+                        this.gameBoard[i, j] = " _ ";
+                    }
+                    else if (j == 0 || j == 11)
+                    {
+                        this.gameBoard[i, j] = " | ";
+                    }
+                    else
+                    {
+                        this.gameBoard[i, j] = " - ";
+                    }
                 }
             }
-            
+            // Fyller gameBoard
             
             int npcCount = new Random().Next(4, 8);
             NPCs[] npcs = new NPCs[npcCount];
+            // Skapar random antal NPCs
 
             for (int i = 0; i < npcCount; i++)
             {   
@@ -39,9 +51,7 @@ namespace SaleAdventure3000
                 npcs[i].PosY = posY;
                 this.gameBoard[posX, posY] = npcs[i].Symbol;
             }
-
-
-
+            // Initierar dessa NPCs och sätter ut dem på gameBoard.
         }
 
         public void DrawGameBoard()
@@ -55,6 +65,7 @@ namespace SaleAdventure3000
                 }
             }
         }
+        // Ritar upp gameBoard för ett game objekt.
 
         public void DrawGameBoard(string[,] gameBoard)
         {
@@ -67,7 +78,6 @@ namespace SaleAdventure3000
                 }
             }
         }
-
-
+        // Ritar upp det gameBoard som man angett som parameter.
     }
 }
