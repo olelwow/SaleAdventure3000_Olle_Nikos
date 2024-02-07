@@ -23,7 +23,7 @@ namespace SaleAdventure3000
         
         public NPCs ()
         {
-            this.Symbol = symbols[randomSymbol];
+            this.Symbol = symbols[randomThing];
             this.HP = NPCProperties[this.Symbol].ElementAt(0);
             this.Power = NPCProperties[this.Symbol].ElementAt(1);
             this.Name = names[randomThing];
