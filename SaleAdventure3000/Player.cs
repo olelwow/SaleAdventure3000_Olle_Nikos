@@ -14,11 +14,9 @@ namespace SaleAdventure3000
             this.Symbol = Symbol;
         }
 
-        
-
         public string[,] ChangePosition(string[,] gameBoard, int posX, int posY)
         {
-            gameBoard[posX, posY] = this.Symbol;
+            gameBoard[posX, posY] = Symbol;
             return gameBoard;
         }
 
@@ -48,12 +46,12 @@ namespace SaleAdventure3000
                 {
                     this.PosX++;
                 }
-                else if (keyInfo.Key == ConsoleKey.LeftArrow ||
+                else if (keyInfo.Key == ConsoleKey.RightArrow ||
                     keyInfo.Key == ConsoleKey.D)
                 {
                     this.PosY++;
                 }
-                else if (keyInfo.Key == ConsoleKey.RightArrow ||
+                else if (keyInfo.Key == ConsoleKey.LeftArrow ||
                     keyInfo.Key == ConsoleKey.A)
                 {
                     this.PosY--;
