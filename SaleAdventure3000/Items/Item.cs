@@ -7,11 +7,14 @@ using SaleAdventure3000.Entities;
 
 namespace SaleAdventure3000.Items
 {
-    internal class Item : Entity
+    public class Item : Entity
     {
         public Item() { }
         public int HealAmount { get; set; }
         public int PowerAdded { get; set; }
         public int HpBoost { get; set; }
+        public bool Wear {  get; set; }
+
+        
     }
 }

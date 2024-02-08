@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 
 namespace SaleAdventure3000.Entities
 {
-    internal class Creature : Entity
+    public class Creature : Entity
     {
         public Creature() { }
         public int HP { get; set; }

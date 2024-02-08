@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 
 namespace SaleAdventure3000.Entities
 {
-    internal class NPC : Creature
+    public class NPC : Creature
     {
         string[] symbols = [" * ", " @ ", " # ", " & ", " £ "];
         string[] names = ["Ragnar", "Klasse", "Nikos", "Olle", "Jonas"];
