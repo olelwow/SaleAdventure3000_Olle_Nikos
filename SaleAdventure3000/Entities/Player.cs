@@ -16,6 +16,8 @@ namespace SaleAdventure3000.Entities
         }
         // När man skapar ett spelar-objekt så lägger man även till symbol.
 
+        public bool Quit = true;
+
         private Dictionary<string, int> bag = new Dictionary<string, int>();
         // Spelarens väska, lagrar föremåls namn som key
         // och value indikerar ifall det är en consumable eller wearable.
@@ -44,25 +46,26 @@ namespace SaleAdventure3000.Entities
                 // Ersätter spelarens gamla position med ett -
                 if (keyInfo.Key == ConsoleKey.Q)
                 {
+                    this.Quit = false;
                     break;
                 }
-                else if (keyInfo.Key == ConsoleKey.UpArrow ||
-                    keyInfo.Key == ConsoleKey.W)
+                else if ((keyInfo.Key == ConsoleKey.UpArrow ||
+                    keyInfo.Key == ConsoleKey.W) && PosX > 1)
                 {
                     PosX--;
                 }
-                else if (keyInfo.Key == ConsoleKey.DownArrow ||
-                    keyInfo.Key == ConsoleKey.S)
+                else if ((keyInfo.Key == ConsoleKey.DownArrow ||
+                    keyInfo.Key == ConsoleKey.S) && PosX < 10)
                 {
                     PosX++;
                 }
-                else if (keyInfo.Key == ConsoleKey.RightArrow ||
-                    keyInfo.Key == ConsoleKey.D)
+                else if ((keyInfo.Key == ConsoleKey.RightArrow ||
+                    keyInfo.Key == ConsoleKey.D) && PosY < 10)
                 {
                     PosY++;
                 }
-                else if (keyInfo.Key == ConsoleKey.LeftArrow ||
-                    keyInfo.Key == ConsoleKey.A && PosY < 0)
+                else if ((keyInfo.Key == ConsoleKey.LeftArrow ||
+                    keyInfo.Key == ConsoleKey.A) && PosY > 1)
                 {
                     PosY--;
                 }
