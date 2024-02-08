@@ -4,9 +4,9 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace SaleAdventure3000
+namespace SaleAdventure3000.Entities
 {
-    internal class NPCs : Creature
+    internal class NPC : Creature
     {
         string[] symbols = [" * ", " @ ", " # ", " & ", " £ "];
         string[] names = ["Ragnar", "Klasse", "Nikos", "Olle", "Jonas"];
@@ -18,15 +18,16 @@ namespace SaleAdventure3000
             {" # ", [150, 7]},
             {" & ", [60, 15]},
             {" £ ", [30, 5] }
+            // Siffrorna i arrayen representerar HP och Power.
 
         };
-        
-        public NPCs ()
+
+        public NPC()
         {
-            this.Symbol = symbols[randomThing];
-            this.HP = NPCProperties[this.Symbol].ElementAt(0);
-            this.Power = NPCProperties[this.Symbol].ElementAt(1);
-            this.Name = names[randomThing];
+            Symbol = symbols[randomThing];
+            HP = NPCProperties[Symbol].ElementAt(0);
+            Power = NPCProperties[Symbol].ElementAt(1);
+            Name = names[randomThing];
         }
     }
 }

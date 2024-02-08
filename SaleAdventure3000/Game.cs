@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using SaleAdventure3000.Entities;
 
 
 namespace SaleAdventure3000
@@ -39,14 +40,14 @@ namespace SaleAdventure3000
             // Fyller gameBoard
             
             int npcCount = new Random().Next(4, 8);
-            NPCs[] npcs = new NPCs[npcCount];
+            NPC[] npcs = new NPC[npcCount];
             // Skapar random antal NPCs
 
             for (int i = 0; i < npcCount; i++)
             {   
                 int posX = new Random().Next(1, 10);
                 int posY = new Random().Next(1, 10);
-                npcs[i] = new NPCs();
+                npcs[i] = new NPC();
                 npcs[i].PosX = posX;
                 npcs[i].PosY = posY;
                 this.gameBoard[posX, posY] = npcs[i].Symbol;

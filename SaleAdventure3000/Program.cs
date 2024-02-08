@@ -1,8 +1,8 @@
 ﻿using SaleAdventure3000;
+using SaleAdventure3000.Entities;
 
 Game game = new Game();
 Player player = new Player(" 0 ");
-NPCs npc = new NPCs();
 
 game.FillGameBoard();
 game.DrawGameBoard();
