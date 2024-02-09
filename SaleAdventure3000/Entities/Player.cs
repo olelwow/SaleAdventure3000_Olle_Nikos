@@ -11,16 +11,17 @@ namespace SaleAdventure3000.Entities
 {
     internal class Player : Creature
     {
-        public Player(string Symbol)
+        public Player(string symbol, string name)
         {
-            this.Symbol = Symbol;
+            this.Symbol = symbol;
+            this.Name = name;
             this.HP = 100;
             this.Power = 15;
         }
-        // När man skapar ett spelar-objekt så lägger man även till symbol.
+        // När man skapar ett spelar-objekt så lägger man även till symbol och namn.
 
         public bool Quit = true;
-        private Dictionary<string, int> Bag = new Dictionary<string, int>();
+        private Dictionary<Item, int> Bag = new Dictionary<Item, int>();
 
         // Spelarens väska, lagrar föremåls namn som key
         // och value indikerar ifall det är en consumable eller wearable.
@@ -39,8 +40,9 @@ namespace SaleAdventure3000.Entities
 
             PosX = firstX;
             PosY = firstY;
-            gameBoard[PosX, PosY] = Symbol;
+            gameBoard[PosX, PosY] = player.Symbol;
             // Startposition för spelaren anges när metoden anropas.
+            
 
             while (true)
             {
@@ -80,7 +82,7 @@ namespace SaleAdventure3000.Entities
                 gameBoard = ChangePosition(gameBoard, PosX, PosY);
 
 
-                DrawGameBoard(gameBoard);
+                game.DrawGameBoard(gameBoard);
                 // Ändrar spelarens position och ritar upp gameBoard igen.
 
 
@@ -112,7 +114,7 @@ namespace SaleAdventure3000.Entities
                         if (gameBoard[PosX, PosY] == consumables.Symbol)
                             //kontrolleras om player träffas en specifik symbol från denna array.
                         {
-                            PickUp();
+                            PickUp(consumables, player);
                             break;
                         }
                     }
@@ -136,19 +138,29 @@ namespace SaleAdventure3000.Entities
             }
         }
 
-        public void PickUp ()
+        public void PickUp (Consumable item, Player player)
         {
-            Console.WriteLine("Picked up");
+            Console.WriteLine($"{player.Name} picked up a {item.Name}");
+            if (!Bag.ContainsKey(item)) 
+            {
+                Bag.Add(item, 1);
+            }
+            else
+            {
+                Bag[item]++;
+            }
+            
         }
 
         public void Encounter (NPC npc, Player player)
         {
-            Console.WriteLine(npc.Power);
+            
             bool run = true;
 
             while (run)
             {
-                if(player.HP < 1) 
+                
+                if (player.HP < 1) 
                 {
                     Console.WriteLine($"Player died and npc has {npc.HP} left.");
                     run = false;
@@ -163,11 +175,13 @@ namespace SaleAdventure3000.Entities
                 else
                 {
                     Console.Clear();
+                    Console.WriteLine($"{player.Name}:{player.HP}HP VERSUS {npc.Name}:{npc.HP}HP \n");
                     //Spelaren kan välja mellan 3 olika alt
                     Console.WriteLine("What do you want to do? \n" +
                         "1. Punch \n" +
                         "2. Block \n" +
-                        "3. Escape");
+                        "3. Escape \n" +
+                        "4. Use item");
                     bool successfulInput = Int32.TryParse(Console.ReadLine(), out int choice);
                     int computerChoice = new Random().Next(1, 4);
                     switch (choice)
@@ -193,6 +207,32 @@ namespace SaleAdventure3000.Entities
                             Console.ReadLine();
                             run = false;
                                 break;
+                        case 4:
+                            
+                            foreach (var item in Bag)
+                            {
+                                Console.WriteLine($"{item.Key.Name} {item.Value}");
+                            }
+                            Console.WriteLine("Which item do you want to use?");
+                            string consumableChoice = Console.ReadLine();
+                            foreach (var item in Bag)
+                            {
+                                if (consumableChoice == item.Key.Name)
+                                {
+                                    Console.WriteLine($"{player.Name} ate {item.Key.Name}. It healed {item.Key.HealAmount}HP.");
+                                    player.HP += item.Key.HealAmount;
+                                    Console.ReadLine();
+                                }
+                                else
+                                {
+                                    Console.WriteLine("You don't have that item.");
+                                }
+                            }
+
+                            
+
+
+                            break;
                     }
 
                     //NPCs tur att agera mot spelaren
