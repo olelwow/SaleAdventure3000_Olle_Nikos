@@ -4,7 +4,10 @@ using SaleAdventure3000.Items;
 using System.Runtime.CompilerServices;
 
 Game game = new Game();
-Player player = new Player(" 0 ");
+Console.WriteLine("What is your name?");
+string name = Console.ReadLine();
+Player player = new Player(" 0 ", name);
+
 
 //Consumable consumable = new Consumable();
 //Wearable item = new Wearable();

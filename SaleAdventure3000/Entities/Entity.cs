@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 
 namespace SaleAdventure3000.Entities
 {
-    public class Entity : Game
+    public class Entity
     {
         public int PosX { get; set; }
         public int PosY { get; set; }
