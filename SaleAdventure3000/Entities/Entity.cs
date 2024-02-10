@@ -1,4 +1,5 @@
-﻿using System;
+﻿using SaleAdventure3000.Items;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -12,6 +13,7 @@ namespace SaleAdventure3000.Entities
         public int PosY { get; set; }
         public string? Symbol { get; set; }
         public string? Name { get; set; }
-        
+
+
     }
 }

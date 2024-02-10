@@ -10,7 +10,7 @@ namespace SaleAdventure3000.Entities
     public class Grid
     {
         public Entity[,] gridBoard = new Entity[12, 12];
-        public static int itemsCount = new Random().Next(1, 4);
+        public static int itemsCount = new Random().Next(2, 4);
         public static int npcCount = new Random().Next(4, 8);
         public NPC[] npcs = new NPC[npcCount];
         public Wearable[] wears = new Wearable[itemsCount];
