@@ -33,22 +33,21 @@ namespace SaleAdventure3000.Items
         
         public override void OnPickup (Consumable item, Player player)
         {
-            
-                Console.WriteLine($"{player.Name} picked up a {item.Name}");
-                if (!player.Bag.ContainsKey(item))
-                {
-                    //item.Amount
-                    player.Bag.Add(item, item.Amount);
-                }
-                else
-                {
-                    //player.Bag.Add(item, 1);
-                    player.Bag[item]++;
-                    // FIXA DETTA, IDIOT!
-                }
-            
-            
+            Console.WriteLine($"{player.Name} picked up a {item.Name}");
+
+            if (!player.Bag.ContainsKey(item))
+            {
+                player.Bag.Add(item, item.Amount);
+            }
+            else 
+            {
+                player.Bag[item]++;
+                // Löste problemet här genom att lägga till en override metod i klassen Item.
+                // Eftersom två objekt inte betraktas som lika även om de har samma namn, stats osv
+                // så blev det en ny rad i vilket fall. Kör man override på metoden Equals så kommer
+                // den att betrakta två objekt som likadana ifall de har samma Name.
+                
+            }
         }
-        
     }
 }

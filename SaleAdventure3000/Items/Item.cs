@@ -21,7 +21,26 @@ namespace SaleAdventure3000.Items
         public virtual void OnPickup(Consumable c, Player p) 
         { 
         }
+        public override bool Equals(object? obj)
+        {
+            if (obj == null || GetType() != obj.GetType())
+            {
+                return false;
+            }
 
-        
+            Item other = (Item)obj;
+            return Name == other.Name;
+        }
+
+        public override int GetHashCode()
+        {
+            if (Name != null)
+            {
+                return Name.GetHashCode();
+            }
+            return -1;
+        }
+
+
     }
 }

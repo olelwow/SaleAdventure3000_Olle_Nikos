@@ -85,7 +85,7 @@ namespace SaleAdventure3000.Entities
         private void ControllCollision(Entity[,] gameBoard, Player player, Grid grid)
         {
             //Samlas en lista av objekt 
-            List<Object[]> entities = new List<Object[]>()
+            List<Entity[]> entities = new List<Entity[]>()
             {
                 {grid.npcs },
                 {grid.wears },
@@ -94,7 +94,7 @@ namespace SaleAdventure3000.Entities
 
             for (int i = 0; i < entities.Count; i++)
             {
-                Object[] entityArray = entities[i];
+                Entity[] entityArray = entities[i];
                 // array som skrivs över vid varje varv, tar en array i taget från listan entities.
 
                 for (int j = 0; j < entityArray.Length; j++)
