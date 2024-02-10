@@ -11,39 +11,32 @@ namespace SaleAdventure3000.Entities
 {
     internal class Player : Creature
     {
-        public Player(string symbol, string name)
+        public bool Quit = true;
+        private Dictionary<Item, int> Bag = new Dictionary<Item, int>();
+        // Spelarens väska, lagrar objektet som key
+        // och value indikerar antal av detta objekt som spelaren har i väskan.
+        // Satt till Private eftersom endast spelarobjektet behöver ha koll på väskan.
+        public Player(string name)
         {
-            this.Symbol = symbol;
+            this.Symbol = " 0 ";
             this.Name = name;
             this.HP = 100;
             this.Power = 15;
         }
         // När man skapar ett spelar-objekt så lägger man även till symbol och namn.
-
-        public bool Quit = true;
-        private Dictionary<Item, int> Bag = new Dictionary<Item, int>();
-
-        // Spelarens väska, lagrar föremåls namn som key
-        // och value indikerar ifall det är en consumable eller wearable.
-
-        public string[,] ChangePosition(string[,] gameBoard, int posX, int posY)
+        public string[,] ChangePosition(string[,] gameBoard, Player player)
         {
-            gameBoard[posX, posY] = Symbol;
+            gameBoard[player.PosX, player.PosY] = player.Symbol;
             return gameBoard;
         }
-        
         // Denna funktion tar in gameboard samt position,
         // och returnerar ett nytt gameboard med spelarens nya position.
-
         public void MovePlayer(string[,] gameBoard, int firstX, int firstY, Player player, Game game)
         {
-
-            PosX = firstX;
-            PosY = firstY;
+            player.PosX = firstX;
+            player.PosY = firstY;
             gameBoard[PosX, PosY] = player.Symbol;
             // Startposition för spelaren anges när metoden anropas.
-            
-
             while (true)
             {
                 ConsoleKeyInfo keyInfo = Console.ReadKey(true);
@@ -52,8 +45,12 @@ namespace SaleAdventure3000.Entities
                 // Ersätter spelarens gamla position med ett -
                 if (keyInfo.Key == ConsoleKey.Q)
                 {
-                    this.Quit = false;
+                    player.Quit = false;
                     break;
+                }
+                else if (keyInfo.Key == ConsoleKey.B)
+                {
+                    OpenBag(keyInfo, player);
                 }
                 else if ((keyInfo.Key == ConsoleKey.UpArrow ||
                     keyInfo.Key == ConsoleKey.W) && PosX > 1)
@@ -75,23 +72,17 @@ namespace SaleAdventure3000.Entities
                 {
                     PosY--;
                 }
+                ControllCollision(gameBoard, player, game);
+                // Tar endast in player objektet istället för PosX, PosY 
+                // Eftersom man kommer åt dessa genom player. Samma för ChangePosition.
 
-                ControllCollision(gameBoard, PosX, PosY, player, game);
-
-
-                gameBoard = ChangePosition(gameBoard, PosX, PosY);
-
-
+                gameBoard = ChangePosition(gameBoard, player);
                 game.DrawGameBoard(gameBoard);
                 // Ändrar spelarens position och ritar upp gameBoard igen.
-
-
             }
         }
-
-        public void ControllCollision(string[,] gameBoard, int PosX, int PosY, Player player, Game game)
+        public void ControllCollision(string[,] gameBoard, Player player, Game game)
         {
-            
             //Samlas en lista av objekt 
             List<Object[]> entities = new List<Object[]>()
             {
@@ -99,7 +90,6 @@ namespace SaleAdventure3000.Entities
                 {game.wears },
                 {game.consumables }
             };
-
 
             for (int i = 0; i < entities.Count; i++)
             {
@@ -111,7 +101,7 @@ namespace SaleAdventure3000.Entities
                     if (entityArray[j] is Consumable consumables) 
                         // Kontroll som kollar vilken typ den nuvarande arrayen är av.
                     {
-                        if (gameBoard[PosX, PosY] == consumables.Symbol)
+                        if (gameBoard[player.PosX, player.PosY] == consumables.Symbol)
                             //kontrolleras om player träffas en specifik symbol från denna array.
                         {
                             PickUp(consumables, player);
@@ -120,15 +110,15 @@ namespace SaleAdventure3000.Entities
                     }
                     else if (entityArray[j] is Wearable wears)
                     {
-                        if (gameBoard[PosX, PosY] == wears.Symbol)
+                        if (gameBoard[player.PosX, player.PosY] == wears.Symbol)
                         {
-                            Wear();
+                            Wear(wears, player);
                             break;
                         }
                     }
                     else if (entityArray[j] is NPC npcs)
                     {
-                        if (gameBoard[PosX, PosY] == npcs.Symbol)
+                        if (gameBoard[player.PosX, player.PosY] == npcs.Symbol)
                         {
                             Encounter(npcs, player);
                             break;
@@ -137,13 +127,12 @@ namespace SaleAdventure3000.Entities
                 }
             }
         }
-
         public void PickUp (Consumable item, Player player)
         {
             Console.WriteLine($"{player.Name} picked up a {item.Name}");
             if (!Bag.ContainsKey(item)) 
             {
-                Bag.Add(item, 1);
+                Bag.Add(item, item.Amount);
             }
             else
             {
@@ -151,31 +140,33 @@ namespace SaleAdventure3000.Entities
             }
             
         }
-
         public void Encounter (NPC npc, Player player)
         {
-            
             bool run = true;
 
             while (run)
             {
-                
                 if (player.HP < 1) 
                 {
-                    Console.WriteLine($"Player died and npc has {npc.HP} left.");
+                    player.HP = 0;
+                    Console.WriteLine($"{player.Name} died and {npc.Name} has {npc.HP} left.");
                     run = false;
                     break;
                 }
                 else if (npc.HP < 1)
                 {
-                    Console.WriteLine($"NPC died and player has {player.HP} left.");
+                    npc.HP = 0;
+                    Console.WriteLine($"{npc.Name} died and player has {player.HP} left.");
                     run = false;
                     break;
                 }
                 else
                 {
                     Console.Clear();
-                    Console.WriteLine($"{player.Name}:{player.HP}HP VERSUS {npc.Name}:{npc.HP}HP \n");
+                    Console.WriteLine(
+                        $"{player.Name}:{player.HP}HP VERSUS " +
+                        $"{npc.Name}:{npc.HP}HP \n");
+
                     //Spelaren kan välja mellan 3 olika alt
                     Console.WriteLine("What do you want to do? \n" +
                         "1. Punch \n" +
@@ -189,24 +180,32 @@ namespace SaleAdventure3000.Entities
                         case 1:
                             if (computerChoice == 2)
                             {
-                                Console.WriteLine($"NPC blocks the attack! NPC HP: {npc.HP}, player HP: {player.HP}");
+                                Console.WriteLine(
+                                    $"{npc.Name} blocks the attack! " +
+                                    $"{player.Name} HP: {player.HP}, " +
+                                    $"{npc.Name} HP: {npc.HP}");
                             }
                             else
                             {
-                                Console.WriteLine($"Player attacks with {player.Power} power");
+                                Console.WriteLine($"{player.Name} attacks with {player.Power} power");
                                 npc.HP -= player.Power;
-                                Console.WriteLine($"NPCs HP är: {npc.HP}, player HP: {player.HP} !");
+                                Console.WriteLine(
+                                    $"{player.Name}s HP: {player.HP}," +
+                                    $" {npc.Name} HP:{npc.HP}!");
                             }
                             Console.ReadLine();
-                            break;
-                        case 2: Console.WriteLine($"Player blocks the NPCs attack!");
+                        break;
+
+                        case 2: Console.WriteLine($"{player.Name} blocks {npc.Name}'s attack!");
                             Console.ReadLine();
-                                break;
+                        break;
+
                         case 3:
-                            Console.WriteLine("Player runs for his life...");
+                            Console.WriteLine($"{player.Name} runs for his life...");
                             Console.ReadLine();
                             run = false;
-                                break;
+                        break;
+
                         case 4:
                             
                             foreach (var item in Bag)
@@ -214,71 +213,121 @@ namespace SaleAdventure3000.Entities
                                 Console.WriteLine($"{item.Key.Name} {item.Value}");
                             }
                             Console.WriteLine("Which item do you want to use?");
-                            string consumableChoice = Console.ReadLine();
+                            // Skriver ut en lista av items man har i Bag.
+                            string? consumableChoice = Console.ReadLine();
+                            // Kollar sedan igenom Bag igen, och ifall input matchar
+                            // något som finns i Bag så används detta item. Ifall man har fler än två
+                            // så minskar antalet med ett.
                             foreach (var item in Bag)
                             {
                                 if (consumableChoice == item.Key.Name)
                                 {
-                                    Console.WriteLine($"{player.Name} ate {item.Key.Name}. It healed {item.Key.HealAmount}HP.");
+                                    Console.WriteLine(
+                                        $"{player.Name} ate {item.Key.Name}. " +
+                                        $"It healed {item.Key.HealAmount}HP.");
                                     player.HP += item.Key.HealAmount;
+                                    if (item.Value == 1)
+                                    {
+                                        Bag.Remove(item.Key);
+                                    }
+                                    else
+                                    {
+                                        Bag[item.Key]--;
+                                    }
                                     Console.ReadLine();
                                 }
                                 else
                                 {
-                                    Console.WriteLine("You don't have that item.");
+                                    Console.WriteLine($"You don't have any {consumableChoice} in your bag.");
                                 }
                             }
-
-                            
-
-
-                            break;
+                        break;
                     }
-
                     //NPCs tur att agera mot spelaren
-
                     switch (computerChoice)
                     {
                         case 1:
                             if (choice == 2)
                             {
-                                Console.WriteLine($"Player blocks the attack! NPC HP: {npc.HP}, player HP: {player.HP}");
+                                Console.WriteLine(
+                                    $"{player.Name} blocks the attack! " +
+                                    $"{player.Name} HP: {player.HP}, " +
+                                    $"{npc.Name} HP: {npc.HP}");
                             }
                             else
                             {
-                                Console.WriteLine($"NPC attacks with {npc.Power} power");
+                                Console.WriteLine($"{npc.Name} attacks with {npc.Power} power");
                                 player.HP -= npc.Power;
-                                Console.WriteLine($"NPCs HP är: {npc.HP}, player HP: {player.HP} !");
+                                Console.WriteLine(
+                                    $"{player.Name} HP: {player.HP}," +
+                                    $" {npc.Name} HP: {npc.HP}!");
                                 Console.ReadLine();
                             }
-                            break;
+                        break;
+
                         case 2:
-                            Console.WriteLine($"NPC blocks the attack! NPC HP: {npc.HP}, player HP: {player.HP}");
-                            break;
+                            Console.WriteLine(
+                                $"{npc.Name} blocks the attack! " +
+                                $"{player.Name} HP: {player.HP}, " +
+                                $"{npc.Name} HP: {npc.HP}");
+                        break;
+
                         case 3:
                             if (npc.HP < (npc.HP * 0.1))
                             {
-                                Console.WriteLine("NPC runs for his life...");
+                                Console.WriteLine($"{npc.Name} runs for his life...");
                                 run = false;
                             }
-                            break;
+                        break;
                     }
-
                 }
-
+            }
+        }
+        public void OpenBag (ConsoleKeyInfo keyInfo, Player player)
+        {
+            Console.WriteLine("ITEM       HEALAMOUNT     AMOUNT");
+            string[] spacerArray = ["     ", "        ", "             "];
+            foreach (var item in player.Bag)
+            {
+                if (item.Key.Name.Length == 3)
+                {
+                    Console.WriteLine(
+                        $"{item.Key.Name}{spacerArray[1]}" +
+                        $"{item.Key.HealAmount}{spacerArray[2]}{item.Value}");
+                }
+                else
+                {
+                    Console.WriteLine(
+                        $"{item.Key.Name}{spacerArray[0]}" +
+                        $"{item.Key.HealAmount}{spacerArray[2]}{item.Value}");
+                }
             }
 
+            if (keyInfo.Key == ConsoleKey.B)
+            {
+                CloseBag();
+            }
+            else
+            {
+                Console.ReadLine();
+            }
+        }
+        public void CloseBag ()
+        {
 
         }
-
         public void Consume ()
         {
 
         }
-
-        public void Wear ()
+        public void Wear (Wearable wears, Player player)
         {
-            Console.WriteLine("Wearing");
+            Console.WriteLine
+                ($"{player.Name} is now wearing {wears.Name}" +
+                $" which gives {wears.PowerAdded} power and " +
+                $"{wears.HpBoost} additional HP.");
+            player.HP += wears.HpBoost;
+            player.Power += wears.PowerAdded;
         }
     }
 }
