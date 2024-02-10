@@ -14,7 +14,5 @@ namespace SaleAdventure3000.Items
         public int PowerAdded { get; set; }
         public int HpBoost { get; set; }
         public bool Wear {  get; set; }
-
-        
     }
 }

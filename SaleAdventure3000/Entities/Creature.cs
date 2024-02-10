@@ -11,10 +11,5 @@ namespace SaleAdventure3000.Entities
         public Creature() { }
         public int HP { get; set; }
         public int Power { get; set; }
-
-        
-
-
-
     }
 }

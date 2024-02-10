@@ -21,9 +21,41 @@ namespace SaleAdventure3000
         public Consumable[] consumables = new Consumable[itemsCount];
 
         // Skapar random antal NPCs och föremål
+        public void StartGame ()
+        {
+            Console.WriteLine("What is your name, adventurer?");
+            string? chosenName = Console.ReadLine();
 
+            while (chosenName == null || chosenName.Length < 3)
+            {
+                Console.WriteLine("Invalid name, must be at least 3 character long.");
+                Console.WriteLine("What is your name, adventurer?");
+                chosenName = Console.ReadLine();
+            }
 
-        public void FillGameBoard ()
+            Player player = new Player(chosenName);
+            // Skapar nytt player objekt med det valda namnet, måste vara minst 3 tecken.
+            int randomStartLocationX = new Random().Next(1,10);
+            int randomStartLocationY = new Random().Next(1,10);
+            // Ger spelaren en random startposition på gameBoard.
+
+            FillGameBoard();
+            DrawGameBoard();
+            // Fyller gameBoard, initierar random NPCs och items och ritar upp gameBoard.
+
+            while (player.Quit)
+            {
+                player.MovePlayer
+                    (this.gameBoard,
+                     randomStartLocationX,
+                     randomStartLocationY,
+                     player,
+                     this
+                     );
+            }
+        }
+
+        private void FillGameBoard ()
         {
 
             for (int i = 0; i < 12; i++)
@@ -77,7 +109,7 @@ namespace SaleAdventure3000
             }
         }
 
-        public void DrawGameBoard()
+        private void DrawGameBoard()
         {
             for (int i = 0; i < this.gameBoard.GetLength(0); i++)
             {
@@ -88,8 +120,8 @@ namespace SaleAdventure3000
                 }
             }
         }
-        // Ritar upp gameBoard för ett game objekt.
-
+        // Ritar upp gameBoard för ett game objekt, private eftersom denna endast används
+        // Vid start av spelet.
         public void DrawGameBoard(string[,] gameBoard)
         {
             for (int i = 0; i < gameBoard.GetLength(0); i++)
@@ -101,6 +133,7 @@ namespace SaleAdventure3000
                 }
             }
         }
-        // Ritar upp det gameBoard som man angett som parameter.
+        // Ritar upp det gameBoard som man angett som parameter, public eftersom denna 
+        // metod ska användas i player objektet.
     }
 }
