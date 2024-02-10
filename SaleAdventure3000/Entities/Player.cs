@@ -9,10 +9,10 @@ using SaleAdventure3000.Items;
 
 namespace SaleAdventure3000.Entities
 {
-    internal class Player : Creature
+    public class Player : Creature
     {
         public bool Quit = true;
-        private Dictionary<Item, int> Bag = new Dictionary<Item, int>();
+        public Dictionary<Item, int> Bag = new Dictionary<Item, int>();
         // Spelarens väska, lagrar objektet som key
         // och value indikerar antal av detta objekt som spelaren har i väskan.
         // Satt till Private eftersom endast spelarobjektet behöver ha koll på väskan.
@@ -24,24 +24,24 @@ namespace SaleAdventure3000.Entities
             this.Power = 15;
         }
         // När man skapar ett spelar-objekt så lägger man även till symbol och namn.
-        public string[,] ChangePosition(string[,] gameBoard, Player player)
+        private object[,] ChangePosition(Entity[,] gameBoard, Player player)
         {
-            gameBoard[player.PosX, player.PosY] = player.Symbol;
+            gameBoard[player.PosX, player.PosY] = player;
             return gameBoard;
         }
         // Denna funktion tar in gameboard samt position,
         // och returnerar ett nytt gameboard med spelarens nya position.
-        public void MovePlayer(string[,] gameBoard, int firstX, int firstY, Player player, Game game)
+        public void MovePlayer(Entity[,] gameBoard, int firstX, int firstY, Player player, Grid grid)
         {
             player.PosX = firstX;
             player.PosY = firstY;
-            gameBoard[PosX, PosY] = player.Symbol;
+            gameBoard[PosX, PosY] = player;
             // Startposition för spelaren anges när metoden anropas.
             while (true)
             {
                 ConsoleKeyInfo keyInfo = Console.ReadKey(true);
                 Console.Clear();
-                gameBoard[PosX, PosY] = " - ";
+                gameBoard[PosX, PosY] = new Entity() { Symbol = " - "};
                 // Ersätter spelarens gamla position med ett -
                 if (keyInfo.Key == ConsoleKey.Q)
                 {
@@ -72,23 +72,24 @@ namespace SaleAdventure3000.Entities
                 {
                     PosY--;
                 }
-                ControllCollision(gameBoard, player, game);
+
+                ControllCollision(gameBoard, player, grid);
                 // Tar endast in player objektet istället för PosX, PosY 
                 // Eftersom man kommer åt dessa genom player. Samma för ChangePosition.
 
-                gameBoard = ChangePosition(gameBoard, player);
-                game.DrawGameBoard(gameBoard);
+                gameBoard = (Entity[,])ChangePosition(gameBoard, player);
+                grid.DrawGridBoard(gameBoard);
                 // Ändrar spelarens position och ritar upp gameBoard igen.
             }
         }
-        public void ControllCollision(string[,] gameBoard, Player player, Game game)
+        private void ControllCollision(Entity[,] gameBoard, Player player, Grid grid)
         {
             //Samlas en lista av objekt 
             List<Object[]> entities = new List<Object[]>()
             {
-                {game.npcs },
-                {game.wears },
-                {game.consumables }
+                {grid.npcs },
+                {grid.wears },
+                {grid.consumables }
             };
 
             for (int i = 0; i < entities.Count; i++)
@@ -101,24 +102,24 @@ namespace SaleAdventure3000.Entities
                     if (entityArray[j] is Consumable consumables) 
                         // Kontroll som kollar vilken typ den nuvarande arrayen är av.
                     {
-                        if (gameBoard[player.PosX, player.PosY] == consumables.Symbol)
+                        if (gameBoard[player.PosX, player.PosY] == consumables)
                             //kontrolleras om player träffas en specifik symbol från denna array.
                         {
-                            PickUp(consumables, player);
+                            consumables.OnPickup(consumables, player);
                             break;
                         }
                     }
                     else if (entityArray[j] is Wearable wears)
                     {
-                        if (gameBoard[player.PosX, player.PosY] == wears.Symbol)
+                        if (gameBoard[player.PosX, player.PosY] == wears)
                         {
-                            Wear(wears, player);
+                            wears.OnPickup(wears, player);
                             break;
                         }
                     }
                     else if (entityArray[j] is NPC npcs)
                     {
-                        if (gameBoard[player.PosX, player.PosY] == npcs.Symbol)
+                        if (gameBoard[player.PosX, player.PosY] == npcs)
                         {
                             Encounter(npcs, player);
                             break;
@@ -127,19 +128,19 @@ namespace SaleAdventure3000.Entities
                 }
             }
         }
-        public void PickUp (Consumable item, Player player)
-        {
-            Console.WriteLine($"{player.Name} picked up a {item.Name}");
-            if (!Bag.ContainsKey(item)) 
-            {
-                Bag.Add(item, item.Amount);
-            }
-            else
-            {
-                Bag[item]++;
-            }
-            
-        }
+        //public void PickUp (Consumable item, Player player)
+        //{
+        //    Console.WriteLine($"{player.Name} picked up a {item.Name}");
+        //    if (!Bag.ContainsKey(item)) 
+        //    {
+        //        Bag.Add(item, item.Amount);
+        //    }
+        //    else
+        //    {
+        //        Bag[item]++;
+        //    }
+        //}
+
         public void Encounter (NPC npc, Player player)
         {
             bool run = true;
@@ -229,16 +230,22 @@ namespace SaleAdventure3000.Entities
                                     if (item.Value == 1)
                                     {
                                         Bag.Remove(item.Key);
+                                        Console.ReadLine();
+                                        break;
                                     }
                                     else
                                     {
                                         Bag[item.Key]--;
+                                        Console.ReadLine();
+                                        break;
                                     }
-                                    Console.ReadLine();
+                                    
                                 }
-                                else
+                                else if (!Bag.ContainsKey(item.Key))
                                 {
                                     Console.WriteLine($"You don't have any {consumableChoice} in your bag.");
+                                    Console.ReadLine();
+                                    break;
                                 }
                             }
                         break;
@@ -320,14 +327,14 @@ namespace SaleAdventure3000.Entities
         {
 
         }
-        public void Wear (Wearable wears, Player player)
-        {
-            Console.WriteLine
-                ($"{player.Name} is now wearing {wears.Name}" +
-                $" which gives {wears.PowerAdded} power and " +
-                $"{wears.HpBoost} additional HP.");
-            player.HP += wears.HpBoost;
-            player.Power += wears.PowerAdded;
-        }
+        //public void Wear (Wearable wears, Player player)
+        //{
+        //    Console.WriteLine
+        //        ($"{player.Name} is now wearing {wears.Name}" +
+        //        $" which gives {wears.PowerAdded} power and " +
+        //        $"{wears.HpBoost} additional HP.");
+        //    player.HP += wears.HpBoost;
+        //    player.Power += wears.PowerAdded;
+        //}
     }
 }
