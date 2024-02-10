@@ -1,4 +1,5 @@
-﻿using System;
+﻿using SaleAdventure3000.Entities;
+using System;
 using System.Collections.Generic;
 using System.ComponentModel;
 using System.Linq;
@@ -28,6 +29,16 @@ namespace SaleAdventure3000.Items
             PowerAdded = wearableProperties[Symbol].ElementAt(0);
             HpBoost = wearableProperties[Symbol].ElementAt(1);
             Wear = true;
+        }
+
+        public override void OnPickup (Wearable wears, Player player)
+        {
+            Console.WriteLine
+                ($"{player.Name} is now wearing {wears.Name}" +
+                $" which gives {wears.PowerAdded} power and " +
+                $"{wears.HpBoost} additional HP.");
+            player.HP += wears.HpBoost;
+            player.Power += wears.PowerAdded;
         }
     }
 }

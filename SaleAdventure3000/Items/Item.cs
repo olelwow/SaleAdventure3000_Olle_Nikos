@@ -14,5 +14,14 @@ namespace SaleAdventure3000.Items
         public int PowerAdded { get; set; }
         public int HpBoost { get; set; }
         public bool Wear {  get; set; }
+        
+        public virtual void OnPickup (Wearable w, Player p)
+        {
+        }
+        public virtual void OnPickup(Consumable c, Player p) 
+        { 
+        }
+
+        
     }
 }

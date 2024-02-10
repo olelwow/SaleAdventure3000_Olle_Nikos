@@ -1,6 +1,9 @@
-﻿using System;
+﻿using SaleAdventure3000.Entities;
+using System;
+using System.Collections.Concurrent;
 using System.Collections.Generic;
 using System.Linq;
+using System.Runtime.CompilerServices;
 using System.Text;
 using System.Threading.Tasks;
 
@@ -27,5 +30,25 @@ namespace SaleAdventure3000.Items
             this.Amount = 1;
             this.Wear = false;
         }
+        
+        public override void OnPickup (Consumable item, Player player)
+        {
+            
+                Console.WriteLine($"{player.Name} picked up a {item.Name}");
+                if (!player.Bag.ContainsKey(item))
+                {
+                    //item.Amount
+                    player.Bag.Add(item, item.Amount);
+                }
+                else
+                {
+                    //player.Bag.Add(item, 1);
+                    player.Bag[item]++;
+                    // FIXA DETTA, IDIOT!
+                }
+            
+            
+        }
+        
     }
 }
