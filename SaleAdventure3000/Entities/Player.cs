@@ -6,6 +6,7 @@ using System.Text;
 using System.Threading.Tasks;
 using SaleAdventure3000;
 using SaleAdventure3000.Items;
+using Spectre.Console;
 
 namespace SaleAdventure3000.Entities
 {
@@ -292,40 +293,89 @@ namespace SaleAdventure3000.Entities
         }
         public void OpenBag (ConsoleKeyInfo keyInfo, Player player)
         {
-            Console.WriteLine("ITEM       HEALAMOUNT     AMOUNT");
-            string[] spacerArray = ["     ", "        ", "             "];
+            string[] spacerArray = ["        ", " ", "       ",
+                                    "      ", " ",
+                                    "      ", " ",
+                                    "    ", "   ", " ",
+                                    " ", " "];
+            Item[] items = new Item[player.Bag.Count];
+            // Array av items för jämförelse längre ner.
+            var showBag = 
+                new SelectionPrompt<string>()
+                .Title("  Item     Wearable   Amount   Equipped")
+                .PageSize(player.Bag.Count + 3);
+            // Skapar ny SelectionPrompt, med rubrikerna ovan.
+            int index = 0;
+
             foreach (var item in player.Bag)
             {
-                if (item.Key.Name.Length == 3)
+                showBag.AddChoice
+                    ($"{item.Key.Name}" +
+                     $"{spacerArray[item.Key.Name.Length + 4 - 2]}" +
+                     $"{item.Key.Wear}" +
+                     $"{spacerArray[item.Key.Wear.ToString().Length - 2]}" +
+                     $"{item.Key.Amount}" +
+                     $"{spacerArray[0]}" +
+                     $"{item.Key.Equipped}"
+                     );
+                // Adderar nödvändig info till showBag. För att detta skulle funka var jag tvungen 
+                // att ändra i Entity så att Name inte kan vara null.
+                items[index] = item.Key;
+                index++;
+                // Lägger till Item i arrayen.
+            }
+            var bagChoice = AnsiConsole.Prompt(showBag);
+            // Gör det möjligt att välja Item med piltangenterna, och sparar valet man gör med enter.
+            foreach (Item item in items)
+            {
+                if (bagChoice.Contains(item.Name) && item.Wear == false)
                 {
-                    Console.WriteLine(
-                        $"{item.Key.Name}{spacerArray[1]}" +
-                        $"{item.Key.HealAmount}{spacerArray[2]}{item.Value}");
+                    Console.WriteLine($"{player.Name} eats a {item.Name}. It heals for {item.HealAmount}.");
+                    player.HP += item.HealAmount;
+                    Consume(player, item);
+                    // Kollar ifall föremålets namn stämmer överens med valet, isåfall så
+                    // äter man upp föremålet och det tas bort ifrån bagen med metoden Consume().
                 }
-                else
+                else if ((bagChoice.Contains(item.Name) && item.Wear == true) && item.Equipped == true)
                 {
-                    Console.WriteLine(
-                        $"{item.Key.Name}{spacerArray[0]}" +
-                        $"{item.Key.HealAmount}{spacerArray[2]}{item.Value}");
+                    Unequip(player, item);
+                }
+                else if ((bagChoice.Contains(item.Name) && item.Wear == true) && item.Equipped == false)
+                {
+                    Equip(player, item);
                 }
             }
-
-            if (keyInfo.Key == ConsoleKey.B)
+        }
+        public void Consume(Player player, Item item)
+        {
+            if (player.Bag.ContainsKey(item) && player.Bag[item] > 1)
             {
-                CloseBag();
+                item.Amount--;
             }
             else
             {
-                Console.ReadLine();
+                player.Bag.Remove(item);
             }
         }
-        public void CloseBag ()
-        {
 
+        public void Unequip (Player player, Item item)
+        {
+            Console.WriteLine($"{player.Name} unequips " +
+                              $"{item.Name}, losing {item.HpBoost} HP " +
+                              $"and {item.PowerAdded} power.");
+            item.Equipped = false;
+            player.HP -= item.HpBoost;
+            player.Power -= item.PowerAdded;
         }
-        public void Consume ()
-        {
 
+        public void Equip (Player player, Item item)
+        {
+            Console.WriteLine($"{player.Name} equips " +
+                              $"{item.Name}, gaining {item.HpBoost} HP " +
+                              $"and {item.PowerAdded} power.");
+            item.Equipped = true;
+            player.HP += item.HpBoost;
+            player.Power += item.PowerAdded;
         }
         //public void Wear (Wearable wears, Player player)
         //{
