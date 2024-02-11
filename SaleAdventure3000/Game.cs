@@ -29,6 +29,7 @@ namespace SaleAdventure3000
             Console.WriteLine("What is your name, adventurer?");
             string? chosenName = Console.ReadLine();
 
+
             while (chosenName == null || chosenName.Length < 3)
             {
                 Console.WriteLine("Invalid name, must be at least 3 character long.");
