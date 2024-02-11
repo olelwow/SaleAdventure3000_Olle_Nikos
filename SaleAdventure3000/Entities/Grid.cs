@@ -9,7 +9,7 @@ namespace SaleAdventure3000.Entities
 {
     public class Grid
     {
-        public Entity[,] gridBoard = new Entity[12, 12];
+        public Entity[,] gameBoard = new Entity[12, 12];
         public static int itemsCount = new Random().Next(2, 4);
         public static int npcCount = new Random().Next(4, 8);
         public NPC[] npcs = new NPC[npcCount];
@@ -18,7 +18,7 @@ namespace SaleAdventure3000.Entities
 
         public Grid(){ }
 
-        public void FillGrid(Entity[,] gridBoard)
+        public void FillGrid(Entity[,] gameBoard)
         {
             for (int i = 0; i < 12; i++)
             {
@@ -26,15 +26,15 @@ namespace SaleAdventure3000.Entities
                 {
                     if (i == 0 || i == 11)
                     {
-                        gridBoard[i, j] = new Entity() { Symbol = " - ", PosX = i, PosY = j};
+                        gameBoard[i, j] = new Entity() { Symbol = " - ", PosX = i, PosY = j};
                     }
                     else if (j == 0 || j == 11)
                     {
-                        gridBoard[i, j] = new Entity() { Symbol = " | ", PosX = i, PosY = j };
+                        gameBoard[i, j] = new Entity() { Symbol = " | ", PosX = i, PosY = j };
                     }
                     else
                     {
-                        gridBoard[i, j] = new Entity() { Symbol = " - ", PosX = i, PosY = j };
+                        gameBoard[i, j] = new Entity() { Symbol = " - ", PosX = i, PosY = j };
                     }
                 }
             }
@@ -45,7 +45,7 @@ namespace SaleAdventure3000.Entities
                 npcs[i] = new NPC();
                 npcs[i].PosX = posX;
                 npcs[i].PosY = posY;
-                gridBoard[posX, posY] = npcs[i];
+                gameBoard[posX, posY] = npcs[i];
             }
             // Initierar dessa NPCs och föremål och sätter ut dem på gameBoard.
             for (int i = 0; i < itemsCount; i++)
@@ -55,7 +55,7 @@ namespace SaleAdventure3000.Entities
                 wears[i] = new Wearable();
                 wears[i].PosX = posX;
                 wears[i].PosY = posY;
-                gridBoard[posX, posY] = wears[i];
+                gameBoard[posX, posY] = wears[i];
             }
             for (int i = 0; i < itemsCount; i++)
             {
@@ -64,11 +64,11 @@ namespace SaleAdventure3000.Entities
                 consumables[i] = new Consumable();
                 consumables[i].PosX = posX;
                 consumables[i].PosY = posY;
-                gridBoard[posX, posY] = consumables[i];
+                gameBoard[posX, posY] = consumables[i];
             }
         }
 
-        public void DrawGridBoard(Entity[,] gameBoard)
+        public void DrawGameBoard(Entity[,] gameBoard)
         {
             for (int i = 0; i < gameBoard.GetLength(0); i++)
             {
