@@ -25,7 +25,7 @@ namespace SaleAdventure3000.Entities
             this.Power = 15;
         }
         // När man skapar ett spelar-objekt så lägger man även till symbol och namn.
-        private object[,] ChangePosition(Entity[,] gameBoard, Player player)
+        private Entity[,] ChangePosition(Entity[,] gameBoard, Player player)
         {
             gameBoard[player.PosX, player.PosY] = player;
             return gameBoard;
@@ -51,7 +51,7 @@ namespace SaleAdventure3000.Entities
                 }
                 else if (keyInfo.Key == ConsoleKey.B)
                 {
-                    OpenBag(keyInfo, player);
+                    OpenBag(player);
                 }
                 else if ((keyInfo.Key == ConsoleKey.UpArrow ||
                     keyInfo.Key == ConsoleKey.W) && PosX > 1)
@@ -78,8 +78,8 @@ namespace SaleAdventure3000.Entities
                 // Tar endast in player objektet istället för PosX, PosY 
                 // Eftersom man kommer åt dessa genom player. Samma för ChangePosition.
 
-                gameBoard = (Entity[,])ChangePosition(gameBoard, player);
-                grid.DrawGridBoard(gameBoard);
+                gameBoard = ChangePosition(gameBoard, player);
+                grid.DrawGameBoard(gameBoard);
                 // Ändrar spelarens position och ritar upp gameBoard igen.
             }
         }
@@ -104,7 +104,7 @@ namespace SaleAdventure3000.Entities
                         // Kontroll som kollar vilken typ den nuvarande arrayen är av.
                     {
                         if (gameBoard[player.PosX, player.PosY] == consumables)
-                            //kontrolleras om player träffas en specifik symbol från denna array.
+                        //kontrolleras om player träffas en specifik symbol från denna array.
                         {
                             consumables.OnPickup(consumables, player);
                             break;
@@ -291,7 +291,7 @@ namespace SaleAdventure3000.Entities
                 }
             }
         }
-        public void OpenBag (ConsoleKeyInfo keyInfo, Player player)
+        public void OpenBag (Player player)
         {
             string[] spacerArray = ["        ", " ", "       ",
                                     "      ", " ",
@@ -324,35 +324,42 @@ namespace SaleAdventure3000.Entities
                 index++;
                 // Lägger till Item i arrayen.
             }
+            showBag.AddChoice("Close Bag");
+            
             var bagChoice = AnsiConsole.Prompt(showBag);
             // Gör det möjligt att välja Item med piltangenterna, och sparar valet man gör med enter.
-            foreach (Item item in items)
+            
+            foreach (var item in player.Bag)
             {
-                if (bagChoice.Contains(item.Name) && item.Wear == false)
+                if (bagChoice.Contains(item.Key.Name) && item.Key.Wear == false)
                 {
-                    Console.WriteLine($"{player.Name} eats a {item.Name}. It heals for {item.HealAmount}.");
-                    player.HP += item.HealAmount;
-                    Consume(player, item);
+                    Console.WriteLine($"{player.Name} eats a {item.Key.Name}. It heals for {item.Key.HealAmount}.");
+                    player.HP += item.Key.HealAmount;
+                    Consume(player, item.Key);
                     // Kollar ifall föremålets namn stämmer överens med valet, isåfall så
                     // äter man upp föremålet och det tas bort ifrån bagen med metoden Consume().
                 }
-                else if ((bagChoice.Contains(item.Name) && item.Wear == true) && item.Equipped == true)
+                else if ((bagChoice.Contains(item.Key.Name) && item.Key.Wear == true) && item.Key.Equipped == true)
                 {
-                    Unequip(player, item);
+                    Unequip(player, item.Key);
                 }
-                else if ((bagChoice.Contains(item.Name) && item.Wear == true) && item.Equipped == false)
+                else if ((bagChoice.Contains(item.Key.Name) && item.Key.Wear == true) && item.Key.Equipped == false)
                 {
-                    Equip(player, item);
+                    Equip(player, item.Key);
+                }
+                else if (bagChoice.Equals("Close Bag"))
+                {
+                    break;
                 }
             }
         }
         public void Consume(Player player, Item item)
         {
-            if (player.Bag.ContainsKey(item) && player.Bag[item] > 1)
+            if (player.Bag.ContainsKey(item) && player.Bag[item] >= 1)
             {
-                item.Amount--;
+                player.Bag[item]--;
             }
-            else
+            else if (player.Bag[item] <= 0)
             {
                 player.Bag.Remove(item);
             }

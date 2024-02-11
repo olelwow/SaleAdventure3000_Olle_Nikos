@@ -24,13 +24,11 @@ namespace SaleAdventure3000.Items
         {
             if (!player.Bag.ContainsKey(item))
             {
-                player.Bag.Add(item, item.Amount);
+                player.Bag.Add(item, 1);
             }
             else
             {
-                player.Bag.Remove(item);
-                item.Amount++;
-                player.Bag.Add(item, item.Amount);
+                player.Bag[item]++;
                 /* Löste problemet här genom att lägga till en override metod i klassen Item.
                    Eftersom två objekt inte betraktas som lika även om de har samma namn, stats osv
                    så blev det en ny rad i vilket fall. Kör man override på metoden Equals så kommer

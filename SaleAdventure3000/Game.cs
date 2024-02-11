@@ -42,8 +42,8 @@ namespace SaleAdventure3000
             int randomStartLocationY = new Random().Next(1,10);
             // Ger spelaren en random startposition på gameBoard.
 
-            gameGrid.FillGrid(gameGrid.gridBoard);
-            gameGrid.DrawGridBoard(gameGrid.gridBoard);
+            gameGrid.FillGrid(gameGrid.gameBoard);
+            gameGrid.DrawGameBoard(gameGrid.gameBoard);
             //FillGameBoard();
             //DrawGameBoard();
             // Fyller gameBoard, initierar random NPCs och items och ritar upp gameBoard.
@@ -51,7 +51,7 @@ namespace SaleAdventure3000
             while (player.Quit)
             {
                 player.MovePlayer
-                    (gameGrid.gridBoard,
+                    (gameGrid.gameBoard,
                      randomStartLocationX,
                      randomStartLocationY,
                      player,
