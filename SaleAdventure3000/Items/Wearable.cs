@@ -11,6 +11,7 @@ namespace SaleAdventure3000.Items
 {
     public class Wearable : Item
     {
+        
         private readonly string[] symbols = [" H ", " B ", " N "];
         private readonly string[] names = ["Hat", "Boots", "Necklace"];
         private readonly int randomizedProperties = new Random().Next(0, 3);
@@ -29,16 +30,20 @@ namespace SaleAdventure3000.Items
             PowerAdded = wearableProperties[Symbol].ElementAt(0);
             HpBoost = wearableProperties[Symbol].ElementAt(1);
             Wear = true;
+            Amount = 1;
         }
 
-        public override void OnPickup (Wearable wears, Player player)
+        public override void OnPickup (Item item, Player player)
         {
-            Console.WriteLine
-                ($"{player.Name} is now wearing {wears.Name}" +
-                $" which gives {wears.PowerAdded} power and " +
-                $"{wears.HpBoost} additional HP.");
-            player.HP += wears.HpBoost;
-            player.Power += wears.PowerAdded;
+            Console.WriteLine($"{player.Name} equips " +
+                              $"{item.Name}, gaining {item.HpBoost} HP " +
+                              $"and {item.PowerAdded} power.");
+
+            player.HP += item.HpBoost;
+            player.Power += item.PowerAdded;
+            item.Equipped = true;
+            AddToBag(item, player);
+            
         }
     }
 }

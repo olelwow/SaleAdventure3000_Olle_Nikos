@@ -12,7 +12,7 @@ namespace SaleAdventure3000.Entities
         public int PosX { get; set; }
         public int PosY { get; set; }
         public string? Symbol { get; set; }
-        public string? Name { get; set; }
+        public string Name { get; set; }
 
 
     }

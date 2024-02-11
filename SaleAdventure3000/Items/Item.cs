@@ -14,13 +14,33 @@ namespace SaleAdventure3000.Items
         public int PowerAdded { get; set; }
         public int HpBoost { get; set; }
         public bool Wear {  get; set; }
-        
-        public virtual void OnPickup (Wearable w, Player p)
+        public int Amount { get; set; }
+        public bool Equipped { get; set; } = false;
+
+        public virtual void OnPickup (Item item, Player player)
         {
         }
-        public virtual void OnPickup(Consumable c, Player p) 
-        { 
+        public void AddToBag (Item item, Player player)
+        {
+            if (!player.Bag.ContainsKey(item))
+            {
+                player.Bag.Add(item, item.Amount);
+            }
+            else
+            {
+                player.Bag.Remove(item);
+                item.Amount++;
+                player.Bag.Add(item, item.Amount);
+                /* Löste problemet här genom att lägga till en override metod i klassen Item.
+                   Eftersom två objekt inte betraktas som lika även om de har samma namn, stats osv
+                   så blev det en ny rad i vilket fall. Kör man override på metoden Equals så kommer
+                   den att betrakta två objekt som likadana ifall de har samma Name.
+                */
+            }
         }
+        //public virtual void OnPickup(Consumable c, Player p) 
+        //{ 
+        //}
         public override bool Equals(object? obj)
         {
             if (obj == null || GetType() != obj.GetType())
@@ -31,6 +51,8 @@ namespace SaleAdventure3000.Items
             Item other = (Item)obj;
             return Name == other.Name;
         }
+        // Override metod som gör det möjligt att betrakta två objekt som lika
+        // Ifall de delar samma Name.
 
         public override int GetHashCode()
         {
