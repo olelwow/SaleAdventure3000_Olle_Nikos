@@ -314,7 +314,7 @@ namespace SaleAdventure3000.Entities
                      $"{spacerArray[item.Key.Name.Length + 4 - 2]}" +
                      $"{item.Key.Wear}" +
                      $"{spacerArray[item.Key.Wear.ToString().Length - 2]}" +
-                     $"{item.Key.Amount}" +
+                     $"{item.Value}" +
                      $"{spacerArray[0]}" +
                      $"{item.Key.Equipped}"
                      );
@@ -355,11 +355,11 @@ namespace SaleAdventure3000.Entities
         }
         public void Consume(Player player, Item item)
         {
-            if (player.Bag.ContainsKey(item) && player.Bag[item] >= 1)
+            if (player.Bag.ContainsKey(item) && player.Bag[item] > 1)
             {
                 player.Bag[item]--;
             }
-            else if (player.Bag[item] <= 0)
+            else if (player.Bag[item] <= 1)
             {
                 player.Bag.Remove(item);
             }
