@@ -27,7 +27,6 @@ namespace SaleAdventure3000.Items
             this.Name = ConsumableNames[randomizedProperties];
             this.Symbol = ConsumableSymbols[randomizedProperties];
             this.HealAmount = ConsumableAttributes[this.Symbol];
-            this.Amount = 1;
             this.Wear = false;
         }
         

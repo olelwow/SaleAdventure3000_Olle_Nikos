@@ -30,7 +30,6 @@ namespace SaleAdventure3000.Items
             PowerAdded = wearableProperties[Symbol].ElementAt(0);
             HpBoost = wearableProperties[Symbol].ElementAt(1);
             Wear = true;
-            Amount = 1;
         }
 
         public override void OnPickup (Item item, Player player)
