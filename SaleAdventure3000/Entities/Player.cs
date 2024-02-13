@@ -17,12 +17,14 @@ namespace SaleAdventure3000.Entities
         // Spelarens väska, lagrar objektet som key
         // och value indikerar antal av detta objekt som spelaren har i väskan.
         // Satt till Private eftersom endast spelarobjektet behöver ha koll på väskan.
+        public int score = 0;
         public Player(string name)
         {
             this.Symbol = " 0 ";
             this.Name = name;
             this.HP = 100;
             this.Power = 15;
+            this.score = 0;
         }
         // När man skapar ett spelar-objekt så lägger man även till symbol och namn.
         private Entity[,] ChangePosition(Entity[,] gameBoard, Player player)
@@ -159,6 +161,7 @@ namespace SaleAdventure3000.Entities
                 {
                     npc.HP = 0;
                     Console.WriteLine($"{npc.Name} died and player has {player.HP} left.");
+                    player.score += 10;
                     run = false;
                     break;
                 }
@@ -290,6 +293,9 @@ namespace SaleAdventure3000.Entities
                     }
                 }
             }
+            StreamWriter stream = new StreamWriter(@"C:\Users\nick_\source\repos\SaleAdventure3000_Olle_Nikos\SaleAdventure3000\Scoreboard.txt", true);
+            stream.WriteLine($"Name : {Name} - Score : {score + 10}");
+            stream.Close();
         }
         public void OpenBag (Player player)
         {
