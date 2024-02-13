@@ -10,7 +10,7 @@ namespace SaleAdventure3000.Items
     public class Item : Entity
     {
         public Item() { }
-        public int HealAmount { get; set; }
+        public int HealAmount { get; }
         public int PowerAdded { get; set; }
         public int HpBoost { get; set; }
         public bool Wear {  get; set; }
@@ -20,15 +20,19 @@ namespace SaleAdventure3000.Items
         public virtual void OnPickup (Item item, Player player)
         {
         }
+        // Metod som styr vad som händer när man plockar upp ett Item,
+        // olika beteende beroende på ifall föremålet är wearable eller consumable.
+
         public void AddToBag (Item item, Player player)
         {
-            if (!player.Bag.ContainsKey(item))
+            Dictionary<Item,int> bag = player.GetBag();
+            if (!bag.ContainsKey(item))
             {
-                player.Bag.Add(item, 1);
+                bag.Add(item, 1);
             }
             else
             {
-                player.Bag[item]++;
+                bag[item]++;
                 /* Löste problemet här genom att lägga till en override metod i klassen Item.
                    Eftersom två objekt inte betraktas som lika även om de har samma namn, stats osv
                    så blev det en ny rad i vilket fall. Kör man override på metoden Equals så kommer
@@ -36,9 +40,6 @@ namespace SaleAdventure3000.Items
                 */
             }
         }
-        //public virtual void OnPickup(Consumable c, Player p) 
-        //{ 
-        //}
         public override bool Equals(object? obj)
         {
             if (obj == null || GetType() != obj.GetType())
@@ -60,7 +61,5 @@ namespace SaleAdventure3000.Items
             }
             return -1;
         }
-
-
     }
 }

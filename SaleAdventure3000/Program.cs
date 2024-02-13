@@ -13,13 +13,9 @@ internal class Program
         {
             Console.Clear();    
             Operations.Logo();
-            Console.WriteLine("- - - Menu - - -\n" +
-                "1. Register\n" +
-                "2. Log in\n" +
-                "3. Scoreboard\n" +
-                "4. Quit");
-            Console.Write(">");
-            int choice = int.Parse(Console.ReadLine());
+            Console.WriteLine("- - - Menu - - -\n");
+            int choice = Operations.PrintChoiceMenu("Register",
+                "Log in", "View scoreboard", "Quit");
 
             switch (choice)
             {

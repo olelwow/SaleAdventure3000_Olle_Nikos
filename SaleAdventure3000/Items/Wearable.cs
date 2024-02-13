@@ -25,11 +25,11 @@ namespace SaleAdventure3000.Items
 
         public Wearable()
         {
-            Symbol = symbols[randomizedProperties];
-            Name = names[randomizedProperties];
-            PowerAdded = wearableProperties[Symbol].ElementAt(0);
-            HpBoost = wearableProperties[Symbol].ElementAt(1);
-            Wear = true;
+            this.Symbol = symbols[randomizedProperties];
+            this.Name = names[randomizedProperties];
+            this.PowerAdded = wearableProperties[Symbol].ElementAt(0);
+            this.HpBoost = wearableProperties[Symbol].ElementAt(1);
+            this.Wear = true;
         }
 
         public override void OnPickup (Item item, Player player)

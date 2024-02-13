@@ -13,7 +13,7 @@ namespace SaleAdventure3000.Entities
     public class Player : Creature
     {
         public bool Quit = true;
-        public Dictionary<Item, int> Bag = new Dictionary<Item, int>();
+        private Dictionary<Item, int> Bag = new Dictionary<Item, int>();
         // Spelarens väska, lagrar objektet som key
         // och value indikerar antal av detta objekt som spelaren har i väskan.
         // Satt till Private eftersom endast spelarobjektet behöver ha koll på väskan.
@@ -26,14 +26,8 @@ namespace SaleAdventure3000.Entities
             this.Power = 15;
             this.score = 0;
         }
-        // När man skapar ett spelar-objekt så lägger man även till symbol och namn.
-        private Entity[,] ChangePosition(Entity[,] gameBoard, Player player)
-        {
-            gameBoard[player.PosX, player.PosY] = player;
-            return gameBoard;
-        }
-        // Denna funktion tar in gameboard samt position,
-        // och returnerar ett nytt gameboard med spelarens nya position.
+        // När man skapar ett spelar-objekt så lägger man även till namn.
+
         public void MovePlayer(Entity[,] gameBoard, int firstX, int firstY, Player player, Grid grid)
         {
             player.PosX = firstX;
@@ -76,228 +70,17 @@ namespace SaleAdventure3000.Entities
                     PosY--;
                 }
 
-                ControllCollision(gameBoard, player, grid);
+                Mechanics.ControlCollision(gameBoard, player, grid);
                 // Tar endast in player objektet istället för PosX, PosY 
                 // Eftersom man kommer åt dessa genom player. Samma för ChangePosition.
 
-                gameBoard = ChangePosition(gameBoard, player);
+                gameBoard = Mechanics.ChangePosition(gameBoard, player);
                 grid.DrawGameBoard(gameBoard);
                 // Ändrar spelarens position och ritar upp gameBoard igen.
             }
         }
-        private void ControllCollision(Entity[,] gameBoard, Player player, Grid grid)
-        {
-            //Samlas en lista av objekt 
-            List<Entity[]> entities = new List<Entity[]>()
-            {
-                {grid.npcs },
-                {grid.wears },
-                {grid.consumables }
-            };
 
-            for (int i = 0; i < entities.Count; i++)
-            {
-                Entity[] entityArray = entities[i];
-                // array som skrivs över vid varje varv, tar en array i taget från listan entities.
-
-                for (int j = 0; j < entityArray.Length; j++)
-                {
-                    if (entityArray[j] is Consumable consumables) 
-                        // Kontroll som kollar vilken typ den nuvarande arrayen är av.
-                    {
-                        if (gameBoard[player.PosX, player.PosY] == consumables)
-                        //kontrolleras om player träffas en specifik symbol från denna array.
-                        {
-                            consumables.OnPickup(consumables, player);
-                            break;
-                        }
-                    }
-                    else if (entityArray[j] is Wearable wears)
-                    {
-                        if (gameBoard[player.PosX, player.PosY] == wears)
-                        {
-                            wears.OnPickup(wears, player);
-                            break;
-                        }
-                    }
-                    else if (entityArray[j] is NPC npcs)
-                    {
-                        if (gameBoard[player.PosX, player.PosY] == npcs)
-                        {
-                            Encounter(npcs, player);
-                            break;
-                        }
-                    }
-                }
-            }
-        }
-        //public void PickUp (Consumable item, Player player)
-        //{
-        //    Console.WriteLine($"{player.Name} picked up a {item.Name}");
-        //    if (!Bag.ContainsKey(item)) 
-        //    {
-        //        Bag.Add(item, item.Amount);
-        //    }
-        //    else
-        //    {
-        //        Bag[item]++;
-        //    }
-        //}
-
-        public void Encounter (NPC npc, Player player)
-        {
-            bool run = true;
-
-            while (run)
-            {
-                if (player.HP < 1) 
-                {
-                    player.HP = 0;
-                    Console.WriteLine($"{player.Name} died and {npc.Name} has {npc.HP} left.");
-                    run = false;
-                    break;
-                }
-                else if (npc.HP < 1)
-                {
-                    npc.HP = 0;
-                    Console.WriteLine($"{npc.Name} died and player has {player.HP} left.");
-                    player.score += 10;
-                    run = false;
-                    break;
-                }
-                else
-                {
-                    Console.Clear();
-                    Console.WriteLine(
-                        $"{player.Name}:{player.HP}HP VERSUS " +
-                        $"{npc.Name}:{npc.HP}HP \n");
-
-                    //Spelaren kan välja mellan 3 olika alt
-                    Console.WriteLine("What do you want to do? \n" +
-                        "1. Punch \n" +
-                        "2. Block \n" +
-                        "3. Escape \n" +
-                        "4. Use item");
-                    bool successfulInput = Int32.TryParse(Console.ReadLine(), out int choice);
-                    int computerChoice = new Random().Next(1, 4);
-                    switch (choice)
-                    {
-                        case 1:
-                            if (computerChoice == 2)
-                            {
-                                Console.WriteLine(
-                                    $"{npc.Name} blocks the attack! " +
-                                    $"{player.Name} HP: {player.HP}, " +
-                                    $"{npc.Name} HP: {npc.HP}");
-                            }
-                            else
-                            {
-                                Console.WriteLine($"{player.Name} attacks with {player.Power} power");
-                                npc.HP -= player.Power;
-                                Console.WriteLine(
-                                    $"{player.Name}s HP: {player.HP}," +
-                                    $" {npc.Name} HP:{npc.HP}!");
-                            }
-                            Console.ReadLine();
-                        break;
-
-                        case 2: Console.WriteLine($"{player.Name} blocks {npc.Name}'s attack!");
-                            Console.ReadLine();
-                        break;
-
-                        case 3:
-                            Console.WriteLine($"{player.Name} runs for his life...");
-                            Console.ReadLine();
-                            run = false;
-                        break;
-
-                        case 4:
-                            
-                            foreach (var item in Bag)
-                            {
-                                Console.WriteLine($"{item.Key.Name} {item.Value}");
-                            }
-                            Console.WriteLine("Which item do you want to use?");
-                            // Skriver ut en lista av items man har i Bag.
-                            string? consumableChoice = Console.ReadLine();
-                            // Kollar sedan igenom Bag igen, och ifall input matchar
-                            // något som finns i Bag så används detta item. Ifall man har fler än två
-                            // så minskar antalet med ett.
-                            foreach (var item in Bag)
-                            {
-                                if (consumableChoice == item.Key.Name)
-                                {
-                                    Console.WriteLine(
-                                        $"{player.Name} ate {item.Key.Name}. " +
-                                        $"It healed {item.Key.HealAmount}HP.");
-                                    player.HP += item.Key.HealAmount;
-                                    if (item.Value == 1)
-                                    {
-                                        Bag.Remove(item.Key);
-                                        Console.ReadLine();
-                                        break;
-                                    }
-                                    else
-                                    {
-                                        Bag[item.Key]--;
-                                        Console.ReadLine();
-                                        break;
-                                    }
-                                    
-                                }
-                                else if (!Bag.ContainsKey(item.Key))
-                                {
-                                    Console.WriteLine($"You don't have any {consumableChoice} in your bag.");
-                                    Console.ReadLine();
-                                    break;
-                                }
-                            }
-                        break;
-                    }
-                    //NPCs tur att agera mot spelaren
-                    switch (computerChoice)
-                    {
-                        case 1:
-                            if (choice == 2)
-                            {
-                                Console.WriteLine(
-                                    $"{player.Name} blocks the attack! " +
-                                    $"{player.Name} HP: {player.HP}, " +
-                                    $"{npc.Name} HP: {npc.HP}");
-                            }
-                            else
-                            {
-                                Console.WriteLine($"{npc.Name} attacks with {npc.Power} power");
-                                player.HP -= npc.Power;
-                                Console.WriteLine(
-                                    $"{player.Name} HP: {player.HP}," +
-                                    $" {npc.Name} HP: {npc.HP}!");
-                                Console.ReadLine();
-                            }
-                        break;
-
-                        case 2:
-                            Console.WriteLine(
-                                $"{npc.Name} blocks the attack! " +
-                                $"{player.Name} HP: {player.HP}, " +
-                                $"{npc.Name} HP: {npc.HP}");
-                        break;
-
-                        case 3:
-                            if (npc.HP < (npc.HP * 0.1))
-                            {
-                                Console.WriteLine($"{npc.Name} runs for his life...");
-                                run = false;
-                            }
-                        break;
-                    }
-                }
-            }
-            StreamWriter stream = new StreamWriter(@"C:\Users\nick_\source\repos\SaleAdventure3000_Olle_Nikos\SaleAdventure3000\Scoreboard.txt", true);
-            stream.WriteLine($"Name : {Name} - Score : {score + 10}");
-            stream.Close();
-        }
-        public void OpenBag (Player player)
+        public static void OpenBag (Player player)
         {
             string[] spacerArray = ["        ", " ", "       ",
                                     "      ", " ",
@@ -324,6 +107,7 @@ namespace SaleAdventure3000.Entities
                      $"{spacerArray[0]}" +
                      $"{item.Key.Equipped}"
                      );
+                
                 // Adderar nödvändig info till showBag. För att detta skulle funka var jag tvungen 
                 // att ändra i Entity så att Name inte kan vara null.
                 items[index] = item.Key;
@@ -341,17 +125,17 @@ namespace SaleAdventure3000.Entities
                 {
                     Console.WriteLine($"{player.Name} eats a {item.Key.Name}. It heals for {item.Key.HealAmount}.");
                     player.HP += item.Key.HealAmount;
-                    Consume(player, item.Key);
+                    player.Consume(player, item.Key);
                     // Kollar ifall föremålets namn stämmer överens med valet, isåfall så
                     // äter man upp föremålet och det tas bort ifrån bagen med metoden Consume().
                 }
                 else if ((bagChoice.Contains(item.Key.Name) && item.Key.Wear == true) && item.Key.Equipped == true)
                 {
-                    Unequip(player, item.Key);
+                    player.Unequip(player, item.Key);
                 }
                 else if ((bagChoice.Contains(item.Key.Name) && item.Key.Wear == true) && item.Key.Equipped == false)
                 {
-                    Equip(player, item.Key);
+                    player.Equip(player, item.Key);
                 }
                 else if (bagChoice.Equals("Close Bag"))
                 {
@@ -369,6 +153,9 @@ namespace SaleAdventure3000.Entities
             {
                 player.Bag.Remove(item);
             }
+            // Sköter vad som händer när man använder en consumable. Finns det fler av
+            // samma item i bagen så minskar value med 1, äter man den sista tas både
+            // key och value bort från spelarens bag.
         }
 
         public void Unequip (Player player, Item item)
@@ -390,14 +177,11 @@ namespace SaleAdventure3000.Entities
             player.HP += item.HpBoost;
             player.Power += item.PowerAdded;
         }
-        //public void Wear (Wearable wears, Player player)
-        //{
-        //    Console.WriteLine
-        //        ($"{player.Name} is now wearing {wears.Name}" +
-        //        $" which gives {wears.PowerAdded} power and " +
-        //        $"{wears.HpBoost} additional HP.");
-        //    player.HP += wears.HpBoost;
-        //    player.Power += wears.PowerAdded;
-        //}
+        public Dictionary<Item, int> GetBag ()
+        {
+            return this.Bag;
+        }
+        // Getter för spelarens bag, eftersom bagen är private och inte synlig utanför
+        // klassen player.
     }
 }
