@@ -10,7 +10,7 @@ namespace SaleAdventure3000.Items
     public class Item : Entity
     {
         public Item() { }
-        public int HealAmount { get; }
+        public int HealAmount { get; set; }
         public int PowerAdded { get; set; }
         public int HpBoost { get; set; }
         public bool Wear {  get; set; }

@@ -1,4 +1,5 @@
 ﻿using SaleAdventure3000.Entities;
+using SaleAdventure3000.Items;
 using Spectre.Console;
 using System;
 using System.Collections.Generic;
@@ -72,7 +73,7 @@ namespace SaleAdventure3000
             }
             
         }
-        //Scoreboard metoden skriver ut scoreboard av alla sp
+        //Scoreboard metoden skriver ut scoreboard av alla spelare som har spelat
         internal static void Scoreboard()
         {
             string[] lines = File.ReadAllLines(@"C:\Users\Sheikah Slate\source\repos\SaleAdventure3000_Olle_Nikos\SaleAdventure3000\Scoreboard.txt");
@@ -87,7 +88,9 @@ namespace SaleAdventure3000
         {
             
         }
-
+        /*Attack metoderna tar in player stats och npc stats
+         och tar bort HP från resp karaktär.
+        Första Attack är spelarens metod och andra är Npcs metod */
         public static string Attack (Player player, NPC npc)
         {
             if(player.HP > 0)
@@ -112,6 +115,7 @@ namespace SaleAdventure3000
             return "";
             // Metod som sköter NPCs attack, ifall npc redan dött returneras en tom sträng.
         }
+        //I Block metoderna gäller samma som Attack metoder fast de har ingen påverkan
         public static string Block (NPC npc, Player player)
         {
             return $"{npc.Name} blocks the attack! " +
@@ -124,6 +128,7 @@ namespace SaleAdventure3000
                    $"\n{player.Name} HP: {player.HP}, " +
                    $"{npc.Name} HP: {npc.HP}";
         }
+        //Härr kotntrollerar vi om spelaren eller npc är död och avsluta deras tur och tillbaka till gameboard
         public static string Death (Player player, NPC npc)
         {
             if (player.HP < 1)
@@ -140,7 +145,7 @@ namespace SaleAdventure3000
             }
             return "";
         }
-        
+        //Generellt metod som skriver ut menyerna med hjälp av Spectre.Console som är snyggare än vanlig console
         public static int PrintChoiceMenu (string choice1, string choice2, string choice3, string choice4)
         {
             Dictionary<string, int> choice = new Dictionary<string, int>()
@@ -162,7 +167,13 @@ namespace SaleAdventure3000
             return choice[displayMenu];
             // Returnerar värdet i choice som hör ihop med rätt menyval.
         }
-
+        
+        /*I denna metod hämtar vi registrerat scoreboard.
+         *Populerar vi 2 listor med scoreboard och itererar en av de.
+         *Sen händer jämförelse mellan nuvarande score och registrerat score.
+         *I den icke-iterations lista ersätter vi data enligt jämförelse och 
+         *Ersätter alla raderna i txt filen med uppdaterat namn och score.
+         */
         internal static void ScoreBoardReg(Player player)
         {
             StreamReader reader = new StreamReader(@"C:\Users\Sheikah Slate\source\repos\SaleAdventure3000_Olle_Nikos\SaleAdventure3000\Scoreboard.txt");
@@ -186,7 +197,6 @@ namespace SaleAdventure3000
                     if (row.Contains(player.Name))
                     {
                         int newPoints = player.score;
-                        //int index = row.LastIndexOf(row);
                         int index = row.Length - 2 ;
                         int currentPoints= int.Parse(row.Substring(index, 2));
                         
