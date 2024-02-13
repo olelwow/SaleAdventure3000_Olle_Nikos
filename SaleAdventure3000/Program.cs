@@ -11,6 +11,7 @@ internal class Program
         bool run = true;
         while (run)
         {
+            Console.Clear();    
             Operations.Logo();
             Console.WriteLine("- - - Menu - - -\n" +
                 "1. Register\n" +
@@ -29,6 +30,7 @@ internal class Program
                     Operations.Login();
                 break;
                 case 3:
+                    Operations.Scoreboard();
                 break;
                 case 4:
                 run = false;

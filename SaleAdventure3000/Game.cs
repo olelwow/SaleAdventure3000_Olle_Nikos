@@ -23,21 +23,22 @@ namespace SaleAdventure3000
 
 
         // Skapar random antal NPCs och föremål
-        public void StartGame ()
+        public void StartGame (string username)
         {
             Grid gameGrid = new Grid();
-            Console.WriteLine("What is your name, adventurer?");
-            string? chosenName = Console.ReadLine();
+            //Console.WriteLine("What is your name, adventurer?");
+
+            //string? chosenName = Console.ReadLine();
 
 
-            while (chosenName == null || chosenName.Length < 3)
-            {
-                Console.WriteLine("Invalid name, must be at least 3 character long.");
-                Console.WriteLine("What is your name, adventurer?");
-                chosenName = Console.ReadLine();
-            }
+            //while (chosenName == null || chosenName.Length < 3)
+            //{
+            //    Console.WriteLine("Invalid name, must be at least 3 character long.");
+            //    Console.WriteLine("What is your name, adventurer?");
+            //    chosenName = Console.ReadLine();
+            //}
 
-            Player player = new Player(chosenName);
+            Player player = new Player(username);
             // Skapar nytt player objekt med det valda namnet, måste vara minst 3 tecken.
             int randomStartLocationX = new Random().Next(1,10);
             int randomStartLocationY = new Random().Next(1,10);
