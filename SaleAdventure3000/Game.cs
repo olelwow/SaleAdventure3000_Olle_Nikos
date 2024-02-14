@@ -14,8 +14,8 @@ namespace SaleAdventure3000
 
             Player player = new Player(username);
             // Skapar nytt player objekt med det valda namnet, måste vara minst 3 tecken.
-            int randomStartLocationX = new Random().Next(1,10);
-            int randomStartLocationY = new Random().Next(1,10);
+            //int randomStartLocationX = new Random().Next(1,10);
+            //int randomStartLocationY = new Random().Next(1,10);
             // Ger spelaren en random startposition på gameBoard.
 
             gameGrid.FillGrid(gameGrid.gameBoard);
@@ -26,8 +26,8 @@ namespace SaleAdventure3000
             {
                 player.MovePlayer
                     (gameGrid.gameBoard,
-                     randomStartLocationX,
-                     randomStartLocationY,
+                     1,
+                     1,
                      player,
                      gameGrid
                      );

@@ -13,7 +13,8 @@ public class Mechanics
             {
                 {grid.npcs },
                 {grid.wears },
-                {grid.consumables }
+                {grid.consumables },
+                {grid.goal}
             };
 
         for (int i = 0; i < entities.Count; i++)
@@ -49,9 +50,26 @@ public class Mechanics
                         break;
                     }
                 }
+                else if (entityArray[j] is Entity goal)
+                {
+                    if (gameBoard[player.PosX, player.PosY] == goal)
+                    {
+                        GameWon(player);
+                    }
+                }
             }
         }
     }
+    public static void GameWon (Player player)
+    {
+        Console.Clear();
+        Operations.Logo();
+        Console.WriteLine($"\nYou made it all the way to the goal! Congratulations!" +
+                          $"\nYou got a score of {player.score}");
+        Console.ReadLine();
+        player.Quit = false;
+    }
+
     public static void Encounter(NPC npc, Player player)
     {
         bool run = true;

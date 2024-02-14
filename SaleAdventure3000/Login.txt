@@ -1,9 +1,3 @@
-Olle
-
-
 Name : nikos
 Name : olle
-Name : qwerty
-Name : qqqqqq
-Name : nikos
-Name : gina
+Name : qwe

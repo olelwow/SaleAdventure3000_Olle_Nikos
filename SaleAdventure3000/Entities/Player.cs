@@ -27,12 +27,11 @@ namespace SaleAdventure3000.Entities
             player.PosY = firstY;
             gameBoard[PosX, PosY] = player;
             // Startposition för spelaren anges när metoden anropas.
-            while (true)
+            while (Quit)
             {
                 ConsoleKeyInfo keyInfo = Console.ReadKey(true);
                 Console.Clear();
-                Obstacle HorizontalLine = new Obstacle("XXX");
-                //Obstacle VerticalLine = new Obstacle(" X ");
+                string line = "¤¤¤";
                 if (gameBoard[PosX, PosY].CanPass == true)
                 {
                     gameBoard[PosX, PosY] = new Entity() { Symbol = " - "};
@@ -51,23 +50,23 @@ namespace SaleAdventure3000.Entities
                 else if ((keyInfo.Key == ConsoleKey.UpArrow ||
                     keyInfo.Key == ConsoleKey.W) && PosX > 1)
                 {
-                    if (gameBoard[PosX - 1, PosY].Symbol != HorizontalLine.Symbol)
+                    if (gameBoard[PosX - 1, PosY].Symbol != line)
                     {
                         PosX--;
                     }
                 }
                 else if ((keyInfo.Key == ConsoleKey.DownArrow ||
-                    keyInfo.Key == ConsoleKey.S) && PosX < 10)
+                    keyInfo.Key == ConsoleKey.S) && PosX < 20)
                 {
-                    if (gameBoard[PosX + 1, PosY].Symbol != HorizontalLine.Symbol)
+                    if (gameBoard[PosX + 1, PosY].Symbol != line)
                     {
                         PosX++;
                     }
                 }
                 else if ((keyInfo.Key == ConsoleKey.RightArrow ||
-                    keyInfo.Key == ConsoleKey.D) && PosY < 10)
+                    keyInfo.Key == ConsoleKey.D) && PosY < 20)
                 {
-                    if (gameBoard[PosX, PosY +1].Symbol != HorizontalLine.Symbol)
+                    if (gameBoard[PosX, PosY +1].Symbol != line) 
                     {
                         PosY++;
                     }
@@ -75,7 +74,7 @@ namespace SaleAdventure3000.Entities
                 else if ((keyInfo.Key == ConsoleKey.LeftArrow ||
                     keyInfo.Key == ConsoleKey.A) && PosY > 1)
                 {
-                    if (gameBoard[PosX, PosY - 1].Symbol != HorizontalLine.Symbol)
+                    if (gameBoard[PosX, PosY - 1].Symbol != line)
                     {
                         PosY--;
                     }
