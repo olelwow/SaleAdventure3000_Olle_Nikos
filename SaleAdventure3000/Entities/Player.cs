@@ -85,6 +85,7 @@ namespace SaleAdventure3000.Entities
                 // Eftersom man kommer åt dessa genom player. Samma för ChangePosition.
 
                 gameBoard = Mechanics.ChangePosition(gameBoard, player);
+                Console.WriteLine($"                             {player.Name}'s HP: {player.HP}");
                 grid.DrawGameBoard(gameBoard);
                 // Ändrar spelarens position och ritar upp gameBoard igen.
             }
@@ -92,41 +93,7 @@ namespace SaleAdventure3000.Entities
 
         public static void OpenBag (Player player)
         {
-            string[] spacerArray = ["        ", " ", "       ",
-                                    "      ", " ",
-                                    "      ", " ",
-                                    "    ", "   ", " ",
-                                    " ", " "];
-            Item[] items = new Item[player.Bag.Count];
-            // Array av items för jämförelse längre ner.
-            var showBag = 
-                new SelectionPrompt<string>()
-                .Title("  Item     Wearable   Amount   Equipped")
-                .PageSize(player.Bag.Count + 3);
-            // Skapar ny SelectionPrompt, med rubrikerna ovan.
-            int index = 0;
-
-            foreach (var item in player.Bag)
-            {
-                showBag.AddChoice
-                    ($"{item.Key.Name}" +
-                     $"{spacerArray[item.Key.Name.Length + 4 - 2]}" +
-                     $"{item.Key.Wear}" +
-                     $"{spacerArray[item.Key.Wear.ToString().Length - 2]}" +
-                     $"{item.Value}" +
-                     $"{spacerArray[0]}" +
-                     $"{item.Key.Equipped}"
-                     );
-                
-                // Adderar nödvändig info till showBag. För att detta skulle funka var jag tvungen 
-                // att ändra i Entity så att Name inte kan vara null.
-                items[index] = item.Key;
-                index++;
-                // Lägger till Item i arrayen.
-            }
-            showBag.AddChoice("Close Bag");
-            
-            var bagChoice = AnsiConsole.Prompt(showBag);
+            string bagChoice = Mechanics.PrintBagMenuAndReturnChoice(player);
             // Gör det möjligt att välja Item med piltangenterna, och sparar valet man gör med enter.
             
             foreach (var item in player.Bag)

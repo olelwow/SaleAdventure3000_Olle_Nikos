@@ -26,7 +26,7 @@ namespace SaleAdventure3000
                 Console.WriteLine("What is your name, adventurer?");
                 chosenName = Console.ReadLine();
             }
-            StreamWriter stream = new StreamWriter(@"C:\Users\Sheikah Slate\source\repos\SaleAdventure3000_Olle_Nikos\SaleAdventure3000\Login.txt", true);
+            StreamWriter stream = new StreamWriter(@"../../../Login.txt", true);
             //Player player = new Player(chosenName);
             stream.WriteLine($"Name : {chosenName}");
             stream.Close();
@@ -39,7 +39,7 @@ namespace SaleAdventure3000
             Console.Write("Enter your username: ");
             string? username = Console.ReadLine();
             bool found = false;
-            string[] lines = File.ReadAllLines(@"C:\Users\Sheikah Slate\source\repos\SaleAdventure3000_Olle_Nikos\SaleAdventure3000\Login.txt");
+            string[] lines = File.ReadAllLines(@"../../../Login.txt");
             for (int i = 0; i < lines.Length; i++)
             {
                 if (lines[i].Contains(username))
@@ -66,7 +66,7 @@ namespace SaleAdventure3000
         //Scoreboard metoden skriver ut scoreboard av alla spelare som har spelat
         internal static void Scoreboard()
         {
-            string[] lines = File.ReadAllLines(@"C:\Users\Sheikah Slate\source\repos\SaleAdventure3000_Olle_Nikos\SaleAdventure3000\Scoreboard.txt");
+            string[] lines = File.ReadAllLines(@"../../../Scoreboard.txt");
             for (int i = 0; i < lines.Length; i++)
             {
                 Console.WriteLine(lines[i]);
@@ -166,7 +166,7 @@ namespace SaleAdventure3000
          */
         internal static void ScoreBoardReg(Player player)
         {
-            StreamReader reader = new StreamReader(@"C:\Users\Sheikah Slate\source\repos\SaleAdventure3000_Olle_Nikos\SaleAdventure3000\Scoreboard.txt");
+            StreamReader reader = new StreamReader(@"../../../Scoreboard.txt");
             string line = "";
             List<string> lines = new List<string>();
             List<string> newLines = new List<string>();
@@ -178,7 +178,7 @@ namespace SaleAdventure3000
             }
             reader.Close();
 
-            StreamWriter writer = new StreamWriter(@"C:\Users\Sheikah Slate\source\repos\SaleAdventure3000_Olle_Nikos\SaleAdventure3000\Scoreboard.txt");
+            StreamWriter writer = new StreamWriter(@"../../../Scoreboard.txt");
 
             if (lines.Count > 0) 
             {

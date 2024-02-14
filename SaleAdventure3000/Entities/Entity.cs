@@ -8,7 +8,7 @@ namespace SaleAdventure3000.Entities
         public int PosY { get; set; }
         public string? Symbol { get; set; }
         public string Name { get; set; }
-        public string Color { get; set; } = "#ffffff";
+        public string SymbolColor { get; set; } = "#ffffff";
 
         public bool CanPass = true;
         

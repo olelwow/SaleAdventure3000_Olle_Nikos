@@ -27,7 +27,7 @@ namespace SaleAdventure3000.Items
             EntitySelection(wearableType);
             this.PosX = posX;
             this.PosY = posY;
-            this.Color = "#6699ff";
+            this.SymbolColor = "#6699ff";
         }
         public override void EntitySelection(string type)
         {

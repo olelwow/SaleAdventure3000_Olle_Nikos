@@ -45,7 +45,7 @@ namespace SaleAdventure3000.Entities
         };
         public Entity[] goal = 
         {
-            new Entity() { Symbol = "[+]", PosX = 20, PosY = 7, Color = "#00b300" }
+            new Entity() { Symbol = "[+]", PosX = 20, PosY = 7, SymbolColor = "#00b300" }
         };
 
 
@@ -130,12 +130,10 @@ namespace SaleAdventure3000.Entities
         {
             for (int i = 0; i < gameBoard.GetLength(0); i++)
             {
-                
                 Console.WriteLine("\n");
                 for (int j = 0; j < gameBoard.GetLength(1); j++)
                 {
-                    Console.Write(gameBoard[i, j].Symbol.Pastel(gameBoard[i,j].Color));
-                    //AnsiConsole.Markup($"[green on blue]{gameBoard[i, j].Symbol}[/]");
+                    Console.Write(gameBoard[i, j].Symbol.Pastel(gameBoard[i,j].SymbolColor));
                 }
             }
         }
