@@ -1,9 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using SaleAdventure3000.Entities;
+﻿using SaleAdventure3000.Entities;
 
 namespace SaleAdventure3000.Items
 {
@@ -40,26 +35,26 @@ namespace SaleAdventure3000.Items
                 */
             }
         }
-        public override bool Equals(object? obj)
-        {
-            if (obj == null || GetType() != obj.GetType())
-            {
-                return false;
-            }
+        //public override bool Equals(object? obj)
+        //{
+        //    if (obj == null || GetType() != obj.GetType())
+        //    {
+        //        return false;
+        //    }
 
-            Item other = (Item)obj;
-            return Name == other.Name;
-        }
-        // Override metod som gör det möjligt att betrakta två objekt som lika
-        // Ifall de delar samma Name.
+        //    Item other = (Item)obj;
+        //    return Name == other.Name;
+        //}
+        //// Override metod som gör det möjligt att betrakta två objekt som lika
+        //// Ifall de delar samma Name.
 
-        public override int GetHashCode()
-        {
-            if (Name != null)
-            {
-                return Name.GetHashCode();
-            }
-            return -1;
-        }
+        //public override int GetHashCode()
+        //{
+        //    if (Name != null)
+        //    {
+        //        return Name.GetHashCode();
+        //    }
+        //    return -1;
+        //}
     }
 }

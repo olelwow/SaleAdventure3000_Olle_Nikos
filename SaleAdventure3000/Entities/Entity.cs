@@ -1,9 +1,4 @@
 ﻿using SaleAdventure3000.Items;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace SaleAdventure3000.Entities
 {
@@ -14,6 +9,29 @@ namespace SaleAdventure3000.Entities
         public string? Symbol { get; set; }
         public string Name { get; set; }
 
+        public bool CanPass = true;
+
+        public override bool Equals(object? obj)
+        {
+            if (obj == null || GetType() != obj.GetType())
+            {
+                return false;
+            }
+
+            Item other = (Item)obj;
+            return Symbol == other.Symbol;
+        }
+        // Override metod som gör det möjligt att betrakta två objekt som lika
+        // Ifall de delar samma Name.
+
+        public override int GetHashCode()
+        {
+            if (Symbol != null)
+            {
+                return Symbol.GetHashCode();
+            }
+            return -1;
+        }
 
     }
 }
