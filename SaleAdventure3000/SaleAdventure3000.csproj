@@ -8,6 +8,7 @@
   </PropertyGroup>
 
   <ItemGroup>
+    <None Remove="Entities\NewFile1.txt" />
     <None Remove="GameMechanics\NewFile1.txt" />
   </ItemGroup>
 

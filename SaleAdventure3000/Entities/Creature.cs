@@ -1,10 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-
-namespace SaleAdventure3000.Entities
+﻿namespace SaleAdventure3000.Entities
 {
     public class Creature : Entity
     {

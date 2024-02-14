@@ -1,6 +1,4 @@
-﻿
-
-using SaleAdventure3000;
+﻿using SaleAdventure3000;
 using SaleAdventure3000.Entities;
 using SaleAdventure3000.Items;
 

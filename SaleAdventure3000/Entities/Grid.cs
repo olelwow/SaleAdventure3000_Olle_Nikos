@@ -1,15 +1,13 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using SaleAdventure3000.Items;
+﻿using SaleAdventure3000.Items;
 
 namespace SaleAdventure3000.Entities
 {
     public class Grid
     {
         public Entity[,] gameBoard = new Entity[12, 12];
+        //public static string horizontalLine = "XXX";
+        Obstacle obstacle = new Obstacle("XXX");
+        //public static string verticalLine = " X ";
         public static int itemsCount = new Random().Next(2, 4);
         public static int npcCount = new Random().Next(4, 8);
         public NPC[] npcs = new NPC[npcCount];
@@ -26,7 +24,7 @@ namespace SaleAdventure3000.Entities
                 {
                     if (i == 0 || i == 11)
                     {
-                        gameBoard[i, j] = new Entity() { Symbol = " - ", PosX = i, PosY = j};
+                        gameBoard[i, j] = new Entity() { Symbol = "===", PosX = i, PosY = j};
                     }
                     else if (j == 0 || j == 11)
                     {
@@ -66,6 +64,37 @@ namespace SaleAdventure3000.Entities
                 consumables[i].PosY = posY;
                 gameBoard[posX, posY] = consumables[i];
             }
+
+
+           
+            for (int j = 0; j < 16; j++)
+            {
+                int posX = new Random().Next(1, 10);
+                int posY = new Random().Next(1, 10);
+                gameBoard[posX, posY] = new Obstacle(obstacle.Symbol)
+                {
+                    PosX = posX,
+                    PosY = posY
+                };
+            }
+            
+                
+
+            
+            /* ---------------------
+             * hej
+             * __________________
+             *                   |
+             *                   |
+             *         |         |
+             *         |_________________         
+             *        " ___ "   |        |   
+             *                           |
+             *                           |
+             *           __  |        
+             *                   
+             *                   
+             */
         }
 
         public void DrawGameBoard(Entity[,] gameBoard)

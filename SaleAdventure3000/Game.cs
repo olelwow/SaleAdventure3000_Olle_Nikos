@@ -1,11 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using SaleAdventure3000.Entities;
-using SaleAdventure3000.Items;
-
+﻿using SaleAdventure3000.Entities;
 
 namespace SaleAdventure3000
 {

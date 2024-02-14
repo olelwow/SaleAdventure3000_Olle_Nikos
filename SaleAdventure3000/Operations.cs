@@ -1,15 +1,5 @@
 ﻿using SaleAdventure3000.Entities;
-using SaleAdventure3000.Items;
 using Spectre.Console;
-using System;
-using System.Collections.Generic;
-using System.IO;
-using System.Linq;
-using System.Numerics;
-using System.Text;
-using System.Threading.Tasks;
-using System.Xml.Linq;
-using static System.Net.Mime.MediaTypeNames;
 
 namespace SaleAdventure3000
 {

@@ -1,11 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Runtime.CompilerServices;
-using System.Text;
-using System.Threading.Tasks;
-using SaleAdventure3000;
-using SaleAdventure3000.Items;
+﻿using SaleAdventure3000.Items;
 using Spectre.Console;
 
 namespace SaleAdventure3000.Entities
@@ -38,7 +31,13 @@ namespace SaleAdventure3000.Entities
             {
                 ConsoleKeyInfo keyInfo = Console.ReadKey(true);
                 Console.Clear();
-                gameBoard[PosX, PosY] = new Entity() { Symbol = " - "};
+                Obstacle HorizontalLine = new Obstacle("XXX");
+                //Obstacle VerticalLine = new Obstacle(" X ");
+                if (gameBoard[PosX, PosY].CanPass == true)
+                {
+                    gameBoard[PosX, PosY] = new Entity() { Symbol = " - "};
+                }
+                
                 // Ersätter spelarens gamla position med ett -
                 if (keyInfo.Key == ConsoleKey.Q)
                 {
@@ -52,22 +51,34 @@ namespace SaleAdventure3000.Entities
                 else if ((keyInfo.Key == ConsoleKey.UpArrow ||
                     keyInfo.Key == ConsoleKey.W) && PosX > 1)
                 {
-                    PosX--;
+                    if (gameBoard[PosX - 1, PosY].Symbol != HorizontalLine.Symbol)
+                    {
+                        PosX--;
+                    }
                 }
                 else if ((keyInfo.Key == ConsoleKey.DownArrow ||
                     keyInfo.Key == ConsoleKey.S) && PosX < 10)
                 {
-                    PosX++;
+                    if (gameBoard[PosX + 1, PosY].Symbol != HorizontalLine.Symbol)
+                    {
+                        PosX++;
+                    }
                 }
                 else if ((keyInfo.Key == ConsoleKey.RightArrow ||
                     keyInfo.Key == ConsoleKey.D) && PosY < 10)
                 {
-                    PosY++;
+                    if (gameBoard[PosX, PosY +1].Symbol != HorizontalLine.Symbol)
+                    {
+                        PosY++;
+                    }
                 }
                 else if ((keyInfo.Key == ConsoleKey.LeftArrow ||
                     keyInfo.Key == ConsoleKey.A) && PosY > 1)
                 {
-                    PosY--;
+                    if (gameBoard[PosX, PosY - 1].Symbol != HorizontalLine.Symbol)
+                    {
+                        PosY--;
+                    }
                 }
 
                 Mechanics.ControlCollision(gameBoard, player, grid);
