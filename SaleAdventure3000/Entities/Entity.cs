@@ -8,8 +8,14 @@ namespace SaleAdventure3000.Entities
         public int PosY { get; set; }
         public string? Symbol { get; set; }
         public string Name { get; set; }
+        public string Color { get; set; } = "#ffffff";
 
         public bool CanPass = true;
+        
+        public virtual void EntitySelection(string type)
+        {
+
+        }
 
         public override bool Equals(object? obj)
         {

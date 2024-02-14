@@ -1,100 +1,129 @@
-﻿using SaleAdventure3000.Items;
+﻿using Pastel;
+using SaleAdventure3000.Items;
+using Spectre.Console;
 
 namespace SaleAdventure3000.Entities
 {
     public class Grid
     {
-        public Entity[,] gameBoard = new Entity[12, 12];
-        //public static string horizontalLine = "XXX";
-        Obstacle obstacle = new Obstacle("XXX");
-        //public static string verticalLine = " X ";
-        public static int itemsCount = new Random().Next(2, 4);
-        public static int npcCount = new Random().Next(4, 8);
-        public NPC[] npcs = new NPC[npcCount];
-        public Wearable[] wears = new Wearable[itemsCount];
-        public Consumable[] consumables = new Consumable[itemsCount];
+        public Entity[,] gameBoard = new Entity[22, 22];
+
+        
+
+        public NPC[] npcs =
+        {
+            new("Nikos", 4, 1),
+            new("Olle", 1, 10),
+            new("Jonas", 10, 20),
+            new("Ragnar", 16, 11),
+            new("Nikos", 15, 20),
+            new("Olle", 16, 5),
+            new("Jonas", 1, 3),
+            new("Ragnar", 9, 18),
+            new("Nikos", 19, 18),
+            new("Olle", 16, 13),
+            new("Ragnar", 5, 7),
+            new("Jonas", 3, 12),
+        };
+
+        public Wearable[] wears =
+        {
+            new("Boots", 3, 3),
+            new("Hat", 3, 11),
+            new("Necklace", 5, 1),
+            new("Boots", 18, 12),
+            new("Hat", 20, 15),
+            new("Necklace", 10, 17),
+        };
+        public Consumable[] consumables =
+        {
+            new("Cheese", 6, 1),
+            new("Bad-Apple", 3, 5),
+            new("Pie", 12, 19),
+            new("Egg", 18, 16),
+            new("Cheese", 9, 1)
+        };
+        public Entity[] goal = 
+        {
+            new Entity() { Symbol = "[+]", PosX = 20, PosY = 7, Color = "#00b300" }
+        };
+
 
         public Grid(){ }
 
+        //public string empty ;
+        //empty.ForeColor = System.Drawing.Color.Red;
         public void FillGrid(Entity[,] gameBoard)
         {
-            for (int i = 0; i < 12; i++)
+            
+            for (int i = 0; i < gameBoard.GetLength(0); i++)
             {
-                for (int j = 0; j < 12; j++)
+                for (int j = 0; j < gameBoard.GetLength(1); j++)
                 {
-                    if (i == 0 || i == 11)
+                    if (i == 0 || i == 21)
                     {
-                        gameBoard[i, j] = new Entity() { Symbol = "===", PosX = i, PosY = j};
+                        gameBoard[i, j] = new Entity() { Symbol = "===", PosX = i, PosY = j };
                     }
-                    else if (j == 0 || j == 11)
+                    else if (j == 0 || j == 21)
                     {
                         gameBoard[i, j] = new Entity() { Symbol = " | ", PosX = i, PosY = j };
                     }
                     else
                     {
-                        gameBoard[i, j] = new Entity() { Symbol = " - ", PosX = i, PosY = j };
+                        gameBoard[i, j] = new Entity() { Symbol = "   ", PosX = i, PosY = j };
                     }
                 }
             }
-            for (int i = 0; i < npcCount; i++)
+            for (int i = 0; i < npcs.Length; i++)
             {
-                int posX = new Random().Next(1, 10);
-                int posY = new Random().Next(1, 10);
-                npcs[i] = new NPC();
-                npcs[i].PosX = posX;
-                npcs[i].PosY = posY;
-                gameBoard[posX, posY] = npcs[i];
+                gameBoard[npcs[i].PosX, npcs[i].PosY] = npcs[i];
             }
-            // Initierar dessa NPCs och föremål och sätter ut dem på gameBoard.
-            for (int i = 0; i < itemsCount; i++)
+            //Initierar dessa NPCs och föremål och sätter ut dem på gameBoard.
+            for (int i = 0; i < wears.Length; i++)
             {
-                int posX = new Random().Next(1, 10);
-                int posY = new Random().Next(1, 10);
-                wears[i] = new Wearable();
-                wears[i].PosX = posX;
-                wears[i].PosY = posY;
-                gameBoard[posX, posY] = wears[i];
+                gameBoard[wears[i].PosX, wears[i].PosY] = wears[i];
             }
-            for (int i = 0; i < itemsCount; i++)
+            for (int i = 0; i < consumables.Length; i++)
             {
-                int posX = new Random().Next(1, 10);
-                int posY = new Random().Next(1, 10);
-                consumables[i] = new Consumable();
-                consumables[i].PosX = posX;
-                consumables[i].PosY = posY;
-                gameBoard[posX, posY] = consumables[i];
+                gameBoard[consumables[i].PosX, consumables[i].PosY] = consumables[i];
             }
+            Dictionary<int, int[]> horizontalCoords = new Dictionary<int, int[]>()
+            {
+                {2, new[] {2, 4, 6, 7, 8, 10, 11, 12, 14, 15, 16, 17, 18, 19} },
+                {3, new[] {2, 4, 6, 10, 14} },
+                {4, new[] {2, 3, 4, 5, 6, 7, 8, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19} },
+                {5, new[] {2, 10} },
+                {6, new[] {2, 4, 6, 8, 9, 10, 11, 12, 13, 14, 15, 17, 19} },
+                {7, new[] {1, 2, 3, 4, 5, 6, 8, 17, 19} },
+                {8, new[] {8, 10, 11, 12, 13, 14, 15, 17, 19} },
+                {9, new[] {2, 4, 5, 6, 7, 8, 10, 17, 19} },
+                {10, new[] {1, 2, 3, 4, 10, 12, 13, 14, 15, 16, 19} },
+                {11, new[] {6, 7, 8, 9, 10, 12, 18, 19} },
+                {12, new[] {2, 3, 4, 6, 12, 14, 15, 16, 17}},
+                {13, new[] {2, 6, 7, 8, 9, 10, 11, 12, 14, 15, 16, 17, 18, 19} },
+                {14, new[] {1, 2, 6, 14} },
+                {15, new[] {1, 2, 3, 4, 6, 7, 8, 10, 11, 12, 14, 15, 16, 17, 18, 19} },
+                {16, new[] {6, 10, 14} },
+                {17, new[] {1, 2, 4, 6, 7, 8, 9, 10, 12,  14, 15, 16, 17, 18 } },
+                {18, new[] {4, 6, 12, 14 }},
+                {19, new[] {1, 2, 3, 4, 6, 7, 8, 9, 10, 12, 14, 15, 16, 17, 19} },
+                {20, new[] {6, 12, 14, 19}},
+                // Add more horizontal coordinates as needed
+            };
 
-
-           
-            for (int j = 0; j < 16; j++)
+            foreach (var coord in horizontalCoords)
             {
-                int posX = new Random().Next(1, 10);
-                int posY = new Random().Next(1, 10);
-                gameBoard[posX, posY] = new Obstacle(obstacle.Symbol)
+                for (int i = 0; i < coord.Value.Length; i++)
                 {
-                    PosX = posX,
-                    PosY = posY
-                };
+                    gameBoard[coord.Key,coord.Value.ElementAt(i)] = new Obstacle("¤¤¤")
+                    {
+                        PosX = coord.Key,
+                        PosY = coord.Value.ElementAt(i)
+                    };
+                }
             }
-            
-                
-
-            
-            /* ---------------------
-             * hej
-             * __________________
-             *                   |
-             *                   |
-             *         |         |
-             *         |_________________         
-             *        " ___ "   |        |   
-             *                           |
-             *                           |
-             *           __  |        
-             *                   
-             *                   
-             */
+            // GOAL
+            gameBoard[20, 7] = goal[0];
         }
 
         public void DrawGameBoard(Entity[,] gameBoard)
@@ -105,10 +134,10 @@ namespace SaleAdventure3000.Entities
                 Console.WriteLine("\n");
                 for (int j = 0; j < gameBoard.GetLength(1); j++)
                 {
-                    Console.Write(gameBoard[i, j].Symbol);
+                    Console.Write(gameBoard[i, j].Symbol.Pastel(gameBoard[i,j].Color));
+                    //AnsiConsole.Markup($"[green on blue]{gameBoard[i, j].Symbol}[/]");
                 }
             }
         }
-
     }
 }

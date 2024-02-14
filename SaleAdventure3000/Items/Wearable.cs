@@ -16,13 +16,31 @@ namespace SaleAdventure3000.Items
             // Siffrorna i arrayen representerar Poweradded och HPBoost.
         };
 
-        public Wearable()
+        public Wearable(string wearableType, int posX, int posY)
         {
-            this.Symbol = symbols[randomizedProperties];
-            this.Name = names[randomizedProperties];
-            this.PowerAdded = wearableProperties[Symbol].ElementAt(0);
-            this.HpBoost = wearableProperties[Symbol].ElementAt(1);
-            this.Wear = true;
+            // gammal blyat
+            //this.Symbol = symbols[randomizedProperties];
+            //this.Name = names[randomizedProperties];
+            //this.PowerAdded = wearableProperties[Symbol].ElementAt(0);
+            //this.HpBoost = wearableProperties[Symbol].ElementAt(1);
+            //this.Wear = true;
+            EntitySelection(wearableType);
+            this.PosX = posX;
+            this.PosY = posY;
+            this.Color = "#6699ff";
+        }
+        public override void EntitySelection(string type)
+        {
+            for (int i = 0; i < names.Length; i++)
+            {
+                if (type == names[i])
+                {
+                    this.Name = names[i];
+                    this.Symbol = symbols[i];
+                    this.PowerAdded = wearableProperties[Symbol].ElementAt(0);
+                    this.HpBoost = wearableProperties[Symbol].ElementAt(1);
+                }
+            }
         }
 
         public override void OnPickup (Item item, Player player)

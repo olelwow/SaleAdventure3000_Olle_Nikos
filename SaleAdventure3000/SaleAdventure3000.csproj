@@ -13,6 +13,7 @@
   </ItemGroup>
 
   <ItemGroup>
+    <PackageReference Include="Pastel" Version="5.0.0" />
     <PackageReference Include="Spectre.Console" Version="0.48.0" />
   </ItemGroup>
 
