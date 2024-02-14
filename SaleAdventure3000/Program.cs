@@ -13,6 +13,7 @@ internal class Program
         {
             Console.Clear();    
             Operations.Logo();
+
             Console.WriteLine("- - - Menu - - -\n");
             int choice = Operations.PrintChoiceMenu("Register",
                 "Log in", "View scoreboard", "Quit");

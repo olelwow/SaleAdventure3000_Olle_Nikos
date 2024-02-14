@@ -24,7 +24,7 @@ namespace SaleAdventure3000.Items
             EntitySelection(consumableType);
             this.PosX = posX;
             this.PosY = posY;
-            this.Color = "#ff9966";
+            this.SymbolColor = "#ff9966";
 
         }
         

@@ -40,7 +40,7 @@
                     this.Name = names[i];
                     this.HP = NPCProperties[Symbol].ElementAt(0);
                     this.Power = NPCProperties[Symbol].ElementAt(1);
-                    this.Color = colors[i];
+                    this.SymbolColor = colors[i];
                 }
             }
         }
