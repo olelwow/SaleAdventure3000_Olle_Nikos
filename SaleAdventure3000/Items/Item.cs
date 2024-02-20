@@ -12,12 +12,11 @@ namespace SaleAdventure3000.Items
         public int Amount { get; set; }
         public bool Equipped { get; set; } = false;
 
+        // Metod som styr vad som händer när man plockar upp ett Item,
+        // olika beteende beroende på ifall föremålet är wearable eller consumable.
         public virtual void OnPickup (Item item, Player player)
         {
         }
-        // Metod som styr vad som händer när man plockar upp ett Item,
-        // olika beteende beroende på ifall föremålet är wearable eller consumable.
-
         public void AddToBag (Item item, Player player)
         {
             Dictionary<Item,int> bag = player.GetBag();
@@ -35,26 +34,8 @@ namespace SaleAdventure3000.Items
                 */
             }
         }
-        //public override bool Equals(object? obj)
-        //{
-        //    if (obj == null || GetType() != obj.GetType())
-        //    {
-        //        return false;
-        //    }
-
-        //    Item other = (Item)obj;
-        //    return Name == other.Name;
-        //}
-        //// Override metod som gör det möjligt att betrakta två objekt som lika
-        //// Ifall de delar samma Name.
-
-        //public override int GetHashCode()
-        //{
-        //    if (Name != null)
-        //    {
-        //        return Name.GetHashCode();
-        //    }
-        //    return -1;
-        //}
+        public override void EntitySelection(string type)
+        {
+        }
     }
 }

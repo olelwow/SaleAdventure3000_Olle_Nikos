@@ -6,43 +6,38 @@ namespace SaleAdventure3000.Items
     {
         private readonly string[] names = ["Egg", "Pie", "Cheese", "Bad-Apple"];
         private readonly string[] symbols = [" E ", " P ", " C ", "B A"];// CxDDDD
+        private readonly string[] colors = ["#b5ba9b", "#61401b", "#dbc63d", "#382121"];
         private readonly Dictionary<string, int> ConsumableAttributes = new Dictionary<string, int>()
         {
+            // Egg ger 10hp, Pie ger 20, Cheese ger 30, Rotten Apple ger -30
             {" E ", 10 },
             {" P ", 20},
             {" C ", 30},
             {"B A", -30} 
-            // Egg ger 10hp, Pie ger 20, Cheese ger 30, Rotten Apple ger -30
         };
-        
-        private readonly int randomizedProperties = new Random().Next(0, 3);
-        public Consumable(string consumableType, int posX, int posY)
+        public Consumable(string type, int posX, int posY)
         {
-            //this.Symbol = ConsumableSymbols[randomizedProperties];
-            //this.HealAmount = ConsumableAttributes[this.Symbol];
-            //this.Wear = false;
-            EntitySelection(consumableType);
+            EntitySelection(type);
             this.PosX = posX;
             this.PosY = posY;
-            this.SymbolColor = "#ff9966";
-
         }
         
         public override void OnPickup (Item item, Player player)
         {
             Console.WriteLine($"{player.Name} picked up a {item.Name}");
-
             AddToBag(item, player);
         }
-        public override void EntitySelection(string npcType)
+        public override void EntitySelection(string type)
         {
+            // Metod som väljer rätt egenskaper beroende på vilket namn man skrivit in i konstruktorn.
             for (int i = 0; i < names.Length; i++)
             {
-                if (npcType == names[i])
+                if (type == names[i])
                 {
-                    Symbol = symbols[i];
-                    Name = names[i];
-                    HealAmount = ConsumableAttributes[symbols[i]];
+                    this.Symbol = symbols[i];
+                    this.Name = names[i];
+                    this.SymbolColor = colors[i];
+                    this.HealAmount = ConsumableAttributes[symbols[i]];
                 }
             }
         }

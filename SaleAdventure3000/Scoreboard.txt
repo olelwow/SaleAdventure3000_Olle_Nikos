@@ -1,1 +1,2 @@
-Name : olle - Score : 30
+Name : olle - Score : 35
+Name : torkel - Score : 10

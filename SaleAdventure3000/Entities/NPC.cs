@@ -16,25 +16,18 @@
             // Siffrorna i arrayen representerar HP och Power.
         };
 
-        public NPC(string npcType, int posX, int posY)
+        public NPC(string type, int posX, int posY)
         {
-            // gammal idé
-            //Symbol = symbols[randomizedProperties];
-            //Name = names[randomizedProperties];
-            //HP = NPCProperties[Symbol].ElementAt(0);
-            //Power = NPCProperties[Symbol].ElementAt(1);
-
-            // ny idé, wack
-            EntitySelection(npcType);
+            EntitySelection(type);
             this.PosX = posX;
             this.PosY = posY;
-            
         }
-        public override void EntitySelection(string npcType)
+        public override void EntitySelection(string type)
         { 
+            // Metod som väljer rätt egenskaper beroende på vilket namn man skrivit in i konstruktorn.
             for (int i = 0; i < names.Length; i++)
             {
-                if (npcType == names[i])
+                if (type == names[i])
                 {
                     this.Symbol = symbols[i];
                     this.Name = names[i];

@@ -1,15 +1,15 @@
 ﻿using SaleAdventure3000.Items;
-using Spectre.Console;
 
 namespace SaleAdventure3000.Entities
 {
     public class Player : Creature
     {
-        public bool Quit = true;
+        public bool Run = true;
+
+        // Bag som lagrar objekt av typen Item som key, och en int som indikerar antal av
+        // detta item som spelaren har i bagen.
         private Dictionary<Item, int> Bag = new Dictionary<Item, int>();
-        // Spelarens väska, lagrar objektet som key
-        // och value indikerar antal av detta objekt som spelaren har i väskan.
-        // Satt till Private eftersom endast spelarobjektet behöver ha koll på väskan.
+        
         public int score = 0;
         public Player(string name)
         {
@@ -19,28 +19,27 @@ namespace SaleAdventure3000.Entities
             this.Power = 15;
             this.score = 0;
         }
-        // När man skapar ett spelar-objekt så lägger man även till namn.
-
+        
         public void MovePlayer(Entity[,] gameBoard, int firstX, int firstY, Player player, Grid grid)
         {
+            // Startposition för spelaren anges när metoden anropas.
             player.PosX = firstX;
             player.PosY = firstY;
             gameBoard[PosX, PosY] = player;
-            // Startposition för spelaren anges när metoden anropas.
-            while (Quit)
+            
+            while (Run)
             {
                 ConsoleKeyInfo keyInfo = Console.ReadKey(true);
                 Console.Clear();
                 string line = "¤¤¤";
                 if (gameBoard[PosX, PosY].CanPass == true)
                 {
-                    gameBoard[PosX, PosY] = new Entity() { Symbol = " - "};
+                    // Ersätter spelarens gamla position med ett -
+                    gameBoard[PosX, PosY] = new Obstacle(" - ");
                 }
-                
-                // Ersätter spelarens gamla position med ett -
                 if (keyInfo.Key == ConsoleKey.Q)
                 {
-                    player.Quit = false;
+                    player.Run = false;
                     break;
                 }
                 else if (keyInfo.Key == ConsoleKey.B)
@@ -79,39 +78,40 @@ namespace SaleAdventure3000.Entities
                         PosY--;
                     }
                 }
-
-                Mechanics.ControlCollision(gameBoard, player, grid);
                 // Tar endast in player objektet istället för PosX, PosY 
                 // Eftersom man kommer åt dessa genom player. Samma för ChangePosition.
+                Mechanics.ControlCollision(gameBoard, player, grid);
 
+                // Ändrar spelarens position och ritar upp gameBoard igen.
                 gameBoard = Mechanics.ChangePosition(gameBoard, player);
                 Console.WriteLine($"                             {player.Name}'s HP: {player.HP}");
                 grid.DrawGameBoard(gameBoard);
-                // Ändrar spelarens position och ritar upp gameBoard igen.
             }
         }
 
         public static void OpenBag (Player player)
-        {
-            string bagChoice = Mechanics.PrintBagMenuAndReturnChoice(player);
+        {   
             // Gör det möjligt att välja Item med piltangenterna, och sparar valet man gör med enter.
-            
+            string bagChoice = Mechanics.PrintBagMenuAndReturnChoice(player);
+
             foreach (var item in player.Bag)
             {
                 if (bagChoice.Contains(item.Key.Name) && item.Key.Wear == false)
                 {
+                    // Kollar ifall föremålets namn stämmer överens med valet, isåfall så
+                    // äter man upp föremålet och det tas bort ifrån bagen med metoden Consume().
                     Console.WriteLine($"{player.Name} eats a {item.Key.Name}. It heals for {item.Key.HealAmount}.");
                     player.HP += item.Key.HealAmount;
                     player.Consume(player, item.Key);
-                    // Kollar ifall föremålets namn stämmer överens med valet, isåfall så
-                    // äter man upp föremålet och det tas bort ifrån bagen med metoden Consume().
                 }
                 else if ((bagChoice.Contains(item.Key.Name) && item.Key.Wear == true) && item.Key.Equipped == true)
                 {
+                    // Kollar ifall föremålet är wearable samt ifall det redan är equipped.
                     player.Unequip(player, item.Key);
                 }
                 else if ((bagChoice.Contains(item.Key.Name) && item.Key.Wear == true) && item.Key.Equipped == false)
                 {
+                    // Kollar ifall föremålet är wearable samt ifall det inte redan är equipped.
                     player.Equip(player, item.Key);
                 }
                 else if (bagChoice.Equals("Close Bag"))
@@ -122,6 +122,9 @@ namespace SaleAdventure3000.Entities
         }
         public void Consume(Player player, Item item)
         {
+            // Sköter vad som händer när man använder en consumable. Finns det fler av
+            // samma item i bagen så minskar value med 1, äter man den sista tas både
+            // key och value bort från spelarens bag.
             if (player.Bag.ContainsKey(item) && player.Bag[item] > 1)
             {
                 player.Bag[item]--;
@@ -130,9 +133,6 @@ namespace SaleAdventure3000.Entities
             {
                 player.Bag.Remove(item);
             }
-            // Sköter vad som händer när man använder en consumable. Finns det fler av
-            // samma item i bagen så minskar value med 1, äter man den sista tas både
-            // key och value bort från spelarens bag.
         }
 
         public void Unequip (Player player, Item item)
@@ -154,11 +154,11 @@ namespace SaleAdventure3000.Entities
             player.HP += item.HpBoost;
             player.Power += item.PowerAdded;
         }
+        // Getter för spelarens bag, eftersom bagen är private och inte synlig utanför
+        // klassen player.
         public Dictionary<Item, int> GetBag ()
         {
             return this.Bag;
         }
-        // Getter för spelarens bag, eftersom bagen är private och inte synlig utanför
-        // klassen player.
     }
 }
