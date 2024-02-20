@@ -2,21 +2,21 @@
 {
     public abstract class Creature : Entity
     {
-        private int HP;
-        private int Power;
+        private int hP;
+        private int power;
         public Creature() { }
         public override void EntitySelection(string type)
         {
         }
-        public int HPGetSet
+        public int HP
         {
-            get { return this.HP; }
-            set { this.HP = value; }
+            get { return this.hP; }
+            set { this.hP = value; }
         }
-        public int PowerGetSet
+        public int Power
         {
-            get { return this.Power; }
-            set { this.Power = value; }
+            get { return this.power; }
+            set { this.power = value; }
         }
     }
 }

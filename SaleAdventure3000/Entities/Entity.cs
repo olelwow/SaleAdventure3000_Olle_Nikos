@@ -4,12 +4,12 @@ namespace SaleAdventure3000.Entities
 {
     public abstract class Entity
     {
-        private int PosX;
-        private int PosY;
-        private string? Symbol;
-        private string? Name;
-        private string SymbolColor = "#ffffff";
-        private string BackgroundColor = "000000";
+        private int posX;
+        private int posY;
+        private string? symbol;
+        private string? name;
+        private string symbolColor = "#ffffff";
+        private string backgroundColor = "000000";
 
         public bool CanPass = true;
 
@@ -25,45 +25,45 @@ namespace SaleAdventure3000.Entities
             }
 
             Item other = (Item)obj;
-            return Symbol == other.Symbol;
+            return symbol == other.symbol;
         }
         public override int GetHashCode()
         {
-            if (Symbol != null)
+            if (symbol != null)
             {
-                return Symbol.GetHashCode();
+                return symbol.GetHashCode();
             }
             return -1;
         }
-        public int PosXGetSet
+        public int PosX
         {
-            get { return this.PosX ; }
-            set { this.PosX = value; }
+            get { return this.posX ; }
+            set { this.posX = value; }
         }
-        public int PosYGetSet
+        public int PosY
         {
-            get { return this.PosY; }
-            set { this.PosY = value; }
+            get { return this.posY; }
+            set { this.posY = value; }
         }
-        public string NameGetSet
+        public string Name
         {
-            get { return this.Name; }
-            set { this.Name = value; }
+            get { return this.name; }
+            set { this.name = value; }
         }
-        public string SymbolGetSet
+        public string Symbol
         {
-            get { return this.Symbol; }
-            set { this.Symbol = value; }
+            get { return this.symbol; }
+            set { this.symbol = value; }
         }
-        public string SymbolColorGetSet
+        public string SymbolColor
         {
-            get { return this.SymbolColor; }
-            set { this.SymbolColor = value; }
+            get { return this.symbolColor; }
+            set { this.symbolColor = value; }
         }
-        public string BackgroundColorGetSet
+        public string BackgroundColor
         {
-            get { return this.BackgroundColor; }
-            set { this.BackgroundColor = value; }
+            get { return this.backgroundColor; }
+            set { this.backgroundColor = value; }
         }
     }
 }

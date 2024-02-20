@@ -42,7 +42,7 @@ namespace SaleAdventure3000.Entities
         };
         public Entity[] goal = 
         {
-            new Obstacle("[+]") {PosXGetSet = 20, PosYGetSet = 7, SymbolColorGetSet = "#00b300" }
+            new Obstacle("[+]") {PosX = 20, PosY = 7, SymbolColor = "#000000" }
         };
 
         public Grid(){ }
@@ -55,30 +55,30 @@ namespace SaleAdventure3000.Entities
                 {
                     if (i == 0 || i == 21)
                     {
-                        gameBoard[i, j] = new Obstacle("===") {PosXGetSet = i, PosYGetSet = j };
+                        gameBoard[i, j] = new Obstacle("===") {PosX = i, PosY = j };
                     }
                     else if (j == 0 || j == 21)
                     {
-                        gameBoard[i, j] = new Obstacle(" | ") { PosXGetSet = i, PosYGetSet = j };
+                        gameBoard[i, j] = new Obstacle(" | ") { PosX = i, PosY = j };
                     }
                     else
                     {
-                        gameBoard[i, j] = new Obstacle("   ") { PosXGetSet = i, PosYGetSet = j };
+                        gameBoard[i, j] = new Obstacle("   ") { PosX = i, PosY = j };
                     }
                 }
             }
             // Går igenom arrays av npcs, wearables samt consumables och sätter ut objekten på kartan.
             for (int i = 0; i < npcs.Length; i++)
             {
-                gameBoard[npcs[i].PosXGetSet, npcs[i].PosYGetSet] = npcs[i];
+                gameBoard[npcs[i].PosX, npcs[i].PosY] = npcs[i];
             }
             for (int i = 0; i < wears.Length; i++)
             {
-                gameBoard[wears[i].PosXGetSet, wears[i].PosYGetSet] = wears[i];
+                gameBoard[wears[i].PosX, wears[i].PosY] = wears[i];
             }
             for (int i = 0; i < consumables.Length; i++)
             {
-                gameBoard[consumables[i].PosXGetSet, consumables[i].PosYGetSet] = consumables[i];
+                gameBoard[consumables[i].PosX, consumables[i].PosY] = consumables[i];
             }
             Dictionary<int, int[]> horizontalCoords = new Dictionary<int, int[]>()
             {
@@ -109,8 +109,8 @@ namespace SaleAdventure3000.Entities
                 {
                     gameBoard[coord.Key,coord.Value.ElementAt(i)] = new Obstacle("¤¤¤")
                     {
-                        PosXGetSet = coord.Key,
-                        PosYGetSet = coord.Value.ElementAt(i)
+                        PosX = coord.Key,
+                        PosY = coord.Value.ElementAt(i)
                     };
                 }
             }
@@ -118,16 +118,16 @@ namespace SaleAdventure3000.Entities
             gameBoard[20, 7] = goal[0];
         }
         // Metod som ritar upp det GameBoard man skickat in som parameter.
-        public void DrawGameBoard(Entity[,] gameBoard, int x, int y)
+        public void DrawGameBoard(Entity[,] gameBoard)
         {
             for (int i = 0; i < gameBoard.GetLength(0); i++)
             {
                 Console.WriteLine("");
                 for (int j = 0; j < gameBoard.GetLength(1); j++)
                 {
-                    Console.Write(gameBoard[i, j].SymbolGetSet
-                                 .Pastel(gameBoard[i,j].SymbolColorGetSet)
-                                 .PastelBg(gameBoard[i, j].BackgroundColorGetSet)
+                    Console.Write(gameBoard[i, j].Symbol
+                                 .Pastel(gameBoard[i,j].SymbolColor)
+                                 .PastelBg(gameBoard[i, j].BackgroundColor)
                                  );
                 }
             }
