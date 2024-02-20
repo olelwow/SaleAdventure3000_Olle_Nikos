@@ -13,7 +13,7 @@ namespace SaleAdventure3000
 
             // Fyller gameBoard och ritar upp gameBoard.
             gameGrid.FillGrid(gameGrid.gameBoard);
-            gameGrid.DrawGameBoard(gameGrid.gameBoard);
+            gameGrid.DrawGameBoard(gameGrid.gameBoard, 1, 1);
             
             // Loop som körs tills man trycker på q vilket ändrar variabeln Run till false.
             while (player.Run)

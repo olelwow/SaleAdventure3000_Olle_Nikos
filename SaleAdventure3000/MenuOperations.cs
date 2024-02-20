@@ -155,7 +155,7 @@ namespace SaleAdventure3000
             {
                 foreach (string row in lines)
                 {
-                    if (row.Contains(player.Name))
+                    if (row.Contains(player.NameGetSet))
                     {
                         int newPoints = player.score;
                         int index = row.Length - 2 ;
@@ -164,7 +164,7 @@ namespace SaleAdventure3000
                         if (currentPoints < newPoints)
                         {
                             newLines.Remove(row);
-                            newLines.Add($"Name : {player.Name} - Score : {newPoints}");
+                            newLines.Add($"Name : {player.NameGetSet} - Score : {newPoints}");
                         }
                         else
                         {
@@ -173,13 +173,13 @@ namespace SaleAdventure3000
                     }
                     else
                     {
-                        newLines.Add($"Name : {player.Name} - Score : {player.score}");
+                        newLines.Add($"Name : {player.NameGetSet} - Score : {player.score}");
                     }
                 }
             }
             else
             {
-                newLines.Add($"Name : {player.Name} - Score : {player.score}");
+                newLines.Add($"Name : {player.NameGetSet} - Score : {player.score}");
             }
             foreach (string s in newLines)
             {

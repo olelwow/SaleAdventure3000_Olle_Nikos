@@ -4,11 +4,12 @@ namespace SaleAdventure3000.Entities
 {
     public abstract class Entity
     {
-        public int PosX { get ; set; }
-        public int PosY { get; set; }
-        public string? Symbol { get; set; }
-        public string Name { get; set; }
-        public string SymbolColor { get; set; } = "#ffffff";
+        private int PosX;
+        private int PosY;
+        private string? Symbol;
+        private string? Name;
+        private string SymbolColor = "#ffffff";
+        private string BackgroundColor = "000000";
 
         public bool CanPass = true;
 
@@ -33,6 +34,36 @@ namespace SaleAdventure3000.Entities
                 return Symbol.GetHashCode();
             }
             return -1;
+        }
+        public int PosXGetSet
+        {
+            get { return this.PosX ; }
+            set { this.PosX = value; }
+        }
+        public int PosYGetSet
+        {
+            get { return this.PosY; }
+            set { this.PosY = value; }
+        }
+        public string NameGetSet
+        {
+            get { return this.Name; }
+            set { this.Name = value; }
+        }
+        public string SymbolGetSet
+        {
+            get { return this.Symbol; }
+            set { this.Symbol = value; }
+        }
+        public string SymbolColorGetSet
+        {
+            get { return this.SymbolColor; }
+            set { this.SymbolColor = value; }
+        }
+        public string BackgroundColorGetSet
+        {
+            get { return this.BackgroundColor; }
+            set { this.BackgroundColor = value; }
         }
     }
 }

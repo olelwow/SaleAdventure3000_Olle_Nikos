@@ -3,14 +3,15 @@
 namespace SaleAdventure3000.Items
 {
     public class Item : Entity
-    {
+    {   
+        private int HealAmount;
+        private int PowerAdded;
+        private int HpBoost;
+        private bool Wear;
+        private int Amount;
+        private bool Equipped = false;
         public Item() { }
-        public int HealAmount { get; set; }
-        public int PowerAdded { get; set; }
-        public int HpBoost { get; set; }
-        public bool Wear {  get; set; }
-        public int Amount { get; set; }
-        public bool Equipped { get; set; } = false;
+        
 
         // Metod som styr vad som händer när man plockar upp ett Item,
         // olika beteende beroende på ifall föremålet är wearable eller consumable.
@@ -36,6 +37,37 @@ namespace SaleAdventure3000.Items
         }
         public override void EntitySelection(string type)
         {
+        }
+        
+        public int HealAmountGetSet
+        {
+            get { return this.HealAmount; }
+            set { this.HealAmount = value; }
+        }
+        public int PowerAddedGetSet
+        {
+            get { return this.PowerAdded; }
+            set { this.PowerAdded = value; }
+        }
+        public int HpBoostGetSet
+        {
+            get { return this.HpBoost; }
+            set { this.HpBoost = value; }
+        }
+        public bool WearGetSet
+        {
+            get { return this.Wear; }
+            set { this.Wear = value; }
+        }
+        public int AmountGetSet
+        {
+            get { return this.Amount; }
+            set { this.Amount = value; }
+        }
+        public bool EquippedGetSet
+        {
+            get { return this.Equipped; }
+            set { this.Equipped = value; }
         }
     }
 }
