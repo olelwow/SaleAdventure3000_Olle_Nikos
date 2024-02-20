@@ -4,8 +4,43 @@ using Spectre.Console;
 namespace SaleAdventure3000
 {
     //Den här klassen innehåller bas metoder som påverkar utskrift av medelande
-    public class Operations
+    public abstract class MenuOperations
     {
+        public static bool PrintStartMenu (bool run)
+        {
+            Console.Clear();
+            Logo();
+            Console.WriteLine("- - - Menu - - -\n");
+            int choice = PrintChoiceMenu("Register", "Log in",
+                                         "View scoreboard", "Quit"
+                                        );
+            switch (choice)
+            {
+                case 1:
+                    RegisterPlayer();
+                    break;
+
+                case 2:
+                    Login();
+                    break;
+
+                case 3:
+                    Scoreboard();
+                    break;
+
+                case 4:
+                    run = false;
+                    break;
+
+                default:
+                    Console.WriteLine("Wrong input, try again!");
+                    break;
+            }
+            // returnerar run, vilket blir false om man väljer case 4. 
+            // Annars fortsätter loopen i Program.cs
+            return run;
+        }
+
         //Skriver ut logon(duh)
         public static void Logo()
         {
@@ -19,7 +54,7 @@ namespace SaleAdventure3000
             Console.Clear();
             Logo();
             Console.Write("Pick a name: ");
-            string chosenName = Console.ReadLine();
+            string? chosenName = Console.ReadLine();
             while (chosenName == null || chosenName.Length < 3)
             {
                 Console.WriteLine("Invalid name, must be at least 3 character long.");
@@ -27,7 +62,6 @@ namespace SaleAdventure3000
                 chosenName = Console.ReadLine();
             }
             StreamWriter stream = new StreamWriter(@"../../../Login.txt", true);
-            //Player player = new Player(chosenName);
             stream.WriteLine($"Name : {chosenName}");
             stream.Close();
         }
@@ -42,18 +76,17 @@ namespace SaleAdventure3000
             string[] lines = File.ReadAllLines(@"../../../Login.txt");
             for (int i = 0; i < lines.Length; i++)
             {
-                if (lines[i].Contains(username))
+                if (username != null && lines[i].Contains(username))
                 {
                     found = true;
                     break;
                 }
             }
-            if (found == true)
+            if (found == true && username != null)
             {
                 Console.WriteLine("\n\tLoging succeed");
                 Thread.Sleep(1500);
-                Game game = new Game();
-                game.StartGame(username);
+                Game.StartGame(username);
             }
             else
             {
@@ -61,7 +94,6 @@ namespace SaleAdventure3000
                 Console.WriteLine("\n\tInvalid username");
                 Console.ReadLine();
             }
-            
         }
         //Scoreboard metoden skriver ut scoreboard av alla spelare som har spelat
         internal static void Scoreboard()
@@ -73,78 +105,17 @@ namespace SaleAdventure3000
             }
             Console.ReadLine();
         }
-
-        public Operations() 
-        {
-            
-        }
-        /*Attack metoderna tar in player stats och npc stats
-         och tar bort HP från resp karaktär.
-        Första Attack är spelarens metod och andra är Npcs metod */
-        public static string Attack (Player player, NPC npc)
-        {
-            if(player.HP > 0)
-            {
-                npc.HP -= player.Power;
-                return $"{player.Name} attacks with {player.Power} power" +
-                   $"\n{player.Name}s HP: {player.HP}," +
-                   $" {npc.Name} HP:{npc.HP}!";
-            }
-            return "";
-            // Metod som sköter spelarens attack.
-        }
-        public static string Attack(NPC npc, Player player)
-        {
-            if (npc.HP > 0)
-            {
-                player.HP -= npc.Power;
-                return $"{npc.Name} attacks with {npc.Power} power" +
-                   $"\n{player.Name} HP: {player.HP}," +
-                   $" {npc.Name} HP: {npc.HP}!";
-            }
-            return "";
-            // Metod som sköter NPCs attack, ifall npc redan dött returneras en tom sträng.
-        }
-        //I Block metoderna gäller samma som Attack metoder fast de har ingen påverkan
-        public static string Block (NPC npc, Player player)
-        {
-            return $"{npc.Name} blocks the attack! " +
-                   $"\n{player.Name} HP: {player.HP}, " +
-                   $"{npc.Name} HP: {npc.HP}";
-        }
-        public static string Block (Player player, NPC npc)
-        {
-            return $"{player.Name} blocks the attack! " +
-                   $"\n{player.Name} HP: {player.HP}, " +
-                   $"{npc.Name} HP: {npc.HP}";
-        }
-        //Härr kotntrollerar vi om spelaren eller npc är död och avsluta deras tur och tillbaka till gameboard
-        public static string Death (Player player, NPC npc)
-        {
-            if (player.HP < 1)
-            {
-                player.HP = 0;
-                return $"{player.Name} died and {npc.Name} has {npc.HP} HP left.";
-            }
-            else if (npc.HP < 1)
-            {
-                npc.HP = 0;
-                player.score += 10;
-                Operations.ScoreBoardReg(player);
-                return $"{npc.Name} died and player has {player.HP} HP left.";
-            }
-            return "";
-        }
         //Generellt metod som skriver ut menyerna med hjälp av Spectre.Console som är snyggare än vanlig console
         public static int PrintChoiceMenu (string choice1, string choice2, string choice3, string choice4)
-        {
+        {   
+            // Dictionary för att koppla ihop respektive val med en siffra.
             Dictionary<string, int> choice = new Dictionary<string, int>()
             { {choice1, 1},
               {choice2, 2 },
               {choice3, 3 },
               {choice4, 4 }
             };
-            // Dictionary för att koppla ihop respektive val med en siffra.
+            
             var displayMenu = 
                 AnsiConsole.Prompt(
                 new SelectionPrompt<string>()
@@ -154,8 +125,8 @@ namespace SaleAdventure3000
                 {
                     choice1, choice2, choice3, choice4 
                 }));
-            return choice[displayMenu];
             // Returnerar värdet i choice som hör ihop med rätt menyval.
+            return choice[displayMenu];
         }
         
         /*I denna metod hämtar vi registrerat scoreboard.
@@ -214,7 +185,6 @@ namespace SaleAdventure3000
             {
                 writer.WriteLine(s);
             }
-
             writer.Close();
         }
     }

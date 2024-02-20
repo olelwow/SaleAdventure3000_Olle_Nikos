@@ -1,14 +1,11 @@
 ﻿using Pastel;
 using SaleAdventure3000.Items;
-using Spectre.Console;
 
 namespace SaleAdventure3000.Entities
 {
     public class Grid
     {
         public Entity[,] gameBoard = new Entity[22, 22];
-
-        
 
         public NPC[] npcs =
         {
@@ -45,40 +42,36 @@ namespace SaleAdventure3000.Entities
         };
         public Entity[] goal = 
         {
-            new Entity() { Symbol = "[+]", PosX = 20, PosY = 7, SymbolColor = "#00b300" }
+            new Obstacle("[+]") {PosX = 20, PosY = 7, SymbolColor = "#00b300" }
         };
-
 
         public Grid(){ }
 
-        //public string empty ;
-        //empty.ForeColor = System.Drawing.Color.Red;
         public void FillGrid(Entity[,] gameBoard)
         {
-            
             for (int i = 0; i < gameBoard.GetLength(0); i++)
             {
                 for (int j = 0; j < gameBoard.GetLength(1); j++)
                 {
                     if (i == 0 || i == 21)
                     {
-                        gameBoard[i, j] = new Entity() { Symbol = "===", PosX = i, PosY = j };
+                        gameBoard[i, j] = new Obstacle("===") {PosX = i, PosY = j };
                     }
                     else if (j == 0 || j == 21)
                     {
-                        gameBoard[i, j] = new Entity() { Symbol = " | ", PosX = i, PosY = j };
+                        gameBoard[i, j] = new Obstacle(" | ") {PosX = i, PosY = j };
                     }
                     else
                     {
-                        gameBoard[i, j] = new Entity() { Symbol = "   ", PosX = i, PosY = j };
+                        gameBoard[i, j] = new Obstacle("   ") { PosX = i, PosY = j };
                     }
                 }
             }
+            // Går igenom arrays av npcs, wearables samt consumables och sätter ut objekten på kartan.
             for (int i = 0; i < npcs.Length; i++)
             {
                 gameBoard[npcs[i].PosX, npcs[i].PosY] = npcs[i];
             }
-            //Initierar dessa NPCs och föremål och sätter ut dem på gameBoard.
             for (int i = 0; i < wears.Length; i++)
             {
                 gameBoard[wears[i].PosX, wears[i].PosY] = wears[i];
@@ -107,10 +100,9 @@ namespace SaleAdventure3000.Entities
                 {17, new[] {1, 2, 4, 6, 7, 8, 9, 10, 12,  14, 15, 16, 17, 18 } },
                 {18, new[] {4, 6, 12, 14 }},
                 {19, new[] {1, 2, 3, 4, 6, 7, 8, 9, 10, 12, 14, 15, 16, 17, 19} },
-                {20, new[] {6, 12, 14, 19}},
-                // Add more horizontal coordinates as needed
+                {20, new[] {6, 12, 14, 19}}
             };
-
+            // Loopar igenom Dictionary med koordinater och placerar ut Obstacles enligt dessa koordinater.
             foreach (var coord in horizontalCoords)
             {
                 for (int i = 0; i < coord.Value.Length; i++)
@@ -125,7 +117,7 @@ namespace SaleAdventure3000.Entities
             // GOAL
             gameBoard[20, 7] = goal[0];
         }
-
+        // Metod som ritar upp det GameBoard man skickat in som parameter.
         public void DrawGameBoard(Entity[,] gameBoard)
         {
             for (int i = 0; i < gameBoard.GetLength(0); i++)

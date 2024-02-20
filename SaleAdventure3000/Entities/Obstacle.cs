@@ -7,7 +7,8 @@ public class Obstacle : Entity
         this.Symbol = symbol;
         this.CanPass = false;
     }
-    
-    
 
+    public override void EntitySelection(string type)
+    {
+    }
 }

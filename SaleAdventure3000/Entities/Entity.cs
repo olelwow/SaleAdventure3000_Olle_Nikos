@@ -2,21 +2,20 @@
 
 namespace SaleAdventure3000.Entities
 {
-    public class Entity
+    public abstract class Entity
     {
-        public int PosX { get; set; }
+        public int PosX { get ; set; }
         public int PosY { get; set; }
         public string? Symbol { get; set; }
         public string Name { get; set; }
         public string SymbolColor { get; set; } = "#ffffff";
 
         public bool CanPass = true;
-        
-        public virtual void EntitySelection(string type)
-        {
 
-        }
+        public abstract void EntitySelection(string type);
 
+        // Override metod som gör det möjligt att betrakta två objekt som lika
+        // Ifall de delar samma Name.
         public override bool Equals(object? obj)
         {
             if (obj == null || GetType() != obj.GetType())
@@ -27,9 +26,6 @@ namespace SaleAdventure3000.Entities
             Item other = (Item)obj;
             return Symbol == other.Symbol;
         }
-        // Override metod som gör det möjligt att betrakta två objekt som lika
-        // Ifall de delar samma Name.
-
         public override int GetHashCode()
         {
             if (Symbol != null)
@@ -38,6 +34,5 @@ namespace SaleAdventure3000.Entities
             }
             return -1;
         }
-
     }
 }

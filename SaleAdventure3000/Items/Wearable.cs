@@ -7,7 +7,6 @@ namespace SaleAdventure3000.Items
         
         private readonly string[] symbols = [" H ", " B ", " N "];
         private readonly string[] names = ["Hat", "Boots", "Necklace"];
-        private readonly int randomizedProperties = new Random().Next(0, 3);
         private readonly Dictionary<string, int[]> wearableProperties = new Dictionary<string, int[]>()
         {
             {" H ", [20, 6]},
@@ -16,21 +15,16 @@ namespace SaleAdventure3000.Items
             // Siffrorna i arrayen representerar Poweradded och HPBoost.
         };
 
-        public Wearable(string wearableType, int posX, int posY)
+        public Wearable(string type, int posX, int posY)
         {
-            // gammal blyat
-            //this.Symbol = symbols[randomizedProperties];
-            //this.Name = names[randomizedProperties];
-            //this.PowerAdded = wearableProperties[Symbol].ElementAt(0);
-            //this.HpBoost = wearableProperties[Symbol].ElementAt(1);
-            //this.Wear = true;
-            EntitySelection(wearableType);
+            EntitySelection(type);
             this.PosX = posX;
             this.PosY = posY;
             this.SymbolColor = "#6699ff";
         }
         public override void EntitySelection(string type)
         {
+            // Metod som väljer rätt egenskaper beroende på vilket namn man skrivit in i konstruktorn.
             for (int i = 0; i < names.Length; i++)
             {
                 if (type == names[i])
@@ -47,13 +41,13 @@ namespace SaleAdventure3000.Items
         {
             Console.WriteLine($"{player.Name} equips " +
                               $"{item.Name}, gaining {item.HpBoost} HP " +
-                              $"and {item.PowerAdded} power.");
+                              $"and {item.PowerAdded} power."
+                              );
 
             player.HP += item.HpBoost;
             player.Power += item.PowerAdded;
             item.Equipped = true;
             AddToBag(item, player);
-            
         }
     }
 }
