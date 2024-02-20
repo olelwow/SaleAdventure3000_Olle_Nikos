@@ -4,7 +4,7 @@ public class Obstacle : Entity
 {
     public Obstacle(string symbol) 
     {
-        this.Symbol = symbol;
+        SymbolGetSet = symbol;
         this.CanPass = false;
     }
 

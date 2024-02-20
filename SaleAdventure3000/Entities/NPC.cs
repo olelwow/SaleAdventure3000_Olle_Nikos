@@ -19,8 +19,8 @@
         public NPC(string type, int posX, int posY)
         {
             EntitySelection(type);
-            this.PosX = posX;
-            this.PosY = posY;
+            PosXGetSet = posX;
+            PosYGetSet = posY;
         }
         public override void EntitySelection(string type)
         { 
@@ -29,11 +29,11 @@
             {
                 if (type == names[i])
                 {
-                    this.Symbol = symbols[i];
-                    this.Name = names[i];
-                    this.HP = NPCProperties[Symbol].ElementAt(0);
-                    this.Power = NPCProperties[Symbol].ElementAt(1);
-                    this.SymbolColor = colors[i];
+                    this.SymbolGetSet = symbols[i];
+                    this.NameGetSet = names[i];
+                    this.HPGetSet = NPCProperties[SymbolGetSet].ElementAt(0);
+                    this.PowerGetSet = NPCProperties[SymbolGetSet].ElementAt(1);
+                    this.SymbolColorGetSet = colors[i];
                 }
             }
         }

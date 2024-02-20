@@ -18,13 +18,13 @@ namespace SaleAdventure3000.Items
         public Consumable(string type, int posX, int posY)
         {
             EntitySelection(type);
-            this.PosX = posX;
-            this.PosY = posY;
+            this.PosXGetSet = posX;
+            this.PosYGetSet = posY;
         }
         
         public override void OnPickup (Item item, Player player)
         {
-            Console.WriteLine($"{player.Name} picked up a {item.Name}");
+            Console.WriteLine($"{player.NameGetSet} picked up a {item.NameGetSet}");
             AddToBag(item, player);
         }
         public override void EntitySelection(string type)
@@ -34,10 +34,10 @@ namespace SaleAdventure3000.Items
             {
                 if (type == names[i])
                 {
-                    this.Symbol = symbols[i];
-                    this.Name = names[i];
-                    this.SymbolColor = colors[i];
-                    this.HealAmount = ConsumableAttributes[symbols[i]];
+                    this.SymbolGetSet = symbols[i];
+                    this.NameGetSet = names[i];
+                    this.SymbolColorGetSet = colors[i];
+                    this.HealAmountGetSet = ConsumableAttributes[symbols[i]];
                 }
             }
         }
