@@ -54,18 +54,46 @@ namespace SaleAdventure3000
         {
             Console.Clear();
             Logo();
+            string[] lines = File.ReadAllLines(@"../../../Login.txt");
+            bool found = false;
+            bool run = true;
             Console.Write("Pick a name: ");
             string? chosenName = Console.ReadLine();
             while (chosenName == null || chosenName.Length < 3)
             {
-                Console.WriteLine("Invalid name, must be at least 3 character long.");
-                Console.WriteLine("What is your name, adventurer?");
+                Console.WriteLine("Invalid name, must be at least 3 characters long");
+                Console.Write("Pick a name: ");
                 chosenName = Console.ReadLine();
             }
-            StreamWriter stream = new StreamWriter(@"../../../Login.txt", true);
-            stream.WriteLine($"Name : {chosenName}");
-            stream.Close();
+            while (run)
+            {
+                for (int i = 0; i < lines.Length; i++)
+                {
+                    if (lines[i].Contains(chosenName))
+                    {
+                        Console.WriteLine("Name is already taken");
+                        Console.Write("Pick a name: ");
+                        chosenName = Console.ReadLine();
+                        found = true;
+                        run = true;
+                    }
+                    else
+                    {
+                        found = false;
+                        run = false;
+                    }
+                }
+            }
+            if (found == false && !(chosenName == null || chosenName.Length < 3))
+            {
+                StreamWriter stream = new StreamWriter(@"../../../Login.txt", true);
+                stream.WriteLine($"Name : {chosenName}");
+                Console.WriteLine("Registering succeed!");
+                Console.ReadLine();
+                stream.Close();
+            }
         }
+
         // i denna metod kontrolleras om spelarens namn finns redan i txt filen och börjar spelet
         public static void Login()
         {
