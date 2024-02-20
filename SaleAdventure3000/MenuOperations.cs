@@ -1,4 +1,5 @@
 ﻿using SaleAdventure3000.Entities;
+using SaleAdventure3000.Items;
 using Spectre.Console;
 
 namespace SaleAdventure3000
@@ -6,7 +7,7 @@ namespace SaleAdventure3000
     //Den här klassen innehåller bas metoder som påverkar utskrift av medelande
     public abstract class MenuOperations
     {
-        public static bool PrintStartMenu (bool run)
+        public static bool PrintStartMenu(bool run)
         {
             Console.Clear();
             Logo();
@@ -106,8 +107,8 @@ namespace SaleAdventure3000
             Console.ReadLine();
         }
         //Generellt metod som skriver ut menyerna med hjälp av Spectre.Console som är snyggare än vanlig console
-        public static int PrintChoiceMenu (string choice1, string choice2, string choice3, string choice4)
-        {   
+        public static int PrintChoiceMenu(string choice1, string choice2, string choice3, string choice4)
+        {
             // Dictionary för att koppla ihop respektive val med en siffra.
             Dictionary<string, int> choice = new Dictionary<string, int>()
             { {choice1, 1},
@@ -115,20 +116,20 @@ namespace SaleAdventure3000
               {choice3, 3 },
               {choice4, 4 }
             };
-            
-            var displayMenu = 
+
+            var displayMenu =
                 AnsiConsole.Prompt(
                 new SelectionPrompt<string>()
                 .Title("Make your choice")
                 .PageSize(5)
-                .AddChoices(new[] 
+                .AddChoices(new[]
                 {
-                    choice1, choice2, choice3, choice4 
+                    choice1, choice2, choice3, choice4
                 }));
             // Returnerar värdet i choice som hör ihop med rätt menyval.
             return choice[displayMenu];
         }
-        
+
         /*I denna metod hämtar vi registrerat scoreboard.
          *Populerar vi 2 listor med scoreboard och itererar en av de.
          *Sen händer jämförelse mellan nuvarande score och registrerat score.
@@ -151,20 +152,20 @@ namespace SaleAdventure3000
 
             StreamWriter writer = new StreamWriter(@"../../../Scoreboard.txt");
 
-            if (lines.Count > 0) 
+            if (lines.Count > 0)
             {
                 foreach (string row in lines)
                 {
-                    if (row.Contains(player.NameGetSet))
+                    if (row.Contains(player.Name))
                     {
                         int newPoints = player.score;
-                        int index = row.Length - 2 ;
-                        int currentPoints= int.Parse(row.Substring(index, 2));
-                        
+                        int index = row.Length - 2;
+                        int currentPoints = int.Parse(row.Substring(index, 2));
+
                         if (currentPoints < newPoints)
                         {
                             newLines.Remove(row);
-                            newLines.Add($"Name : {player.NameGetSet} - Score : {newPoints}");
+                            newLines.Add($"Name : {player.Name} - Score : {newPoints}");
                         }
                         else
                         {
@@ -173,19 +174,32 @@ namespace SaleAdventure3000
                     }
                     else
                     {
-                        newLines.Add($"Name : {player.NameGetSet} - Score : {player.score}");
+                        newLines.Add($"Name : {player.Name} - Score : {player.score}");
                     }
                 }
             }
             else
             {
-                newLines.Add($"Name : {player.NameGetSet} - Score : {player.score}");
+                newLines.Add($"Name : {player.Name} - Score : {player.score}");
             }
             foreach (string s in newLines)
             {
                 writer.WriteLine(s);
             }
             writer.Close();
+        }
+
+        public static void PrintGameInfo(Player player)
+        {
+            // en wedi ruta med grejer
+
+            Console.WriteLine($"             =======================================");
+            Console.WriteLine($"             |   Use WASD or arrow keys to move    |");
+            Console.WriteLine($"             |   B to open Bag                     |");
+            Console.WriteLine($"             |   Q to quit game                    |");
+            Console.WriteLine($"                 {player.Name}'s HP:{player.HP}   ");
+            Console.WriteLine($"             |                                     |");
+            Console.WriteLine($"             =======================================");
         }
     }
 }

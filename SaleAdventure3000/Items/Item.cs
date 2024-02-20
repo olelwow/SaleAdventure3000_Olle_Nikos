@@ -4,12 +4,12 @@ namespace SaleAdventure3000.Items
 {
     public class Item : Entity
     {   
-        private int HealAmount;
-        private int PowerAdded;
-        private int HpBoost;
-        private bool Wear;
-        private int Amount;
-        private bool Equipped = false;
+        private int healAmount;
+        private int powerAdded;
+        private int hpBoost;
+        private bool wear = false;
+        private int amount;
+        private bool equipped = false;
         public Item() { }
         
 
@@ -39,35 +39,35 @@ namespace SaleAdventure3000.Items
         {
         }
         
-        public int HealAmountGetSet
+        public int HealAmount
         {
-            get { return this.HealAmount; }
-            set { this.HealAmount = value; }
+            get { return this.healAmount; }
+            set { this.healAmount = value; }
         }
-        public int PowerAddedGetSet
+        public int PowerAdded
         {
-            get { return this.PowerAdded; }
-            set { this.PowerAdded = value; }
+            get { return this.powerAdded; }
+            set { this.powerAdded = value; }
         }
-        public int HpBoostGetSet
+        public int HpBoost
         {
-            get { return this.HpBoost; }
-            set { this.HpBoost = value; }
+            get { return this.hpBoost; }
+            set { this.hpBoost = value; }
         }
-        public bool WearGetSet
+        public bool Wear
         {
-            get { return this.Wear; }
-            set { this.Wear = value; }
+            get { return this.wear; }
+            set { this.wear = value; }
         }
-        public int AmountGetSet
+        public int Amount
         {
-            get { return this.Amount; }
-            set { this.Amount = value; }
+            get { return this.amount; }
+            set { this.amount = value; }
         }
-        public bool EquippedGetSet
+        public bool Equipped
         {
-            get { return this.Equipped; }
-            set { this.Equipped = value; }
+            get { return this.equipped; }
+            set { this.equipped = value; }
         }
     }
 }

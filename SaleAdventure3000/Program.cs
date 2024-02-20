@@ -1,14 +1,14 @@
-﻿using SaleAdventure3000;
-
-internal class Program
+﻿namespace SaleAdventure3000
 {
-    private static void Main(string[] args)
+    public class Program
     {
-        bool run = true;
-        while (run)
+        private static void Main(string[] args)
         {
-            run = MenuOperations.PrintStartMenu(run);
+            bool run = true;
+            while (run)
+            {
+                run = MenuOperations.PrintStartMenu(run);
+            }
         }
     }
 }
-

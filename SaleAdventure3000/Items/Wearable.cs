@@ -18,9 +18,10 @@ namespace SaleAdventure3000.Items
         public Wearable(string type, int posX, int posY)
         {
             EntitySelection(type);
-            this.PosXGetSet = posX;
-            this.PosYGetSet = posY;
-            this.SymbolColorGetSet = "#6699ff";
+            this.PosX = posX;
+            this.PosY = posY;
+            this.SymbolColor = "#6699ff";
+            this.Wear = true;
         }
         public override void EntitySelection(string type)
         {
@@ -29,24 +30,24 @@ namespace SaleAdventure3000.Items
             {
                 if (type == names[i])
                 {
-                    this.NameGetSet = names[i];
-                    this.SymbolGetSet = symbols[i];
-                    this.PowerAddedGetSet = wearableProperties[SymbolGetSet].ElementAt(0);
-                    this.HpBoostGetSet = wearableProperties[SymbolGetSet].ElementAt(1);
+                    this.Name = names[i];
+                    this.Symbol = symbols[i];
+                    this.PowerAdded = wearableProperties[Symbol].ElementAt(0);
+                    this.HpBoost = wearableProperties[Symbol].ElementAt(1);
                 }
             }
         }
 
         public override void OnPickup (Item item, Player player)
         {
-            Console.WriteLine($"{player.NameGetSet} equips " +
-                              $"{item.NameGetSet}, gaining {item.HpBoostGetSet} HP " +
-                              $"and {item.PowerAddedGetSet} power."
+            Console.WriteLine($"{player.Name} equips " +
+                              $"{item.Name}, gaining {item.HpBoost} HP " +
+                              $"and {item.PowerAdded} power."
                               );
 
-            player.HPGetSet += item.HpBoostGetSet;
-            player.PowerGetSet += item.PowerAddedGetSet;
-            item.EquippedGetSet = true;
+            player.HP += item.HpBoost;
+            player.Power += item.PowerAdded;
+            item.Equipped = true;
             AddToBag(item, player);
         }
     }

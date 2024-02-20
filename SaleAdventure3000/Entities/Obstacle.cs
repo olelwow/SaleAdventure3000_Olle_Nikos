@@ -4,8 +4,10 @@ public class Obstacle : Entity
 {
     public Obstacle(string symbol) 
     {
-        SymbolGetSet = symbol;
+        this.Symbol = symbol;
         this.CanPass = false;
+        this.SymbolColor = "#666565";
+
     }
 
     public override void EntitySelection(string type)

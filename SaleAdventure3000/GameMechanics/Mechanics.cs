@@ -27,7 +27,7 @@ public abstract class Mechanics
                 if (entityArray[j] is Consumable consumables)
                 {   
                     // Kontrolleras om player träffas en specifik symbol från denna array
-                    if (gameBoard[player.PosXGetSet, player.PosYGetSet] == consumables)
+                    if (gameBoard[player.PosX, player.PosY] == consumables)
                     {
                         consumables.OnPickup(consumables, player);
                         break;
@@ -35,7 +35,7 @@ public abstract class Mechanics
                 }
                 else if (entityArray[j] is Wearable wears)
                 {
-                    if (gameBoard[player.PosXGetSet, player.PosYGetSet] == wears)
+                    if (gameBoard[player.PosX, player.PosY] == wears)
                     {
                         wears.OnPickup(wears, player);
                         break;
@@ -43,7 +43,7 @@ public abstract class Mechanics
                 }
                 else if (entityArray[j] is NPC npcs)
                 {
-                    if (gameBoard[player.PosXGetSet, player.PosYGetSet] == npcs)
+                    if (gameBoard[player.PosX, player.PosY] == npcs)
                     {
                         Encounter(npcs, player);
                         break;
@@ -51,7 +51,7 @@ public abstract class Mechanics
                 }
                 else if (entityArray[j] is Entity goal)
                 {
-                    if (gameBoard[player.PosXGetSet, player.PosYGetSet] == goal)
+                    if (gameBoard[player.PosX, player.PosY] == goal)
                     {
                         GameWon(player);
                     }
@@ -74,7 +74,7 @@ public abstract class Mechanics
         var showBag =
             new SelectionPrompt<string>()
             .Title("  Item     Wearable   Amount   Equipped")
-            .PageSize(bag.Count + 3);
+            .PageSize(bag.Count + 4);
         
         int index = 0;
 
@@ -83,13 +83,13 @@ public abstract class Mechanics
             // Adderar nödvändig info till showBag. För att detta skulle funka var jag tvungen 
             // att ändra i Entity så att Name inte kan vara null.
             showBag.AddChoice
-                ($"{item.Key.NameGetSet}" +
-                 $"{spacerArray[item.Key.NameGetSet.Length + 4 - 2]}" +
-                 $"{item.Key.WearGetSet}" +
-                 $"{spacerArray[item.Key.WearGetSet.ToString().Length - 2]}" +
+                ($"{item.Key.Name}" +
+                 $"{spacerArray[item.Key.Name.Length + 4 - 2]}" +
+                 $"{item.Key.Wear}" +
+                 $"{spacerArray[item.Key.Wear.ToString().Length - 2]}" +
                  $"{item.Value}" +
                  $"{spacerArray[0]}" +
-                 $"{item.Key.EquippedGetSet}"
+                 $"{item.Key.Equipped}"
                  );
             // Lägger till Item i arrayen.
             items[index] = item.Key;
@@ -140,7 +140,7 @@ public abstract class Mechanics
         {
             // Kontrollerar med hjälp av metoden Death i Operations ifall antingen spelare
             // eller NPC har dött och skickar tillbaka rätt sträng för utskrift.
-            string? death = (npc.HPGetSet < 1 || player.HPGetSet < 1) ? Death(player, npc) : null;
+            string? death = (npc.HP < 1 || player.HP < 1) ? Death(player, npc) : null;
             if (death != null)
             {
                 Console.WriteLine(death);
@@ -152,8 +152,8 @@ public abstract class Mechanics
                 // Ifall death är null så har varken NPC eller spelare dött, då fortsätter encounter.
                 Console.Clear();
                 Console.WriteLine(
-                    $"{player.NameGetSet}:{player.HPGetSet}HP VERSUS " +
-                    $"{npc.NameGetSet}:{npc.HPGetSet}HP \n");
+                    $"{player.Name}:{player.HP}HP VERSUS " +
+                    $"{npc.Name}:{npc.HP}HP \n");
 
                 int choice = MenuOperations.PrintChoiceMenu("Punch", "Block", "Escape", "Use item");
 
@@ -171,18 +171,18 @@ public abstract class Mechanics
                     break;
 
                     case 2:
-                        Console.WriteLine($"{player.NameGetSet} blocks {npc.NameGetSet}'s attack!");
+                        Console.WriteLine($"{player.Name} blocks {npc.Name}'s attack!");
                         Console.ReadLine();
                     break;
 
                     case 3:
-                        Console.WriteLine($"{player.NameGetSet} runs for his life...");
+                        Console.WriteLine($"{player.Name} runs for his life...");
                         Console.ReadLine();
                         run = false;
                     break;
 
                     case 4:
-                        Player.OpenBag(player);
+                        player.OpenBag(player);
                     break;
                 }
                 //NPCs tur att agera mot spelaren
@@ -208,9 +208,9 @@ public abstract class Mechanics
                     break;
 
                     case 3:
-                        if (npc.HPGetSet < (npc.HPGetSet * 0.1))
+                        if (npc.HP < (npc.HP * 0.1))
                         {
-                            Console.WriteLine($"{npc.NameGetSet} runs for his life...");
+                            Console.WriteLine($"{npc.Name} runs for his life...");
                             player.score += 5;
                             MenuOperations.ScoreBoardReg(player);
                             run = false;
@@ -224,7 +224,7 @@ public abstract class Mechanics
     // och returnerar ett nytt gameboard med spelarens nya position.
     public static Entity[,] ChangePosition(Entity[,] gameBoard, Player player)
     {
-        gameBoard[player.PosXGetSet, player.PosYGetSet] = player;
+        gameBoard[player.PosX, player.PosY] = player;
         return gameBoard;
     }
 
@@ -234,57 +234,67 @@ public abstract class Mechanics
      */
     public static string Attack(Player player, NPC npc)
     {
-        if (player.HPGetSet > 0)
+        if (player.HP > 0)
         {
-            npc.HPGetSet -= player.PowerGetSet;
-            return $"{player.NameGetSet} attacks with {player.PowerGetSet} power" +
-               $"\n{player.NameGetSet}s HP: {player.HPGetSet}," +
-               $" {npc.NameGetSet} HP:{npc.HPGetSet}!";
+            npc.HP -= player.Power;
+
+            if (npc.HP < 1)
+            {
+                npc.HP = 0;
+            }
+            
+            return $"{player.Name} attacks with {player.Power} power" +
+               $"\n{player.Name}s HP: {player.HP}," +
+               $" {npc.Name} HP:{npc.HP}!";
         }
         return "";
     }
     public static string Attack(NPC npc, Player player)
     {
         // Metod som sköter NPCs attack, ifall npc redan dött returneras en tom sträng.
-        if (npc.HPGetSet > 0)
+        if (npc.HP > 0)
         {
-            player.HPGetSet -= npc.PowerGetSet;
-            return $"{npc.NameGetSet} attacks with {npc.PowerGetSet} power" +
-               $"\n{player.NameGetSet} HP: {player.HPGetSet}," +
-               $" {npc.NameGetSet} HP: {npc.HPGetSet}!";
+            player.HP -= npc.Power;
+            
+            if (player.HP < 1)
+            {
+                player.HP = 0;
+            }
+
+            return $"{npc.Name} attacks with {npc.Power} power" +
+               $"\n{player.Name} HP: {player.HP}," +
+               $" {npc.Name} HP: {npc.HP}!";
         }
         return "";
     }
     //I Block metoderna gäller samma som Attack metoder fast de har ingen påverkan
     public static string Block(NPC npc, Player player)
     {
-        return $"{npc.NameGetSet} blocks the attack! " +
-               $"\n{player.NameGetSet} HP: {player.HPGetSet}, " +
-               $"{npc.NameGetSet} HP: {npc.HPGetSet}";
+        return $"{npc.Name} blocks the attack! " +
+               $"\n{player.Name} HP: {player.HP}, " +
+               $"{npc.Name} HP: {npc.HP}";
     }
     public static string Block(Player player, NPC npc)
     {
-        return $"{player.NameGetSet} blocks the attack! " +
-               $"\n{player.NameGetSet} HP: {player.HPGetSet}, " +
-               $"{npc.NameGetSet} HP: {npc.HPGetSet}";
+        return $"{player.Name} blocks the attack! " +
+               $"\n{player.Name} HP: {player.HP}, " +
+               $"{npc.Name} HP: {npc.HP}";
     }
     //Härr kotntrollerar vi om spelaren eller npc är död och avsluta deras tur och tillbaka till gameboard
     public static string Death(Player player, NPC npc)
     {
-        if (player.HPGetSet < 1)
+        if (player.HP < 1)
         {
-            player.HPGetSet = 0;
-            return $"{player.NameGetSet} died and {npc.NameGetSet} has {npc.HPGetSet} HP left.";
+            player.HP = 0;
+            return $"{player.Name} died and {npc.Name} has {npc.HP} HP left.";
         }
-        else if (npc.HPGetSet < 1)
+        else if (npc.HP < 1)
         {
-            npc.HPGetSet = 0;
+            npc.HP = 0;
             player.score += 10;
             MenuOperations.ScoreBoardReg(player);
-            return $"{npc.NameGetSet} died and player has {player.HPGetSet} HP left.";
+            return $"{npc.Name} died and player has {player.HP} HP left.";
         }
         return "";
     }
-
-
 }
