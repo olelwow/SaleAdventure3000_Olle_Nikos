@@ -1,6 +1,9 @@
 ﻿using SaleAdventure3000.Entities;
 using SaleAdventure3000.Items;
 using Spectre.Console;
+using System.ComponentModel.Design;
+using System.Numerics;
+using System.Threading.Tasks;
 
 namespace SaleAdventure3000
 {
@@ -216,18 +219,102 @@ namespace SaleAdventure3000
             }
             writer.Close();
         }
+        public static string PrintBagMenuAndReturnChoice(Player player)
+        {
+            // Tar in spelarens bag via GetBag, och skapar ny array av items för jämförelse längre ner.
+            Dictionary<Item, int> bag = player.GetBag();
+            Item[] items = new Item[bag.Count];
 
+            // Skapar ny SelectionPrompt, med rubrikerna ovan.
+            var showBag =
+                new SelectionPrompt<string>()
+                .Title("  Item       Wearable     Amount   Equipped")
+                .PageSize(bag.Count + 4);
+
+            int index = 0;
+
+            foreach (var item in bag)
+            {
+                // Adderar nödvändig info till showBag. För att detta skulle funka var jag tvungen 
+                // att ändra i Entity så att Name inte kan vara null. Siffrorna efter variabeln i måsvingarna
+                // är till för formatering för att göra menyn symmetrisk.
+                showBag.AddChoice
+                    ($"{item.Key.Name,-11}" +
+                     $"{item.Key.Wear,-13}" +
+                     $"{item.Value,-9}" +
+                     $"{item.Key.Equipped,-5}"
+                     );
+                // Lägger till Item i arrayen.
+                items[index] = item.Key;
+                index++;
+            }
+            showBag.AddChoice("Close Bag");
+
+            return AnsiConsole.Prompt(showBag);
+        }
         public static void PrintGameInfo(Player player)
         {
             // en wedi ruta med grejer
 
-            Console.WriteLine($"             =======================================");
-            Console.WriteLine($"             |   Use WASD or arrow keys to move    |");
-            Console.WriteLine($"             |   B to open Bag                     |");
-            Console.WriteLine($"             |   Q to quit game                    |");
-            Console.WriteLine($"                 {player.Name}'s HP:{player.HP}   ");
-            Console.WriteLine($"             |                                     |");
-            Console.WriteLine($"             =======================================");
+            Console.WriteLine($"       =============================================");
+            Console.WriteLine($"       |      Use WASD or arrow keys to move       |");
+            Console.WriteLine($"       |              B to open Bag                |");
+            Console.WriteLine($"       |              Q to quit game               |");
+            Console.WriteLine($"       |                                           |");
+            Console.WriteLine($"       |         HP remaining: {player.HP, -3}              |");
+            Console.WriteLine($"       |                                           |");
+            Console.WriteLine($"       |                                           |");
+            Console.WriteLine($"       |                                           |");
+            Console.WriteLine($"       =============================================");
+        }
+        public static void PrintGameInfo (Player player, Item item)
+        {
+            Dictionary <Tuple<bool, bool>, string> gameMessages = new Dictionary<Tuple< bool, bool>, string> ()
+            {
+                {Tuple.Create(true, true) , $"{player.Name} unequips {item.Name}," +
+                               $" losing {item.HpBoost} HP and {item.PowerAdded} power."
+                },
+                {Tuple.Create(true, false), $"{player.Name} equips {item.Name}," +
+                                $" gaining {item.HpBoost} HP and {item.PowerAdded} power."
+                },
+                {Tuple.Create(false, false), $"{player.Name} eats a {item.Name}." +
+                                 $" It heals for {item.HealAmount}."
+                }
+            };
+            foreach (var condition in gameMessages) {
+                
+                    if ((condition.Key.Item1 == true && condition.Key.Item2 == true) &&
+                        (item.Wear == true && item.Equipped == true))
+                    {
+                        var value = Tuple.Create(true, true);
+                        InfoText(gameMessages, value, player);
+                    }
+                    else if ((condition.Key.Item1 == true && condition.Key.Item2 == false) &&
+                        (item.Wear == true && item.Equipped == false ))
+                    {
+                        var value = Tuple.Create(true, false);
+                        InfoText(gameMessages, value, player);
+                    }
+                    else if ((condition.Key.Item1 == false && condition.Key.Item2 == false) &&
+                             (item.Wear == false && item.Equipped == false))
+                    {
+                        var value = Tuple.Create(false, false);
+                        InfoText(gameMessages, value, player);
+                    }
+            }
+        }
+        public static void InfoText(Dictionary<Tuple<bool,bool>,string> gameMessages, Tuple<bool, bool> value, Player player)
+        {
+            Console.WriteLine($"       =============================================");
+            Console.WriteLine($"       |      Use WASD or arrow keys to move       |");
+            Console.WriteLine($"       |              B to open Bag                |");
+            Console.WriteLine($"       |              Q to quit game               |");
+            Console.WriteLine($"       |                                           |");
+            Console.WriteLine($"       |         HP remaining: {player.HP,-3}              |");
+            Console.WriteLine($"       |                                           |");
+            Console.WriteLine($"       | {gameMessages[value]}                                          |");
+            Console.WriteLine($"       |                                           |");
+            Console.WriteLine($"       =============================================");
         }
     }
 }

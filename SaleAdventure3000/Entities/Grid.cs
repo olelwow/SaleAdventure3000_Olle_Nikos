@@ -1,5 +1,6 @@
 ﻿using Pastel;
 using SaleAdventure3000.Items;
+using System.Numerics;
 
 namespace SaleAdventure3000.Entities
 {
@@ -20,7 +21,7 @@ namespace SaleAdventure3000.Entities
             new("Nikos", 19, 18),
             new("Olle", 16, 13),
             new("Ragnar", 5, 7),
-            new("Jonas", 3, 12),
+            //new("Jonas", 3, 12),
         };
 
         public Wearable[] wears =
@@ -118,7 +119,7 @@ namespace SaleAdventure3000.Entities
             gameBoard[20, 7] = goal[0];
         }
         // Metod som ritar upp det GameBoard man skickat in som parameter.
-        public void DrawGameBoard(Entity[,] gameBoard)
+        public void DrawGameBoard(Entity[,] gameBoard, Player player)
         {
             for (int i = 0; i < gameBoard.GetLength(0); i++)
             {
@@ -131,6 +132,30 @@ namespace SaleAdventure3000.Entities
                                  );
                 }
             }
+
+            //Dictionary<string, string> gameMessages = new Dictionary<string, string>()
+            //    {
+            //        {"Unequip", $"{player.Name} unequips {player.GetBag()}," +
+            //                    $" losing {item.HpBoost} HP and {item.PowerAdded} power."
+            //        },
+            //        {"Equip", $"{player.Name} equips {item.Name}," +
+            //                    $" gaining {item.HpBoost} HP and {item.PowerAdded} power."
+            //        },
+            //        {"Consume", $"{player.Name} eats a {item.Name}." +
+            //                    $" It heals for {item.HealAmount}."
+            //        }
+            //    };
+            //Console.WriteLine($"       =============================================");
+            //Console.WriteLine($"       |      Use WASD or arrow keys to move       |");
+            //Console.WriteLine($"       |              B to open Bag                |");
+            //Console.WriteLine($"       |              Q to quit game               |");
+            //Console.WriteLine($"       |                                           |");
+            //Console.WriteLine($"       |         HP remaining: {player.HP,-3}              |");
+            //Console.WriteLine($"       |                                           |");
+            //Console.WriteLine($"       | {gameMessages[message]}                                          |");
+            //Console.WriteLine($"       |                                           |");
+            //Console.WriteLine($"       =============================================");
+            
         }
     }
 }

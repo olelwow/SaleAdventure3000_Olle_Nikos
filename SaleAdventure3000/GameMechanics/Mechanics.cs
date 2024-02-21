@@ -60,45 +60,6 @@ public abstract class Mechanics
         }
     }
 
-    public static string PrintBagMenuAndReturnChoice(Player player)
-    {
-        string[] spacerArray = 
-            ["        ", " ", "       ", "      ", " ",
-             "      ", " ", "    ", "   ", " ", " ", " "
-            ];
-        // Tar in spelarens bag via GetBag, och skapar ny array av items för jämförelse längre ner.
-        Dictionary<Item, int> bag = player.GetBag();
-        Item[] items = new Item[bag.Count];
-
-        // Skapar ny SelectionPrompt, med rubrikerna ovan.
-        var showBag =
-            new SelectionPrompt<string>()
-            .Title("  Item     Wearable   Amount   Equipped")
-            .PageSize(bag.Count + 4);
-        
-        int index = 0;
-
-        foreach (var item in bag)
-        {
-            // Adderar nödvändig info till showBag. För att detta skulle funka var jag tvungen 
-            // att ändra i Entity så att Name inte kan vara null.
-            showBag.AddChoice
-                ($"{item.Key.Name}" +
-                 $"{spacerArray[item.Key.Name.Length + 4 - 2]}" +
-                 $"{item.Key.Wear}" +
-                 $"{spacerArray[item.Key.Wear.ToString().Length - 2]}" +
-                 $"{item.Value}" +
-                 $"{spacerArray[0]}" +
-                 $"{item.Key.Equipped}"
-                 );
-            // Lägger till Item i arrayen.
-            items[index] = item.Key;
-            index++;
-        }
-        showBag.AddChoice("Close Bag");
-
-        return AnsiConsole.Prompt(showBag);
-    }
     public static void GameWon (Player player)
     {
         Console.Clear();
@@ -182,7 +143,8 @@ public abstract class Mechanics
                     break;
 
                     case 4:
-                        player.OpenBag(player);
+                        string bagChoice = MenuOperations.PrintBagMenuAndReturnChoice(player);
+                        player.OpenBag(player, bagChoice);
                     break;
                 }
                 //NPCs tur att agera mot spelaren
@@ -220,6 +182,7 @@ public abstract class Mechanics
             }
         }
     }
+    
     // Denna metod tar in gameboard samt position,
     // och returnerar ett nytt gameboard med spelarens nya position.
     public static Entity[,] ChangePosition(Entity[,] gameBoard, Player player)
@@ -280,7 +243,8 @@ public abstract class Mechanics
                $"\n{player.Name} HP: {player.HP}, " +
                $"{npc.Name} HP: {npc.HP}";
     }
-    //Härr kotntrollerar vi om spelaren eller npc är död och avsluta deras tur och tillbaka till gameboard
+    
+    //Här kotntrollerar vi om spelaren eller npc är död och avsluta deras tur och tillbaka till gameboard
     public static string Death(Player player, NPC npc)
     {
         if (player.HP < 1)
