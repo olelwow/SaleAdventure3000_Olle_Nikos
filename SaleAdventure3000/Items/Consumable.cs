@@ -15,8 +15,7 @@ namespace SaleAdventure3000.Items
             {" C ", 30},
             {"B A", -30} 
         };
-        public Consumable () { 
-}
+        public Consumable () { }
         public Consumable(string type, int posX, int posY)
         {
             EntitySelection(type);
