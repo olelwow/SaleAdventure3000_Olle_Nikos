@@ -15,11 +15,17 @@ namespace SaleAdventure3000.Items
             {" C ", 30},
             {"B A", -30} 
         };
+        public Consumable () { 
+}
         public Consumable(string type, int posX, int posY)
         {
             EntitySelection(type);
             this.PosX = posX;
             this.PosY = posY;
+        }
+        public Consumable (string type)
+        {
+            EntitySelection(type);
         }
         
         public override void OnPickup (Item item, Player player)

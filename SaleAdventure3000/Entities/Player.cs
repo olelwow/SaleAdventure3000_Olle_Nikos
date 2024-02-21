@@ -1,4 +1,5 @@
 ﻿using SaleAdventure3000.Items;
+using System.Text.RegularExpressions;
 
 namespace SaleAdventure3000.Entities
 {
@@ -28,10 +29,13 @@ namespace SaleAdventure3000.Entities
             player.PosY = firstY;
             gameBoard[PosX, PosY] = player;
             string color = "#968c4a";
-            string walls = "#666565"; // den här aär backdoor umsmums
+            string bagChoice = "";
             
+
+            Item chosenItem = new();
             while (Run)
             {
+                bagChoice = "";
                 ConsoleKeyInfo keyInfo = Console.ReadKey(true);
                 Console.Clear();
                 string line = "¤¤¤";
@@ -49,7 +53,9 @@ namespace SaleAdventure3000.Entities
                 }
                 else if (keyInfo.Key == ConsoleKey.B)
                 {
-                    player.OpenBag(player);
+                    bagChoice = MenuOperations.
+                        PrintBagMenuAndReturnChoice(player);
+                    chosenItem = player.OpenBag(player, bagChoice);
                 }
                 else if ((keyInfo.Key == ConsoleKey.UpArrow ||
                     keyInfo.Key == ConsoleKey.W) && PosX > 1)
@@ -130,16 +136,27 @@ namespace SaleAdventure3000.Entities
                 // Ändrar spelarens position och ritar upp gameBoard igen.
                 gameBoard = Mechanics.ChangePosition(gameBoard, player);
                 
-                grid.DrawGameBoard(gameBoard);
-                Console.WriteLine("");
-                MenuOperations.PrintGameInfo(player);
+                if (bagChoice == null || bagChoice == "")
+                {
+                    grid.DrawGameBoard(gameBoard, player);
+                    Console.WriteLine("");
+                    MenuOperations.PrintGameInfo(player);
+                }
+                else
+                {
+                    grid.DrawGameBoard(gameBoard, player);
+                    Console.WriteLine("");
+                    MenuOperations.PrintGameInfo(player, chosenItem);
+                }
             }
         }
 
-        public void OpenBag (Player player)
+        public Item OpenBag (Player player, string bagChoice)
         {   
             // Gör det möjligt att välja Item med piltangenterna, och sparar valet man gör med enter.
-            string bagChoice = Mechanics.PrintBagMenuAndReturnChoice(player);
+            //string bagChoice = 
+            //    MenuOperations
+            //    .PrintBagMenuAndReturnChoice(player);
 
             foreach (var item in player.Bag)
             {
@@ -147,28 +164,33 @@ namespace SaleAdventure3000.Entities
                 {
                     // Kollar ifall föremålets namn stämmer överens med valet, isåfall så
                     // äter man upp föremålet och det tas bort ifrån bagen med metoden Consume().
-                    Console.WriteLine($"{player.Name} eats a {item.Key.Name}. It heals for {item.Key.HealAmount}.");
-                    player.HP += item.Key.HealAmount;
+                    //MenuOperations.PrintGameInfo(player, "Consume", item.Key);
                     player.Consume(player, item.Key);
+                    return item.Key;
                 }
                 else if ((bagChoice.Contains(item.Key.Name) && item.Key.Wear == true) && item.Key.Equipped == true)
                 {
                     // Kollar ifall föremålet är wearable samt ifall det redan är equipped.
                     player.Unequip(player, item.Key);
+                    return item.Key;
                 }
                 else if ((bagChoice.Contains(item.Key.Name) && item.Key.Wear == true) && item.Key.Equipped == false)
                 {
                     // Kollar ifall föremålet är wearable samt ifall det inte redan är equipped.
                     player.Equip(player, item.Key);
+                    return item.Key;
                 }
                 else if (bagChoice.Equals("Close Bag"))
                 {
-                    break;
+                    return new Item();
                 }
+                
             }
+            return new Item();
         }
         public void Consume(Player player, Item item)
         {
+            player.HP += item.HealAmount;
             // Sköter vad som händer när man använder en consumable. Finns det fler av
             // samma item i bagen så minskar value med 1, äter man den sista tas både
             // key och value bort från spelarens bag.
@@ -184,9 +206,7 @@ namespace SaleAdventure3000.Entities
 
         public void Unequip (Player player, Item item)
         {
-            Console.WriteLine($"{player.Name} unequips " +
-                              $"{item.Name}, losing {item.HpBoost} HP " +
-                              $"and {item.PowerAdded} power.");
+            //MenuOperations.PrintGameInfo(player, "Unequip", item);
             item.Equipped = false;
             player.HP -= item.HpBoost;
             player.Power -= item.PowerAdded;
@@ -194,13 +214,12 @@ namespace SaleAdventure3000.Entities
 
         public void Equip (Player player, Item item)
         {
-            Console.WriteLine($"{player.Name} equips " +
-                              $"{item.Name}, gaining {item.HpBoost} HP " +
-                              $"and {item.PowerAdded} power.");
+            //MenuOperations.PrintGameInfo(player, "Equip", item);
             item.Equipped = true;
             player.HP += item.HpBoost;
             player.Power += item.PowerAdded;
         }
+        
         // Getter för spelarens bag, eftersom bagen är private och inte synlig utanför
         // klassen player.
         public Dictionary<Item, int> GetBag ()

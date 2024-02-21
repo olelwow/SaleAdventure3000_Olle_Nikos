@@ -14,13 +14,21 @@ namespace SaleAdventure3000.Items
             {" N ", [5, 2]}
             // Siffrorna i arrayen representerar Poweradded och HPBoost.
         };
-
+        public Wearable(bool eq) 
+        {
+            this.Equipped = eq;
+        }
         public Wearable(string type, int posX, int posY)
         {
             EntitySelection(type);
             this.PosX = posX;
             this.PosY = posY;
             this.SymbolColor = "#6699ff";
+            this.Wear = true;
+        }
+        public Wearable (string type)
+        {
+            EntitySelection(type);
             this.Wear = true;
         }
         public override void EntitySelection(string type)
