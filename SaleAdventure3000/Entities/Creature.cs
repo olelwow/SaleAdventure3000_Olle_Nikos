@@ -2,13 +2,13 @@
 {
     public abstract class Creature : Entity
     {
-        private int hP;
+        private double hP;
         private int power;
         public Creature() { }
         public override void EntitySelection(string type)
         {
         }
-        public int HP
+        public double HP
         {
             get { return this.hP; }
             set { this.hP = value; }

@@ -117,7 +117,9 @@ namespace SaleAdventure3000
             if (found == true && username != null)
             {
                 Console.WriteLine("\n\tLoging succeed");
-                Thread.Sleep(1500);
+                ProgressBar();
+                Thread.Sleep(4000);
+                Console.Clear();
                 Game.StartGame(username);
             }
             else
@@ -239,10 +241,10 @@ namespace SaleAdventure3000
                 // att ändra i Entity så att Name inte kan vara null. Siffrorna efter variabeln i måsvingarna
                 // är till för formatering för att göra menyn symmetrisk.
                 showBag.AddChoice
-                    ($"{item.Key.Name,-11}" +
-                     $"{item.Key.Wear,-13}" +
-                     $"{item.Value,-9}" +
-                     $"{item.Key.Equipped,-5}"
+                    ($"{item.Key.Name, -11}" +
+                     $"{item.Key.Wear, -13}" +
+                     $"{item.Value, -9}" +
+                     $"{item.Key.Equipped, -5}"
                      );
                 // Lägger till Item i arrayen.
                 items[index] = item.Key;
@@ -256,65 +258,90 @@ namespace SaleAdventure3000
         {
             // en wedi ruta med grejer
 
-            Console.WriteLine($"       =============================================");
-            Console.WriteLine($"       |      Use WASD or arrow keys to move       |");
-            Console.WriteLine($"       |              B to open Bag                |");
-            Console.WriteLine($"       |              Q to quit game               |");
-            Console.WriteLine($"       |                                           |");
-            Console.WriteLine($"       |         HP remaining: {player.HP, -3}              |");
-            Console.WriteLine($"       |                                           |");
-            Console.WriteLine($"       |                                           |");
-            Console.WriteLine($"       |                                           |");
-            Console.WriteLine($"       =============================================");
+            Console.WriteLine($"==================================================================");
+            Console.WriteLine($"|                 Use WASD or arrow keys to move                 |");
+            Console.WriteLine($"|                        B to open Bag                           |");
+            Console.WriteLine($"|                        Q to quit game                          |");
+            Console.WriteLine($"|                                                                |");
+            Console.WriteLine($"|                    HP remaining: {player.HP:F1,-4}                         |");
+            Console.WriteLine($"|                                                                |");
+            Console.WriteLine($"|                                                                |");
+            Console.WriteLine($"|                                                                |");
+            Console.WriteLine($"==================================================================");
         }
         public static void PrintGameInfo (Player player, Item item)
         {
             Dictionary <Tuple<bool, bool>, string> gameMessages = new Dictionary<Tuple< bool, bool>, string> ()
             {
-                {Tuple.Create(true, true) , $"{player.Name} unequips {item.Name}," +
-                               $" losing {item.HpBoost} HP and {item.PowerAdded} power."
+                {Tuple.Create(true, true) , $"Player {player.Name} equips {item.Name}," +
+                                            $" gaining {item.HpBoost} HP and {item.PowerAdded} power."
                 },
-                {Tuple.Create(true, false), $"{player.Name} equips {item.Name}," +
-                                $" gaining {item.HpBoost} HP and {item.PowerAdded} power."
+                {Tuple.Create(true, false), $"Player {player.Name} unequips {item.Name}," +
+                                            $" losing {item.HpBoost} HP and {item.PowerAdded} power."
                 },
-                {Tuple.Create(false, false), $"{player.Name} eats a {item.Name}." +
-                                 $" It heals for {item.HealAmount}."
+                {Tuple.Create(false, false), $"Player {player.Name} eats a {item.Name}." +
+                                             $" It heals for {item.HealAmount}."
                 }
             };
-            foreach (var condition in gameMessages) {
-                
-                    if ((condition.Key.Item1 == true && condition.Key.Item2 == true) &&
-                        (item.Wear == true && item.Equipped == true))
-                    {
-                        var value = Tuple.Create(true, true);
-                        InfoText(gameMessages, value, player);
-                    }
-                    else if ((condition.Key.Item1 == true && condition.Key.Item2 == false) &&
-                        (item.Wear == true && item.Equipped == false ))
-                    {
-                        var value = Tuple.Create(true, false);
-                        InfoText(gameMessages, value, player);
-                    }
-                    else if ((condition.Key.Item1 == false && condition.Key.Item2 == false) &&
-                             (item.Wear == false && item.Equipped == false))
-                    {
-                        var value = Tuple.Create(false, false);
-                        InfoText(gameMessages, value, player);
-                    }
+            foreach (var condition in gameMessages) 
+            {
+                if ((condition.Key.Item1 == true && condition.Key.Item2 == true) &&
+                    (item.Wear == true && item.Equipped == true))
+                {
+                    var value = Tuple.Create(true, true);
+                    InfoText(gameMessages, value, player);
+                }
+                else if ((condition.Key.Item1 == true && condition.Key.Item2 == false) &&
+                    (item.Wear == true && item.Equipped == false ))
+                {
+                    var value = Tuple.Create(true, false);
+                    InfoText(gameMessages, value, player);
+                }
+                else if ((condition.Key.Item1 == false && condition.Key.Item2 == false) &&
+                            (item.Wear == false && item.Equipped == false))
+                {
+                    var value = Tuple.Create(false, false);
+                    InfoText(gameMessages, value, player);
+                }
             }
         }
         public static void InfoText(Dictionary<Tuple<bool,bool>,string> gameMessages, Tuple<bool, bool> value, Player player)
         {
-            Console.WriteLine($"       =============================================");
-            Console.WriteLine($"       |      Use WASD or arrow keys to move       |");
-            Console.WriteLine($"       |              B to open Bag                |");
-            Console.WriteLine($"       |              Q to quit game               |");
-            Console.WriteLine($"       |                                           |");
-            Console.WriteLine($"       |         HP remaining: {player.HP,-3}              |");
-            Console.WriteLine($"       |                                           |");
-            Console.WriteLine($"       | {gameMessages[value]}                                          |");
-            Console.WriteLine($"       |                                           |");
-            Console.WriteLine($"       =============================================");
+            Console.WriteLine($"==================================================================");
+            Console.WriteLine($"|                  Use WASD or arrow keys to move                |");
+            Console.WriteLine($"|                         B to open Bag                          |");
+            Console.WriteLine($"|                         Q to quit game                         |");
+            Console.WriteLine($"|                                                                |");
+            Console.WriteLine($"|                    HP remaining: {player.HP:F1,-4}                         |");
+            Console.WriteLine($"|                                                                |");
+            Console.WriteLine($"|     {gameMessages[value], -59}|");
+            Console.WriteLine($"|                                                                |");
+            Console.WriteLine($"==================================================================");
+        }
+
+        public static void ProgressBar ()
+        {
+             AnsiConsole.Progress()
+            .AutoRefresh(true)
+            .AutoClear(false)   
+            .HideCompleted(false)   
+            .Columns(new ProgressColumn[]
+            {
+                new TaskDescriptionColumn(),    
+                new ProgressBarColumn(),        
+                new PercentageColumn(),         
+                new SpinnerColumn(),            
+            })
+            .StartAsync(async ctx =>
+            {
+                var task = ctx.AddTask("Loading");
+
+                while (!ctx.IsFinished)
+                {
+                    await Task.Delay(50);
+                    task.Increment(2);
+                }
+            });
         }
     }
 }

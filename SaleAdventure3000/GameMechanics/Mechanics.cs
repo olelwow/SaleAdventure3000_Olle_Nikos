@@ -62,6 +62,7 @@ public abstract class Mechanics
 
     public static void GameWon (Player player)
     {
+        MenuOperations.ScoreBoardReg(player);
         Console.Clear();
 
 
@@ -113,8 +114,8 @@ public abstract class Mechanics
                 // Ifall death är null så har varken NPC eller spelare dött, då fortsätter encounter.
                 Console.Clear();
                 Console.WriteLine(
-                    $"{player.Name}:{player.HP}HP VERSUS " +
-                    $"{npc.Name}:{npc.HP}HP \n");
+                    $"{player.Name}:{player.HP:F1}HP VERSUS " +
+                    $"{npc.Name}:{npc.HP:F1}HP \n");
 
                 int choice = MenuOperations.PrintChoiceMenu("Punch", "Block", "Escape", "Use item");
 
@@ -197,36 +198,40 @@ public abstract class Mechanics
      */
     public static string Attack(Player player, NPC npc)
     {
+        Dice dice = new();
         if (player.HP > 0)
         {
-            npc.HP -= player.Power;
+            double powerAfterRoll = Math.Round((player.Power * dice.Roll(7)), 1);
+            npc.HP -= powerAfterRoll;
 
             if (npc.HP < 1)
             {
                 npc.HP = 0;
             }
             
-            return $"{player.Name} attacks with {player.Power} power" +
-               $"\n{player.Name}s HP: {player.HP}," +
-               $" {npc.Name} HP:{npc.HP}!";
+            return $"{player.Name} attacks with {powerAfterRoll:F1} power" +
+               $"\n\n{player.Name}s HP: {player.HP:F1}, " +
+               $"{npc.Name} HP:{npc.HP:F1}!";
         }
         return "";
     }
     public static string Attack(NPC npc, Player player)
     {
         // Metod som sköter NPCs attack, ifall npc redan dött returneras en tom sträng.
+        Dice dice = new();
         if (npc.HP > 0)
         {
-            player.HP -= npc.Power;
+            double powerAfterRoll = Math.Round((npc.Power * dice.Roll(5)), 1);
+            player.HP -= powerAfterRoll;
             
             if (player.HP < 1)
             {
                 player.HP = 0;
             }
 
-            return $"{npc.Name} attacks with {npc.Power} power" +
-               $"\n{player.Name} HP: {player.HP}," +
-               $" {npc.Name} HP: {npc.HP}!";
+            return $"{npc.Name} attacks with {powerAfterRoll:F1} power" +
+               $"\n\n{player.Name} HP: {player.HP:F1}, " +
+               $"{npc.Name} HP: {npc.HP:F1}!";
         }
         return "";
     }
@@ -234,14 +239,14 @@ public abstract class Mechanics
     public static string Block(NPC npc, Player player)
     {
         return $"{npc.Name} blocks the attack! " +
-               $"\n{player.Name} HP: {player.HP}, " +
-               $"{npc.Name} HP: {npc.HP}";
+               $"\n\n{player.Name} HP: {player.HP:F1}, " +
+               $"{npc.Name} HP: {npc.HP:F1}";
     }
     public static string Block(Player player, NPC npc)
     {
         return $"{player.Name} blocks the attack! " +
-               $"\n{player.Name} HP: {player.HP}, " +
-               $"{npc.Name} HP: {npc.HP}";
+               $"\n\n{player.Name} HP: {player.HP:F1}, " +
+               $"{npc.Name} HP: {npc.HP:F1}";
     }
     
     //Här kotntrollerar vi om spelaren eller npc är död och avsluta deras tur och tillbaka till gameboard
@@ -250,14 +255,14 @@ public abstract class Mechanics
         if (player.HP < 1)
         {
             player.HP = 0;
-            return $"{player.Name} died and {npc.Name} has {npc.HP} HP left.";
+            return $"{player.Name} died and {npc.Name} has {npc.HP:F1} HP left.";
         }
         else if (npc.HP < 1)
         {
             npc.HP = 0;
             player.score += 10;
-            MenuOperations.ScoreBoardReg(player);
-            return $"{npc.Name} died and player has {player.HP} HP left.";
+            //MenuOperations.ScoreBoardReg(player);
+            return $"{npc.Name} died and player has {player.HP:F1} HP left.";
         }
         return "";
     }
