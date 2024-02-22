@@ -1,9 +1,6 @@
 ﻿using SaleAdventure3000.Entities;
 using SaleAdventure3000.Items;
 using Spectre.Console;
-using System.ComponentModel.Design;
-using System.Numerics;
-using System.Threading.Tasks;
 
 namespace SaleAdventure3000
 {
@@ -16,29 +13,28 @@ namespace SaleAdventure3000
             Logo();
             Console.WriteLine("- - - Menu - - -\n");
             int choice = PrintChoiceMenu("Register", "Log in",
-                                         "View scoreboard", "Quit"
-                                        );
+                                         "View scoreboard", "Quit");
             switch (choice)
             {
                 case 1:
                     RegisterPlayer();
-                    break;
+                break;
 
                 case 2:
                     Login();
-                    break;
+                break;
 
                 case 3:
                     Scoreboard();
-                    break;
+                break;
 
                 case 4:
                     run = false;
-                    break;
+                break;
 
                 default:
                     Console.WriteLine("Wrong input, try again!");
-                    break;
+                break;
             }
             // returnerar run, vilket blir false om man väljer case 4. 
             // Annars fortsätter loopen i Program.cs
@@ -116,15 +112,13 @@ namespace SaleAdventure3000
             }
             if (found == true && username != null)
             {
-                Console.WriteLine("\n\tLoging succeed");
+                Console.WriteLine("\n\tLogin success");
                 ProgressBar();
                 Thread.Sleep(4000);
-                Console.Clear();
                 Game.StartGame(username);
             }
             else
             {
-
                 Console.WriteLine("\n\tInvalid username");
                 Console.ReadLine();
             }
@@ -155,10 +149,7 @@ namespace SaleAdventure3000
                 new SelectionPrompt<string>()
                 .Title("Make your choice")
                 .PageSize(5)
-                .AddChoices(new[]
-                {
-                    choice1, choice2, choice3, choice4
-                }));
+                .AddChoices([choice1, choice2, choice3, choice4]));
             // Returnerar värdet i choice som hör ihop med rätt menyval.
             return choice[displayMenu];
         }
@@ -251,7 +242,6 @@ namespace SaleAdventure3000
                 index++;
             }
             showBag.AddChoice("Close Bag");
-
             return AnsiConsole.Prompt(showBag);
         }
         public static void PrintGameInfo(Player player)
@@ -334,19 +324,19 @@ namespace SaleAdventure3000
             })
             .StartAsync(async ctx =>
             {
-                var task = ctx.AddTask("Loading");
+                var task = ctx.AddTask("Loading....");
 
                 while (!ctx.IsFinished)
                 {
-                    await Task.Delay(50);
-                    task.Increment(2);
+                    await Task.Delay(75);
+                    task.Increment(3);
                 }
             });
         }
         public static void DisplayFightImages (Player player, NPC npc)
         {
             // Skapar nytt table med kolumner för spelare och NPC.
-            var table = ImageTableHeaders(player, npc);
+            var table = FightTableHeaders(player, npc);
 
             // Tar in ikonerna, sätter storlek samt adderar dem till table.
             var playerImage = new CanvasImage(@"../../../Icons/player_icon.png").MaxWidth(25);
@@ -357,7 +347,7 @@ namespace SaleAdventure3000
         }
         public static void DisplayFightImages(string winner, Player player, NPC npc)
         {
-            var table = ImageTableHeaders(player, npc);
+            var table = FightTableHeaders(player, npc);
             // Beroende på vem som vann fighten visas olika bilder.
             if (winner == "player")
             {
@@ -376,7 +366,7 @@ namespace SaleAdventure3000
                 AnsiConsole.Write(table);
             }
         }
-        public static Table ImageTableHeaders (Player player, NPC npc)
+        public static Table FightTableHeaders (Player player, NPC npc)
         {
             var table = new Table();
             table.AddColumn($"{player.Name} : {player.HP.ToString("F1")} HP");
@@ -388,6 +378,19 @@ namespace SaleAdventure3000
                 table.Columns[i].Centered();
             }
             return table;
+        }
+        public static void WinScreen (Player player)
+        {
+            var table = new Table();
+            table.AddColumn($"You made it all the way to the goal! Congratulations!" +
+                            $"\nYou achieved a score of {player.score}");
+            table.Columns[0].Centered();
+            
+            var winImage = new CanvasImage(@"../../../Icons/win_icon.png").MaxWidth(35);
+            table.AddRow(winImage);
+            table.Centered();
+            
+            AnsiConsole.Write(table);
         }
     }
 }

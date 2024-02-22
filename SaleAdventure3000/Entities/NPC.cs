@@ -4,14 +4,13 @@
     {
         private readonly string[] symbols = [" # ", " * ", " @ ",  " & ", " £ "];
         private readonly string[] names = ["Nikos","Ragnar", "Klasse",  "Olle", "Jonas"];
-        //private readonly string[] colors = ["#660000", "#b30000", "#ff0000", "#ff4d4d", "#ff9999"];
         private readonly Dictionary<string, int[]> NPCProperties = new Dictionary<string, int[]>()
         {
-            {" # ", [150, 7]},
+            {" # ", [150, 17]},
             {" * ", [100, 12]},
-            {" @ ", [75, 20]},
-            {" & ", [60, 15]},
-            {" £ ", [30, 5] }
+            {" @ ", [75, 10]},
+            {" & ", [60, 8]},
+            {" £ ", [30, 6] }
             // Siffrorna i arrayen representerar HP och Power.
         };
 

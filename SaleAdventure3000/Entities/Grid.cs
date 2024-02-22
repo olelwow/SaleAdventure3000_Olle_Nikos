@@ -1,6 +1,5 @@
 ﻿using Pastel;
 using SaleAdventure3000.Items;
-using System.Numerics;
 
 namespace SaleAdventure3000.Entities
 {

@@ -1,7 +1,6 @@
 ﻿using SaleAdventure3000;
 using SaleAdventure3000.Entities;
 using SaleAdventure3000.Items;
-using Spectre.Console;
 
 public abstract class Mechanics
 {
@@ -65,31 +64,7 @@ public abstract class Mechanics
         MenuOperations.ScoreBoardReg(player);
         Console.Clear();
 
-
-        //Console.WriteLine("                      /|\\                  ");
-        //Console.WriteLine("                      \\|/                  ");
-        //Console.WriteLine("                     '    '                 ");
-        //Console.WriteLine("                   '        '               ");
-        //Console.WriteLine("                '            '              ");
-        //Console.WriteLine("           *  '       *       '   *         ");
-        //Console.WriteLine("          /\\ '       / \\      '  / \\     ");
-        //Console.WriteLine("         /  \\       /   \\       /   \\    ");
-        //Console.WriteLine("        /    \\     /     \\     /     \\   ");
-        //Console.WriteLine("       /      \\   /       \\   /       \\  ");
-        //Console.WriteLine("                                            ");
-        //Console.WriteLine("    ________________________________________");
-        //Console.WriteLine("    ________________________________________");
-        //Console.WriteLine("    ________________________________________");
-        //Console.WriteLine("    |                                      |");
-        //Console.WriteLine("    *     *     *      *     *    *    *   *");
-        //Console.WriteLine("    |                                      |");
-        //Console.WriteLine("    ________________________________________");
-
-        Console.WriteLine("MMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMM\r\nMMMMMMMMMMMMMMMMWX0kk0XWMMMMMMMMMMMMMMMM\r\nMMMMMMMMMMMMMMMWk::cc::kWMMMMMMMMMMMMMMM\r\nMMMMMMMMMMMMMMMXo,lOOl,oXMMMMMMMMMMMMMMM\r\nMWWWMMMMMMMMMMMWO:'''':OWMMMMMMMMMMMWWWM\r\nOdookXWMMMMMMMMWO::ll::OWMMMMMMMMWXkoodO\r\n,cdl;lKMMMMMMMW0c:kNNk:c0WMMMMMMMKl;ldc,\r\n;coc'c0MMMMMMWKc;kNMMNk;lKWMMMMMM0c,co:;\r\n0d,..,o0NMMMMXl;dNMMMMNd;lXMMMMN0o,..,d0\r\nMNk;;ol:lONMXd;oNMMMMMMNo;dXMNOl:lo;;kNM\r\nMMXl;kX0o:cxo,oXMMMMMMMMXo,oxc:o0Xk;lXMM\r\nMMWx;lKMWKd:;lKMMMMMMMMMMKl;:d0WMKl;xWMM\r\nMMMKl;kMMMWXKNWMMMMMMMMMMWNKXWMMMk;lKMMM\r\nMMMWk,:dkkkkkkkkkkkkkkkkkkkkkkkkd:,kWMMM\r\nMMMMO;':llllllllllllllllllllllll:';OMMMM\r\nMMMMO:c0WWWWWWWWWWWWWWWWWWWWWWWW0c:OMMMM\r\nMMMMO;:x000000000000000000000000x:;OMMMM\r\nMMMMXdccllllllllllllllllllllllllccdXMMMM\r\nMMMMMWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWMMMMM\r\nMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMM\r\n");
-
-        //xd
-        Console.WriteLine($"\nYou made it all the way to the goal! Congratulations!" +
-                          $"\nYou got a score of {player.score}");
+        MenuOperations.WinScreen(player);
         Console.ReadLine();
         player.Run = false;
     }
@@ -97,20 +72,19 @@ public abstract class Mechanics
     public static void Encounter(NPC npc, Player player)
     {
         bool run = true;
-
         while (run)
         {
             // Kontrollerar med hjälp av metoden Death i Operations ifall antingen spelare
             // eller NPC har dött och skickar tillbaka rätt sträng för utskrift.
-            string? death = (npc.HP < 1 || player.HP < 1) ? Death(player, npc) : null;
+            string? death = (npc.HP < 1 || player.HP < 1) ? 
+                             Death(player, npc) :
+                             null;
             if (death != null)
             {
                 Console.Clear();
                 MenuOperations.DisplayFightImages(death, player, npc);
-                //Console.WriteLine(death);
                 Console.ReadLine();
                 Console.Clear();
-                run = false;
                 break;
             }
             else if (death == null)
@@ -119,16 +93,15 @@ public abstract class Mechanics
                 Console.Clear();
                 MenuOperations.DisplayFightImages(player, npc);
 
-                int choice = MenuOperations.PrintChoiceMenu("Punch", "Block", "Escape", "Use item");
+                int choice = MenuOperations.PrintChoiceMenu("Attack", "Block", "Escape", "Use item");
 
                 int computerChoice = new Random().Next(1, 4);
                 switch (choice)
                 {
                     case 1:
-                        string playerResult =
-                            (computerChoice == 2) ?
-                            Block(npc, player) :
-                            Attack(player, npc);
+                        string playerResult = (computerChoice == 2) ?
+                                               Block(npc, player) :
+                                               Attack(player, npc);
 
                         Console.WriteLine(playerResult);
                         Console.ReadLine();
@@ -142,6 +115,7 @@ public abstract class Mechanics
                     case 3:
                         Console.WriteLine($"{player.Name} runs for his life...");
                         Console.ReadLine();
+                        Console.Clear();
                         run = false;
                     break;
 
@@ -161,8 +135,9 @@ public abstract class Mechanics
                         else
                         {
                             string computerResult = (choice == 2) ?
-                            Block(player, npc) :
-                            Attack(npc, player);
+                                                     Block(player, npc) :
+                                                     Attack(npc, player);
+
                             Console.WriteLine(computerResult);
                             Console.ReadLine();
                         }
@@ -173,17 +148,11 @@ public abstract class Mechanics
                     break;
 
                     case 3:
-                        if (npc.HP < (npc.HP * 0.1))
-                        {
-                            Console.WriteLine($"{npc.Name} runs for his life...");
-                            player.score += 5;
-                            MenuOperations.ScoreBoardReg(player);
-                            run = false;
-                        }
+                        Console.WriteLine(NpcFart(npc, player));
+                        Console.ReadLine();
                     break;
                 }
             }
-            
         }
     }
     
@@ -201,40 +170,57 @@ public abstract class Mechanics
      */
     public static string Attack(Player player, NPC npc)
     {
-        Dice dice = new();
         if (player.HP > 0)
         {
-            double powerAfterRoll = Math.Round((player.Power * dice.Roll(7)), 1);
+            Dice dice = new();
+            double powerAfterRoll = player.Power * dice.Roll(7);
             npc.HP -= powerAfterRoll;
 
             if (npc.HP < 1)
             {
                 npc.HP = 0;
             }
-            
             return $"{player.Name} attacks with {powerAfterRoll:F1} power" +
-               $"\n\n{player.Name}s HP: {player.HP:F1}, " +
-               $"{npc.Name} HP:{npc.HP:F1}!";
+                   $"\n\n{player.Name}s HP: {player.HP:F1}, " +
+                   $"{npc.Name} HP:{npc.HP:F1}!";
         }
         return "";
     }
     public static string Attack(NPC npc, Player player)
     {
         // Metod som sköter NPCs attack, ifall npc redan dött returneras en tom sträng.
-        Dice dice = new();
         if (npc.HP > 0)
         {
-            double powerAfterRoll = Math.Round((npc.Power * dice.Roll(5)), 1);
+            Dice dice = new();
+            double powerAfterRoll = npc.Power * dice.Roll(5);
             player.HP -= powerAfterRoll;
-            
+
             if (player.HP < 1)
             {
                 player.HP = 0;
             }
-
             return $"{npc.Name} attacks with {powerAfterRoll:F1} power" +
-               $"\n\n{player.Name} HP: {player.HP:F1}, " +
-               $"{npc.Name} HP: {npc.HP:F1}!";
+                   $"\n\n{player.Name} HP: {player.HP:F1}, " +
+                   $"{npc.Name} HP: {npc.HP:F1}!";
+        }
+        return "";
+    }
+    public static string NpcFart (NPC npc, Player player)
+    {
+        if (npc.HP > 0)
+        {
+            Dice dice = new();
+            double powerAfterRoll = npc.Power * dice.Roll(7) * 0.3;
+            player.HP -= powerAfterRoll;
+
+            if (player.HP < 1)
+            {
+                player.HP = 0;
+            }
+            return $"{npc.Name} directs a fart at {player.Name}. It deals " +
+                   $"{powerAfterRoll:F1} damage." +
+                   $"\n\n{player.Name} HP: {player.HP:F1}, " +
+                   $"{npc.Name} HP: {npc.HP:F1}!";
         }
         return "";
     }
