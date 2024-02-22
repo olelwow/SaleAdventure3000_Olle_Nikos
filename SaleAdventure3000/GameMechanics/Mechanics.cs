@@ -105,7 +105,11 @@ public abstract class Mechanics
             string? death = (npc.HP < 1 || player.HP < 1) ? Death(player, npc) : null;
             if (death != null)
             {
-                Console.WriteLine(death);
+                Console.Clear();
+                MenuOperations.DisplayFightImages(death, player, npc);
+                //Console.WriteLine(death);
+                Console.ReadLine();
+                Console.Clear();
                 run = false;
                 break;
             }
@@ -113,9 +117,7 @@ public abstract class Mechanics
             {
                 // Ifall death är null så har varken NPC eller spelare dött, då fortsätter encounter.
                 Console.Clear();
-                Console.WriteLine(
-                    $"{player.Name}:{player.HP:F1}HP VERSUS " +
-                    $"{npc.Name}:{npc.HP:F1}HP \n");
+                MenuOperations.DisplayFightImages(player, npc);
 
                 int choice = MenuOperations.PrintChoiceMenu("Punch", "Block", "Escape", "Use item");
 
@@ -181,6 +183,7 @@ public abstract class Mechanics
                     break;
                 }
             }
+            
         }
     }
     
@@ -255,14 +258,13 @@ public abstract class Mechanics
         if (player.HP < 1)
         {
             player.HP = 0;
-            return $"{player.Name} died and {npc.Name} has {npc.HP:F1} HP left.";
+            return "npc";
         }
         else if (npc.HP < 1)
         {
             npc.HP = 0;
             player.score += 10;
-            //MenuOperations.ScoreBoardReg(player);
-            return $"{npc.Name} died and player has {player.HP:F1} HP left.";
+            return "player";
         }
         return "";
     }

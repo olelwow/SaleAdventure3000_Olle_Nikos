@@ -263,7 +263,7 @@ namespace SaleAdventure3000
             Console.WriteLine($"|                        B to open Bag                           |");
             Console.WriteLine($"|                        Q to quit game                          |");
             Console.WriteLine($"|                                                                |");
-            Console.WriteLine($"|                    HP remaining: {player.HP.ToString("F1"),-4}                         |");
+            Console.WriteLine($"|                     HP remaining: {player.HP.ToString("F1"),-5}                        |");
             Console.WriteLine($"|                                                                |");
             Console.WriteLine($"|                                                                |");
             Console.WriteLine($"|                                                                |");
@@ -312,7 +312,7 @@ namespace SaleAdventure3000
             Console.WriteLine($"|                         B to open Bag                          |");
             Console.WriteLine($"|                         Q to quit game                         |");
             Console.WriteLine($"|                                                                |");
-            Console.WriteLine($"|                    HP remaining: {player.HP.ToString("F1"),-4}                         |");
+            Console.WriteLine($"|                     HP remaining: {player.HP.ToString("F1"),-5}                        |");
             Console.WriteLine($"|                                                                |");
             Console.WriteLine($"|     {gameMessages[value], -59}|");
             Console.WriteLine($"|                                                                |");
@@ -342,6 +342,52 @@ namespace SaleAdventure3000
                     task.Increment(2);
                 }
             });
+        }
+        public static void DisplayFightImages (Player player, NPC npc)
+        {
+            // Skapar nytt table med kolumner för spelare och NPC.
+            var table = ImageTableHeaders(player, npc);
+
+            // Tar in ikonerna, sätter storlek samt adderar dem till table.
+            var playerImage = new CanvasImage(@"../../../Icons/player_icon.png").MaxWidth(25);
+            var middle = new CanvasImage(@"../../../Icons/vs_icon1.png").MaxWidth(25);
+            var npcImage = new CanvasImage(@"../../../Icons/npc_icon.png").MaxWidth(25);
+            table.AddRow(playerImage, middle, npcImage);
+            AnsiConsole.Write(table);
+        }
+        public static void DisplayFightImages(string winner, Player player, NPC npc)
+        {
+            var table = ImageTableHeaders(player, npc);
+            // Beroende på vem som vann fighten visas olika bilder.
+            if (winner == "player")
+            {
+                var playerImage = new CanvasImage(@"../../../Icons/player_icon.png").MaxWidth(25);
+                var middle = new CanvasImage(@"../../../Icons/win_icon.png").MaxWidth(25);
+                var npcImage = new CanvasImage(@"../../../Icons/dead_icon.png").MaxWidth(25);
+                table.AddRow(playerImage, middle, npcImage);
+                AnsiConsole.Write(table);
+            }
+            else if (winner == "npc")
+            {
+                var playerImage = new CanvasImage(@"../../../Icons/dead_icon.png").MaxWidth(25);
+                var middle = new CanvasImage(@"../../../Icons/lose_icon.png").MaxWidth(25);
+                var npcImage = new CanvasImage(@"../../../Icons/npc_icon.png").MaxWidth(25);
+                table.AddRow(playerImage, middle, npcImage);
+                AnsiConsole.Write(table);
+            }
+        }
+        public static Table ImageTableHeaders (Player player, NPC npc)
+        {
+            var table = new Table();
+            table.AddColumn($"{player.Name} : {player.HP.ToString("F1")} HP");
+            table.AddColumn(" VERSUS ");
+            table.AddColumn($"{npc.Name} : {npc.HP.ToString("F1")} HP");
+
+            for (int i = 0; i < table.Columns.Count; i++)
+            {
+                table.Columns[i].Centered();
+            }
+            return table;
         }
     }
 }
