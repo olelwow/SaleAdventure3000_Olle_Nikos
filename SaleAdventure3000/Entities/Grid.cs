@@ -132,30 +132,6 @@ namespace SaleAdventure3000.Entities
                                  );
                 }
             }
-
-            //Dictionary<string, string> gameMessages = new Dictionary<string, string>()
-            //    {
-            //        {"Unequip", $"{player.Name} unequips {player.GetBag()}," +
-            //                    $" losing {item.HpBoost} HP and {item.PowerAdded} power."
-            //        },
-            //        {"Equip", $"{player.Name} equips {item.Name}," +
-            //                    $" gaining {item.HpBoost} HP and {item.PowerAdded} power."
-            //        },
-            //        {"Consume", $"{player.Name} eats a {item.Name}." +
-            //                    $" It heals for {item.HealAmount}."
-            //        }
-            //    };
-            //Console.WriteLine($"       =============================================");
-            //Console.WriteLine($"       |      Use WASD or arrow keys to move       |");
-            //Console.WriteLine($"       |              B to open Bag                |");
-            //Console.WriteLine($"       |              Q to quit game               |");
-            //Console.WriteLine($"       |                                           |");
-            //Console.WriteLine($"       |         HP remaining: {player.HP,-3}              |");
-            //Console.WriteLine($"       |                                           |");
-            //Console.WriteLine($"       | {gameMessages[message]}                                          |");
-            //Console.WriteLine($"       |                                           |");
-            //Console.WriteLine($"       =============================================");
-            
         }
     }
 }

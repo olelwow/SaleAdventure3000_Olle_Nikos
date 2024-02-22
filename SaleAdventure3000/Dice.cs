@@ -1,4 +1,6 @@
-﻿namespace SaleAdventure3000
+﻿using Pastel;
+
+namespace SaleAdventure3000
 {
     public class Dice
     {
@@ -9,24 +11,37 @@
             {1, 0.00 },
             {2, 0.20 },
             {3, 0.45 },
-            {4, 0.95 },
+            {4, 1.00 },
             {5, 1.50 },
             {6, 2.00 },
         };
         public double Roll(int range)
         {
+            string message;
             int result = this.Die.Next(1, range);
             if (result == 1)
             {
-                Console.WriteLine("No effects on the attack");
+                message = $"The dice stayed on {result}.\n " +
+                    "No effects on the attack XD";
+                Console.WriteLine(message.Pastel(ConsoleColor.Red));
             }
-            else if (result < 6 && result > 1)
+            else if (result < 4 && result > 1)
             {
-                Console.WriteLine($"The attack is {100 * powerLuck[result]} % stronger");
+                message = $"The dice stayed on {result}.\n " +
+                    $"The attack is {100 * powerLuck[result]} % weaker :(";
+                Console.WriteLine(message.Pastel(ConsoleColor.Yellow));
             }
-            else if (result == 6)
+            else if (result == 4)
             {
-                Console.WriteLine($"The attack does {100 * (int)powerLuck[result]} % critical damage. WOW!!!");
+                message = $"The dice stayed on {result}.\n " +
+                    $"The attack is normal...";
+                Console.WriteLine(message.Pastel(ConsoleColor.DarkGreen));
+            }
+            else if (result > 4)
+            {
+                message = $"The dice stayed on {result}.\n " +
+                    $"The attack does {100 * (int)powerLuck[result]} % critical damage. WOW!!!";
+                Console.WriteLine(message.Pastel(ConsoleColor.Green));
             }
             return powerLuck[result];
         }

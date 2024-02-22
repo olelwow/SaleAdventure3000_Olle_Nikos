@@ -263,7 +263,7 @@ namespace SaleAdventure3000
             Console.WriteLine($"|                        B to open Bag                           |");
             Console.WriteLine($"|                        Q to quit game                          |");
             Console.WriteLine($"|                                                                |");
-            Console.WriteLine($"|                    HP remaining: {player.HP:F1,-4}                         |");
+            Console.WriteLine($"|                    HP remaining: {player.HP.ToString("F1"),-4}                         |");
             Console.WriteLine($"|                                                                |");
             Console.WriteLine($"|                                                                |");
             Console.WriteLine($"|                                                                |");
@@ -312,7 +312,7 @@ namespace SaleAdventure3000
             Console.WriteLine($"|                         B to open Bag                          |");
             Console.WriteLine($"|                         Q to quit game                         |");
             Console.WriteLine($"|                                                                |");
-            Console.WriteLine($"|                    HP remaining: {player.HP:F1,-4}                         |");
+            Console.WriteLine($"|                    HP remaining: {player.HP.ToString("F1"),-4}                         |");
             Console.WriteLine($"|                                                                |");
             Console.WriteLine($"|     {gameMessages[value], -59}|");
             Console.WriteLine($"|                                                                |");
