@@ -4,9 +4,8 @@
     {
         private static void Main(string[] args)
         {
+            Console.SetWindowSize(120,60);
             bool run = true;
-            //MenuOperations.ProgressBar();
-            //Console.ReadLine();
             while (run)
             {
                 run = MenuOperations.PrintStartMenu(run);

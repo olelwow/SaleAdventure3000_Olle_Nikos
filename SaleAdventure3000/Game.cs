@@ -1,5 +1,4 @@
 ﻿using SaleAdventure3000.Entities;
-using Spectre.Console;
 
 namespace SaleAdventure3000
 {
