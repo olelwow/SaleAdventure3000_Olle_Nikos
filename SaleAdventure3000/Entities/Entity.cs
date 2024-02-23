@@ -6,8 +6,8 @@ namespace SaleAdventure3000.Entities
     {
         private int posX;
         private int posY;
-        private string? symbol;
-        private string? name;
+        private string symbol = "   ";
+        private string name = "Entity";
         private string symbolColor = "#ffffff";
         private string backgroundColor = "000000";
 
@@ -52,7 +52,7 @@ namespace SaleAdventure3000.Entities
         }
         public string Symbol
         {
-            get { return this.symbol; }
+            get { return this.Symbol; }
             set { this.symbol = value; }
         }
         public string SymbolColor

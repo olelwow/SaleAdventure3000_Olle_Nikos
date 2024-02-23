@@ -4,8 +4,8 @@ namespace SaleAdventure3000
 {
     public class Dice
     {
-        private Random Die = new Random();
-        private Dictionary<int, double> Values = new()
+        private readonly Random Die = new();
+        private readonly Dictionary<int, double> Values = new()
         {
             {1, 0.00 },
             {2, 0.20 },
@@ -14,15 +14,14 @@ namespace SaleAdventure3000
             {5, 1.50 },
             {6, 2.00 },
         };
-        private string[] messages = 
-            [ "", "The dice rolled a 1. \nThe attack had no effect XD",
-              "The dice rolled a 2. \nThe attack only has 20% of its original power. :(",
-              "The dice rolled a 3. \nThe attack only has 45% of its original power. :()",
-              "The dice rolled a 4. \nThe attack is normal....",
-              "The dice rolled a 5. \nThe attack does 150% critical damage!! WOW!",
-              "The dice rolled a 6. \nThe attack does 200% critical damage!! WAOOOWWW!"
-            ];
-        private string[] colors = ["", "#9e1519", "#a7b811", "#a7b811", "#1ac4c9", "#1a8cc9", "#1fbd1c"];
+        private readonly string[] messages = 
+            ["", "The dice rolled a 1. \nThe attack had no effect XD",
+             "The dice rolled a 2. \nThe attack only has 20% of its original power. :(",
+             "The dice rolled a 3. \nThe attack only has 45% of its original power. :()",
+             "The dice rolled a 4. \nThe attack is normal....",
+             "The dice rolled a 5. \nThe attack does 150% critical damage!! WOW!",
+             "The dice rolled a 6. \nThe attack does 200% critical damage!! WAOOOWWW!"];
+        private readonly string[] colors = ["", "#9e1519", "#a7b811", "#a7b811", "#1ac4c9", "#1a8cc9", "#1fbd1c"];
 
         public double Roll(int range)
         {
