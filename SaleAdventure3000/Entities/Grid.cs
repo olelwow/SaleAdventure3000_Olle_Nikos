@@ -127,8 +127,7 @@ namespace SaleAdventure3000.Entities
                 {
                     Console.Write(gameBoard[i, j].Symbol
                                  .Pastel(gameBoard[i,j].SymbolColor)
-                                 .PastelBg(gameBoard[i, j].BackgroundColor)
-                                 );
+                                 .PastelBg(gameBoard[i, j].BackgroundColor));
                 }
             }
         }

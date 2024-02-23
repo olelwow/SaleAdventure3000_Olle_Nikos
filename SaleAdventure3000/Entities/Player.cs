@@ -58,6 +58,10 @@ namespace SaleAdventure3000.Entities
                 {
                     bagChoice = MenuOperations.
                         PrintBagMenuAndReturnChoice(player);
+                    if (bagChoice == "Close Bag")
+                    {
+                        bagChoice = "";
+                    }
                     chosenItem = player.OpenBag(player, bagChoice);
                 }
                 else if ((keyInfo.Key == ConsoleKey.UpArrow ||
