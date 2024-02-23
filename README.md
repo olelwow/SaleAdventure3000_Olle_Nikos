@@ -4,8 +4,7 @@
 * Logga in med ditt användarnamn.
 
 * Använd WASD eller piltangenterna för att röra din karaktär, B för att öppna Bag och Q för att avsluta spelet.
-  Fiender är osylniga tills din karaktär är inom en ruta ifrån dem. Den del av kartan som du upptäckt kommer lysas upp och     
-  förbli upplyst. Wearable items är blåa, consumables är andra färger beroende på vilken consumable det är.
+  Fiender är osylniga tills din karaktär är inom en ruta ifrån dem. Den del av kartan som du upptäckt kommer lysas upp och   förbli upplyst. Wearable items är blåa, consumables är andra färger beroende på vilken consumable det är.
 
 * Man vinner spelet när man tagit sig till målet, som också är osynligt tills man är inom en ruta ifrån det.
   Målet symboliseras med tecknet [+].
