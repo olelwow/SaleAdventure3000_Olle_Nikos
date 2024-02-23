@@ -20,17 +20,23 @@ namespace SaleAdventure3000.Entities
             new("Olle", 16, 13),
             new("Ragnar", 5, 7),
             new("Jonas", 3, 12),
-            //new("Tintin", 1, 3), //20, 8
+            new("Olle", 8, 9),
+            new("Ragnar", 20, 5),
+            new("Nikos", 6, 5),
+            new("Tintin", 20, 8), //20, 8
         ];
 
         public Wearable[] wears =
         [
-            new("Body", "Leather", 3, 3),
+            new("Body", "Leather", 3, 7),
             new("Helmet", "Cloth", 3, 11),
             new("Legs", "Leather", 5, 1),
-            new("Body", "Cloth", 18, 12),
+            new("Body", "Cloth", 18, 13),
             new("Helmet", "Leather", 20, 15),
             new("Legs", "Plate", 10, 17),
+            new("Helmet", "Plate", 13, 1),
+            new("Body", "Plate", 14, 7),
+            new("Legs", "Cloth", 20, 1)
         ];
         public Consumable[] consumables =
         [
@@ -39,7 +45,11 @@ namespace SaleAdventure3000.Entities
             new("Pie", 12, 19),
             new("Egg", 18, 16),
             new("Cheese", 9, 1),
-            new("Pie", 9, 17)
+            new("Pie", 9, 9),
+            new("Egg", 17, 3),
+            new("Cheese", 12, 10),
+            new("Pie", 18, 7),
+            new("Egg", 1, 14),
         ];
         public Entity[] goal = 
             [new Obstacle("[+]") { PosX = 20, PosY = 7, SymbolColor = "#000000" } ];

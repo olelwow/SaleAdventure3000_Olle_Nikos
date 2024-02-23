@@ -6,7 +6,7 @@ namespace SaleAdventure3000.Items
     {
         private readonly string[] names = ["Egg", "Pie", "Cheese", "Bad-Apple"];
         private readonly string[] symbols = [" E ", " P ", " C ", "B A"];// CxDDDD
-        private readonly string[] colors = ["#b5ba9b", "#61401b", "#dbc63d", "#382121"];
+        private readonly string[] colors = ["#24691c", "#f786c6", "#dbc63d", "#382121"];
         private readonly Dictionary<string, int> ConsumableAttributes = new()
         {
             // Egg ger 10hp, Pie ger 20, Cheese ger 30, Rotten Apple ger -30
