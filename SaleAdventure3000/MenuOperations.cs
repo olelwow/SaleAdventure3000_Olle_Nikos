@@ -1,6 +1,7 @@
 ﻿using SaleAdventure3000.Entities;
 using SaleAdventure3000.Items;
 using Spectre.Console;
+using System.Numerics;
 
 namespace SaleAdventure3000
 {
@@ -240,8 +241,7 @@ namespace SaleAdventure3000
                     ($"{item.Key.Name, -11}" +
                      $"{item.Key.Wear, -13}" +
                      $"{item.Value, -9}" +
-                     $"{item.Key.Equipped, -5}"
-                     );
+                     $"{item.Key.Equipped, -5}");
                 // Lägger till Item i arrayen.
                 items[index] = item.Key;
                 index++;
@@ -251,18 +251,16 @@ namespace SaleAdventure3000
         }
         public static void PrintGameInfo(Player player)
         {
-            // en wedi ruta med grejer
-
-            Console.WriteLine($"==================================================================");
-            Console.WriteLine($"|                 Use WASD or arrow keys to move                 |");
-            Console.WriteLine($"|                        B to open Bag                           |");
-            Console.WriteLine($"|                        Q to quit game                          |");
-            Console.WriteLine($"|                                                                |");
-            Console.WriteLine($"|                     HP remaining: {player.HP.ToString("F1"),-5}                        |");
-            Console.WriteLine($"|                                                                |");
-            Console.WriteLine($"|                                                                |");
-            Console.WriteLine($"|                      Current score: {player.score, -2}                         |");
-            Console.WriteLine($"==================================================================");
+            AnsiConsole.WriteLine($"==================================================================");
+            AnsiConsole.MarkupLine($"|                 [blue]Use WASD or arrow keys to move[/]                 |");
+            AnsiConsole.MarkupLine($"|                        [cyan]B[/] to open Bag                           |");
+            AnsiConsole.MarkupLine($"|                        [red]Q[/] to quit game                          |");
+            AnsiConsole.WriteLine($"|                                                                |");
+            AnsiConsole.MarkupLine($"|                     HP remaining: {ReturnHpWithColor(player)}                        |");
+            AnsiConsole.WriteLine($"|                                                                |");
+            AnsiConsole.WriteLine($"|                                                                |");
+            AnsiConsole.WriteLine($"|                      Current score: {player.score, -2}                         |");
+            AnsiConsole.WriteLine($"==================================================================");
         }
         public static void PrintGameInfo (Player player, (Item item, double heal) t)
         {
@@ -270,15 +268,13 @@ namespace SaleAdventure3000
             // den andra representerar ifall föremålet är equipped eller ej.
             Dictionary <Tuple<bool, bool>, string> gameMessages = new Dictionary<Tuple< bool, bool>, string> ()
             {
-                {Tuple.Create(true, true) , $"Player {player.Name} equips {t.item.Name}," +
-                                            $" gaining {t.item.HpBoost} HP and {t.item.PowerAdded} power."
+                {Tuple.Create(true, true) , $"{player.Name, 10}".Trim() + " " + $"{"equips", 8}".Trim() + " " + $"{t.item.Name, 8}".Trim() + ", " +
+                                            $"gaining [green]{t.item.HpBoost}[/] HP and [green]{t.item.PowerAdded}[/] power."
                 },
-                {Tuple.Create(true, false), $"Player {player.Name} unequips {t.item.Name}," +
-                                            $" losing {t.item.HpBoost} HP and {t.item.PowerAdded} power."
+                {Tuple.Create(true, false), $"{player.Name, 10}".Trim() + " unequips " + $"{t.item.Name, 8}".Trim() + ", " +
+                                            $"{"losing", 7}".Trim() + " " + $"[red]{t.item.HpBoost}[/] HP and [red]{t.item.PowerAdded}[/] power."
                 },
-                {Tuple.Create(false, false), $"Player {player.Name} eats a {t.item.Name}." +
-                                             $" It heals for {t.heal.ToString("F0")}."
-                }
+                {Tuple.Create(false, false), ReturnHealingWithColor(player, t)}
             };
             foreach (var message in gameMessages) 
             {
@@ -302,26 +298,44 @@ namespace SaleAdventure3000
                 }
             }
         }
-        public static void InfoText(Dictionary<Tuple<bool,bool>,string> gameMessages, Tuple<bool, bool> value, Player player)
+        public static void InfoText(Dictionary<Tuple<bool,bool>,string> gameMessages,
+                                    Tuple<bool, bool> value, Player player)
         {
-            Console.WriteLine($"==================================================================");
-            Console.WriteLine($"|                  Use WASD or arrow keys to move                |");
-            Console.WriteLine($"|                         B to open Bag                          |");
-            Console.WriteLine($"|                         Q to quit game                         |");
-            Console.WriteLine($"|                                                                |");
-            Console.WriteLine($"|                     HP remaining: {player.HP.ToString("F1"),-5}                        |");
-            Console.WriteLine($"|                                                                |");
-            Console.WriteLine($"|     {gameMessages[value], -59}|");
-            Console.WriteLine($"|                                                                |");
-            Console.WriteLine($"==================================================================");
+            const int maxLength = 84;
+            string truncatedMessage = gameMessages[value].Length > maxLength
+                                    ? gameMessages[value].Substring(0, maxLength)
+                                    : gameMessages[value];
+            AnsiConsole.WriteLine($"==================================================================");
+            AnsiConsole.MarkupLine($"|                 [blue]Use WASD or arrow keys to move[/]                 |");
+            AnsiConsole.MarkupLine($"|                        [cyan]B[/] to open Bag                           |");
+            AnsiConsole.MarkupLine($"|                        [red]Q[/] to quit game                          |");
+            AnsiConsole.WriteLine($"|                                                                |");
+            AnsiConsole.MarkupLine($"|                     HP remaining: {ReturnHpWithColor(player)}                        |");
+            AnsiConsole.WriteLine($"|                                                                |");
+            AnsiConsole.MarkupLine($"|{truncatedMessage, - maxLength}|");
+            AnsiConsole.WriteLine($"|                                                                |");
+            AnsiConsole.WriteLine($"==================================================================");
         }
-
+        // Två metoder nedan för att ändra färg på hp/healing när de är under/över specifika värden.
+        public static string ReturnHpWithColor (Player player)
+        {
+            return player.HP > 60 
+                   ? $"[green]{player.HP.ToString("F1"),-5}[/]" 
+                   : $"[red]{player.HP.ToString("F1"),-5}[/]";
+        }
+        public static string ReturnHealingWithColor (Player player, (Item item, double heal) t)
+        {
+            return t.heal < 1 
+                   ? "    " + $"{player.Name, 10}".Trim() + " eats a "+ $"{t.item.Name, 9}".Trim() + ". " +
+                   $"It heals for [red]{t.heal.ToString("F0"), 2}[/] HP." 
+                   : "    " + $"{player.Name, 10}".Trim() + $" eats a " + $"{t.item.Name, 9}".Trim() + ". " +
+                   $"It heals for [green]{t.heal.ToString("F0"), 2}[/] HP.";
+        }
+        // Loadingscreen
         public static void LoadingGame ()
         {
-            var line1 = "[grey]   LOG:[/] [gold3]Loading npcs...[/]";
-            var line2 = "[grey]   LOG:[/] [greenyellow]Increasing difficulty...[/]";
-            var line3 = "[grey]   LOG:[/] [green]Enabling WackMode....[/]";
-            var finished = "[green]   LOG: Finished![/]";
+            string[] values = ["[grey]   LOG:[/] [gold3]Loading npcs...[/]", "[grey]   LOG:[/] [greenyellow]Increasing difficulty...[/]",
+                               "[grey]   LOG:[/] [green]Enabling WackMode....[/]", "[green]   LOG: Finished![/]"];
             Console.CursorVisible = false;
             AnsiConsole.Status()
             .AutoRefresh(true)
@@ -329,15 +343,15 @@ namespace SaleAdventure3000
             .SpinnerStyle(Style.Parse("gold3"))
             .Start("Loading...", ctx =>
             {
-                AnsiConsole.MarkupLine(line1);
-                Thread.Sleep(1500);
-                
-                AnsiConsole.MarkupLine(line2);
+                AnsiConsole.MarkupLine(values[0]);
                 Thread.Sleep(1500);
 
-                AnsiConsole.MarkupLine(line3);
+                AnsiConsole.MarkupLine(values[1]);
                 Thread.Sleep(1500);
-                AnsiConsole.MarkupLine(finished);
+
+                AnsiConsole.MarkupLine(values[2]);
+                Thread.Sleep(1500);
+                AnsiConsole.MarkupLine(values[3]);
             });
             Console.CursorVisible = true;
         }

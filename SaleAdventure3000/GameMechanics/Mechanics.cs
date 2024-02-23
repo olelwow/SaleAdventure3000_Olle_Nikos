@@ -81,9 +81,9 @@ public abstract class Mechanics
         {
             // Kontrollerar med hjälp av metoden Death i Operations ifall antingen spelare
             // eller NPC har dött och skickar tillbaka rätt sträng för utskrift.
-            string? death = (npc.HP < 1 || player.HP < 1) ? 
-                             Death(player, npc) :
-                             null;
+            string? death = (npc.HP < 1 || player.HP < 1) 
+                             ? Death(player, npc) 
+                             : null;
             if (death != null)
             {
                 Console.Clear();
@@ -111,9 +111,9 @@ public abstract class Mechanics
                 switch (choice)
                 {
                     case 1:
-                        string playerResult = (computerChoice == 2) ?
-                                               Block(npc, player) :
-                                               Attack(player, npc);
+                        string playerResult = (computerChoice == 2) 
+                                               ? Block(npc, player) 
+                                               : Attack(player, npc);
 
                         Console.WriteLine(playerResult);
                         Console.ReadLine();
@@ -145,9 +145,9 @@ public abstract class Mechanics
                         }
                         else
                         {
-                            string computerResult = (choice == 2) ?
-                                                     Block(player, npc) :
-                                                     Attack(npc, player);
+                            string computerResult = (choice == 2) 
+                                                    ? Block(player, npc) 
+                                                    : Attack(npc, player);
                             Console.WriteLine(computerResult);
                             Console.ReadLine();
                         }
