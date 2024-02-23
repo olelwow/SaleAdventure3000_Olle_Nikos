@@ -100,27 +100,32 @@ namespace SaleAdventure3000
             Logo();
             Console.Write("Enter your username: ");
             string? username = Console.ReadLine();
+            string blank = " ";
             bool found = false;
             string[] lines = File.ReadAllLines(@"../../../Login.txt");
             for (int i = 0; i < lines.Length; i++)
             {
-                if (username != null && lines[i].Contains(username))
+                if (username != null && 
+                    username != "" && 
+                    username != blank &&
+                    lines[i].Contains(username))
                 {
                     found = true;
                     break;
                 }
+                else
+                {
+                    Console.WriteLine("\n\tInvalid username");
+                    Console.ReadLine();
+                    break;
+                }
             }
-            if (found == true && username != null)
+            if (found == true)
             {
                 Console.WriteLine("\n\tLogin success");
                 LoadingGame();
                 Thread.Sleep(1300);
                 Game.StartGame(username);
-            }
-            else
-            {
-                Console.WriteLine("\n\tInvalid username");
-                Console.ReadLine();
             }
         }
         //Scoreboard metoden skriver ut scoreboard av alla spelare som har spelat

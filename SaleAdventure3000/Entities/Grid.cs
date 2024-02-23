@@ -15,12 +15,12 @@ namespace SaleAdventure3000.Entities
             new("Ragnar", 16, 11),
             new("Nikos", 15, 20),
             new("Olle", 16, 5),
-            //new("Jonas", 1, 3),
             new("Ragnar", 9, 18),
             new("Nikos", 19, 18),
             new("Olle", 16, 13),
             new("Ragnar", 5, 7),
             new("Jonas", 3, 12),
+            new("Tintin", 1, 3), //20, 8
         };
 
         public Wearable[] wears =

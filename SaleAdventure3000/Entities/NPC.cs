@@ -1,16 +1,20 @@
-﻿namespace SaleAdventure3000.Entities
+﻿using System.Text;
+
+namespace SaleAdventure3000.Entities
 {
     public class NPC : Creature
     {
-        private readonly string[] symbols = [" # ", " * ", " @ ",  " & ", " £ "];
-        private readonly string[] names = ["Nikos","Ragnar", "Klasse",  "Olle", "Jonas"];
+        private static readonly string? Boss = Convert.ToChar(169).ToString();
+        private readonly string[] symbols = [" # ", " * ", " @ ", " & ", " £ ", Boss];
+        private readonly string[] names = ["Nikos","Ragnar", "Klasse",  "Olle", "Jonas", "Tintin"];
         private readonly Dictionary<string, int[]> NPCProperties = new Dictionary<string, int[]>()
         {
             {" # ", [150, 17]},
             {" * ", [100, 12]},
             {" @ ", [75, 10]},
             {" & ", [60, 8]},
-            {" £ ", [30, 6] }
+            {" £ ", [30, 6] },
+            {Boss, [300, 50] }
             // Siffrorna i arrayen representerar HP och Power.
         };
 
