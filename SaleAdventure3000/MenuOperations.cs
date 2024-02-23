@@ -113,8 +113,8 @@ namespace SaleAdventure3000
             if (found == true && username != null)
             {
                 Console.WriteLine("\n\tLogin success");
-                ProgressBar();
-                Thread.Sleep(4000);
+                LoadingGame();
+                Thread.Sleep(1300);
                 Game.StartGame(username);
             }
             else
@@ -186,7 +186,7 @@ namespace SaleAdventure3000
                         int index = row.Length - 2;
                         int currentPoints = int.Parse(row.Substring(index, 2));
 
-                        if (currentPoints < newPoints)
+                        if (currentPoints <= newPoints)
                         {
                             newLines.Remove(row);
                             newLines.Add($"Name : {player.Name} - Score : {newPoints}");
@@ -256,39 +256,39 @@ namespace SaleAdventure3000
             Console.WriteLine($"|                     HP remaining: {player.HP.ToString("F1"),-5}                        |");
             Console.WriteLine($"|                                                                |");
             Console.WriteLine($"|                                                                |");
-            Console.WriteLine($"|                                                                |");
+            Console.WriteLine($"|                      Current score: {player.score, -2}                         |");
             Console.WriteLine($"==================================================================");
         }
-        public static void PrintGameInfo (Player player, Item item)
+        public static void PrintGameInfo (Player player, (Item item, double heal) t)
         {
             Dictionary <Tuple<bool, bool>, string> gameMessages = new Dictionary<Tuple< bool, bool>, string> ()
             {
-                {Tuple.Create(true, true) , $"Player {player.Name} equips {item.Name}," +
-                                            $" gaining {item.HpBoost} HP and {item.PowerAdded} power."
+                {Tuple.Create(true, true) , $"Player {player.Name} equips {t.item.Name}," +
+                                            $" gaining {t.item.HpBoost} HP and {t.item.PowerAdded} power."
                 },
-                {Tuple.Create(true, false), $"Player {player.Name} unequips {item.Name}," +
-                                            $" losing {item.HpBoost} HP and {item.PowerAdded} power."
+                {Tuple.Create(true, false), $"Player {player.Name} unequips {t.item.Name}," +
+                                            $" losing {t.item.HpBoost} HP and {t.item.PowerAdded} power."
                 },
-                {Tuple.Create(false, false), $"Player {player.Name} eats a {item.Name}." +
-                                             $" It heals for {item.HealAmount}."
+                {Tuple.Create(false, false), $"Player {player.Name} eats a {t.item.Name}." +
+                                             $" It heals for {t.heal.ToString("F0")}."
                 }
             };
             foreach (var condition in gameMessages) 
             {
                 if ((condition.Key.Item1 == true && condition.Key.Item2 == true) &&
-                    (item.Wear == true && item.Equipped == true))
+                    (t.item.Wear == true && t.item.Equipped == true))
                 {
                     var value = Tuple.Create(true, true);
                     InfoText(gameMessages, value, player);
                 }
                 else if ((condition.Key.Item1 == true && condition.Key.Item2 == false) &&
-                    (item.Wear == true && item.Equipped == false ))
+                    (t.item.Wear == true && t.item.Equipped == false ))
                 {
                     var value = Tuple.Create(true, false);
                     InfoText(gameMessages, value, player);
                 }
                 else if ((condition.Key.Item1 == false && condition.Key.Item2 == false) &&
-                            (item.Wear == false && item.Equipped == false))
+                            (t.item.Wear == false && t.item.Equipped == false))
                 {
                     var value = Tuple.Create(false, false);
                     InfoText(gameMessages, value, player);
@@ -309,29 +309,30 @@ namespace SaleAdventure3000
             Console.WriteLine($"==================================================================");
         }
 
-        public static void ProgressBar ()
+        public static void LoadingGame ()
         {
-             AnsiConsole.Progress()
+            var line1 = "[grey]   LOG:[/] [gold3]Loading npcs...[/]";
+            var line2 = "[grey]   LOG:[/] [greenyellow]Increasing difficulty...[/]";
+            var line3 = "[grey]   LOG:[/] [green]Enabling WackMode....[/]";
+            var finished = "[green]   LOG: Finished![/]";
+            Console.CursorVisible = false;
+            AnsiConsole.Status()
             .AutoRefresh(true)
-            .AutoClear(false)   
-            .HideCompleted(false)   
-            .Columns(new ProgressColumn[]
+            .Spinner(Spinner.Known.Dots12)
+            .SpinnerStyle(Style.Parse("gold3"))
+            .Start("Loading...", ctx =>
             {
-                new TaskDescriptionColumn(),    
-                new ProgressBarColumn(),        
-                new PercentageColumn(),         
-                new SpinnerColumn(),            
-            })
-            .StartAsync(async ctx =>
-            {
-                var task = ctx.AddTask("Loading....");
+                AnsiConsole.MarkupLine(line1);
+                Thread.Sleep(1500);
+                
+                AnsiConsole.MarkupLine(line2);
+                Thread.Sleep(1500);
 
-                while (!ctx.IsFinished)
-                {
-                    await Task.Delay(75);
-                    task.Increment(3);
-                }
+                AnsiConsole.MarkupLine(line3);
+                Thread.Sleep(1500);
+                AnsiConsole.MarkupLine(finished);
             });
+            Console.CursorVisible = true;
         }
         public static void DisplayFightImages (Player player, NPC npc)
         {
@@ -343,6 +344,7 @@ namespace SaleAdventure3000
             var middle = new CanvasImage(@"../../../Icons/vs_icon1.png").MaxWidth(25);
             var npcImage = new CanvasImage(@"../../../Icons/npc_icon.png").MaxWidth(25);
             table.AddRow(playerImage, middle, npcImage);
+            
             AnsiConsole.Write(table);
         }
         public static void DisplayFightImages(string winner, Player player, NPC npc)

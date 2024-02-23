@@ -27,11 +27,14 @@ namespace SaleAdventure3000.Entities
             player.PosX = firstX;
             player.PosY = firstY;
             gameBoard[PosX, PosY] = player;
-            string color = "#968c4a";
-            string bagChoice = "";
-            
+            grid.DrawGameBoard(grid.gameBoard, player);
+            Console.WriteLine();
+            MenuOperations.PrintGameInfo(player);
 
-            Item chosenItem = new();
+            string color = "#968c4a";
+            string bagChoice;
+            (Item, double) chosenItem = (new(), 0.0);
+
             while (Run)
             {
                 bagChoice = "";
@@ -127,69 +130,75 @@ namespace SaleAdventure3000.Entities
                         }
                     }
                 }
-
                 // Tar endast in player objektet istället för PosX, PosY 
                 // Eftersom man kommer åt dessa genom player. Samma för ChangePosition.
                 Mechanics.ControlCollision(gameBoard, player, grid);
-
                 // Ändrar spelarens position och ritar upp gameBoard igen.
                 gameBoard = Mechanics.ChangePosition(gameBoard, player);
                 
-                if (bagChoice == null || bagChoice == "")
+                if (bagChoice == "")
                 {
+                    // Ifall bagChoice är tom så vet vi att vi inte valt något item från Bag.
                     grid.DrawGameBoard(gameBoard, player);
                     Console.WriteLine("");
                     MenuOperations.PrintGameInfo(player);
                 }
                 else
                 {
+                    // Annars skickas det valda itemet in i metoden nedan.
                     grid.DrawGameBoard(gameBoard, player);
                     Console.WriteLine("");
                     MenuOperations.PrintGameInfo(player, chosenItem);
                 }
             }
         }
-
-        public Item OpenBag (Player player, string bagChoice)
+        // Ändrade denna metod till att returnera en Tuple av Item och value som representerar
+        // Hur mycket HP man healade eftersom det inte går att gå över 100hp.
+        public (Item item, double value) OpenBag (Player player, string bagChoice)
         {   
-            // Gör det möjligt att välja Item med piltangenterna, och sparar valet man gör med enter.
-            //string bagChoice = 
-            //    MenuOperations
-            //    .PrintBagMenuAndReturnChoice(player);
-
+            // Vi får in det valda föremålet genom strängen bagChoice, som sedan kontrolleras
+            // och matchas med ett item i bagen.
             foreach (var item in player.Bag)
             {
                 if (bagChoice.Contains(item.Key.Name) && item.Key.Wear == false)
                 {
                     // Kollar ifall föremålets namn stämmer överens med valet, isåfall så
                     // äter man upp föremålet och det tas bort ifrån bagen med metoden Consume().
-                    //MenuOperations.PrintGameInfo(player, "Consume", item.Key);
-                    player.Consume(player, item.Key);
-                    return item.Key;
+                    double heal = player.Consume(player, item.Key);
+                    return (item.Key, heal);
                 }
                 else if ((bagChoice.Contains(item.Key.Name) && item.Key.Wear == true) && item.Key.Equipped == true)
                 {
                     // Kollar ifall föremålet är wearable samt ifall det redan är equipped.
                     player.Unequip(player, item.Key);
-                    return item.Key;
+                    return (item.Key, 0.0);
                 }
                 else if ((bagChoice.Contains(item.Key.Name) && item.Key.Wear == true) && item.Key.Equipped == false)
                 {
                     // Kollar ifall föremålet är wearable samt ifall det inte redan är equipped.
                     player.Equip(player, item.Key);
-                    return item.Key;
+                    return (item.Key, 0.0);
                 }
+                // Returnerar ett tomt item ifall man väljer att stänga bagen.
                 else if (bagChoice.Equals("Close Bag"))
                 {
-                    return new Item();
+                    return (new Item(), 0.0);
                 }
-                
             }
-            return new Item();
+            return (new Item(), 0.0);
         }
-        public void Consume(Player player, Item item)
+        public double Consume(Player player, Item item)
         {
-            player.HP += item.HealAmount;
+            double healedHP = player.HP;
+            if (player.HP <= 100)
+            {
+                player.HP = Math.Min(100, player.HP + item.HealAmount);
+                healedHP = player.HP - healedHP;
+            }
+            else
+            {
+                healedHP = 0.0;
+            }
             // Sköter vad som händer när man använder en consumable. Finns det fler av
             // samma item i bagen så minskar value med 1, äter man den sista tas både
             // key och value bort från spelarens bag.
@@ -201,8 +210,10 @@ namespace SaleAdventure3000.Entities
             {
                 player.Bag.Remove(item);
             }
+            // returnerar antal HP som man healat, ifall det är mindre än föremålets
+            // grundvärde för HealAmount.
+            return healedHP;
         }
-
         public void Unequip (Player player, Item item)
         {
             //MenuOperations.PrintGameInfo(player, "Unequip", item);
@@ -210,7 +221,6 @@ namespace SaleAdventure3000.Entities
             player.HP -= item.HpBoost;
             player.Power -= item.PowerAdded;
         }
-
         public void Equip (Player player, Item item)
         {
             //MenuOperations.PrintGameInfo(player, "Equip", item);
