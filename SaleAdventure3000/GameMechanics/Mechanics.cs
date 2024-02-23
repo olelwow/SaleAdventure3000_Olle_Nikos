@@ -204,10 +204,30 @@ namespace SaleAdventure3000.GameMechanics
             // Metod som sköter NPCs attack, ifall npc redan dött returneras en tom sträng.
             if (npc.HP > 0)
             {
+                double powerAfterRoll;
+                
                 Dice dice = new();
-                double powerAfterRoll = npc.Power * dice.Roll(5);
-                player.HP -= powerAfterRoll;
-
+                
+                if (player.Luck > 9)
+                {
+                    powerAfterRoll = npc.Power * dice.Roll(3);
+                    player.HP -= powerAfterRoll;
+                }
+                else if (player.Evasion > 9)
+                {
+                    powerAfterRoll = npc.Power * dice.Roll(5);
+                    player.HP -= powerAfterRoll;
+                }
+                else if (player.Armor > 9)
+                {
+                    powerAfterRoll = npc.Power * dice.Roll(7);
+                    player.HP -= powerAfterRoll - player.Armor * 0.4;
+                }
+                else
+                {
+                    powerAfterRoll = npc.Power * dice.Roll(7);
+                    player.HP -= powerAfterRoll;
+                }
                 if (player.HP < 1)
                 {
                     player.HP = 0;

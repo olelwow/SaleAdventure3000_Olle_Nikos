@@ -4,7 +4,7 @@ namespace SaleAdventure3000.Entities
 {
     public class NPC : Creature
     {
-        private static readonly string Boss = Convert.ToChar(169).ToString();
+        private static string Boss = Convert.ToChar(169).ToString();
         private readonly string[] symbols = [" # ", " * ", " @ ", " & ", " £ ", Boss];
         private readonly string[] names = ["Nikos","Ragnar", "Klasse",  "Olle", "Jonas", "Tintin"];
         private readonly Dictionary<string, int[]> NPCProperties = new()

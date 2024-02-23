@@ -25,12 +25,12 @@ namespace SaleAdventure3000.Entities
 
         public Wearable[] wears =
         [
-            new("Boots", 3, 3),
-            new("Hat", 3, 11),
-            new("Necklace", 5, 1),
-            new("Boots", 18, 12),
-            new("Hat", 20, 15),
-            new("Necklace", 10, 17),
+            new("Body", "Leather", 3, 3),
+            new("Helmet", "Cloth", 3, 11),
+            new("Legs", "Leather", 5, 1),
+            new("Body", "Cloth", 18, 12),
+            new("Helmet", "Leather", 20, 15),
+            new("Legs", "Plate", 10, 17),
         ];
         public Consumable[] consumables =
         [
@@ -38,7 +38,8 @@ namespace SaleAdventure3000.Entities
             new("Bad-Apple", 3, 5),
             new("Pie", 12, 19),
             new("Egg", 18, 16),
-            new("Cheese", 9, 1)
+            new("Cheese", 9, 1),
+            new("Pie", 9, 17)
         ];
         public Entity[] goal = 
             [new Obstacle("[+]") { PosX = 20, PosY = 7, SymbolColor = "#000000" } ];

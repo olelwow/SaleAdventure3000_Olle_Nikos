@@ -7,6 +7,10 @@ namespace SaleAdventure3000.Items
         private int healAmount;
         private int powerAdded;
         private int hpBoost;
+        private int luck;
+        private int evasion;
+        private int armor;
+        private string? itemType;
         private bool wear = false;
         private int amount;
         private bool equipped = false;
@@ -35,10 +39,13 @@ namespace SaleAdventure3000.Items
                 */
             }
         }
-        public override void EntitySelection(string type)
+        public override void EntitySelection(string name, string type)
         {
         }
-        
+        public override void EntitySelection(string name)
+        {
+        }
+
         public int HealAmount
         {
             get { return this.healAmount; }
@@ -68,6 +75,26 @@ namespace SaleAdventure3000.Items
         {
             get { return this.equipped; }
             set { this.equipped = value; }
+        }
+        public int Evasion
+        {
+            get { return this.evasion; }
+            set { this.evasion = value; }
+        }
+        public int Armor
+        {
+            get { return this.armor; }
+            set { this.armor = value; }
+        }
+        public int Luck
+        {
+            get { return this.luck; }
+            set { this.luck = value; }
+        }
+        public string ItemType
+        {
+            get { return this.itemType; }
+            set { this.itemType = value; }
         }
     }
 }
