@@ -5,6 +5,7 @@
         private static void Main(string[] args)
         {
             Console.SetWindowSize(120,60);
+            Console.Title = "Super awesome adventure game";
             bool run = true;
             while (run)
             {
