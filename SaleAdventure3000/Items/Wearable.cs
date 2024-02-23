@@ -30,7 +30,18 @@ namespace SaleAdventure3000.Items
             EntitySelection(name, type);
             this.PosX = posX;
             this.PosY = posY;
-            this.SymbolColor = "#6699ff";
+            if (type == "Cloth")
+            {
+                this.SymbolColor = "#6699ff";
+            }
+            else if (type == "Leather")
+            {
+                this.SymbolColor = "#fc6f03";
+            }
+            else if (type == "Plate")
+            {
+                this.SymbolColor = "#d9d8d7";
+            }
             this.Wear = true;
         }
         public Wearable (string name, string type)
