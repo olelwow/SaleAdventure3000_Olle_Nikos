@@ -88,7 +88,14 @@ public abstract class Mechanics
             {
                 Console.Clear();
                 MenuOperations.DisplayFightImages(death, player, npc);
+                if (player.HP == 0)
+                {
+                    Console.WriteLine("You died dude...");
+                    Console.ReadLine();
+                    player.Run = false;
+                }
                 Console.ReadLine();
+
                 Console.Clear();
                 break;
             }
