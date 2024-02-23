@@ -18,16 +18,16 @@ namespace SaleAdventure3000.Items
         public virtual void OnPickup (Item item, Player player)
         {
         }
-        public void AddToBag (Item item, Player player)
+        public static void AddToBag (Item item, Player player)
         {
             Dictionary<Item,int> bag = player.GetBag();
-            if (!bag.ContainsKey(item))
+            if (!bag.TryGetValue(item, out int value))
             {
                 bag.Add(item, 1);
             }
             else
             {
-                bag[item]++;
+                bag[item] = ++value;
                 /* Löste problemet här genom att lägga till en override metod i klassen Item.
                    Eftersom två objekt inte betraktas som lika även om de har samma namn, stats osv
                    så blev det en ny rad i vilket fall. Kör man override på metoden Equals så kommer

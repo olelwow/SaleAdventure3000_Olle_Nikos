@@ -69,7 +69,7 @@ namespace SaleAdventure3000
             {
                 for (int i = 0; i < lines.Length; i++)
                 {
-                    if (lines[i].Contains(chosenName))
+                    if (chosenName != null && lines[i].Contains(chosenName))
                     {
                         Console.WriteLine("Name is already taken");
                         Console.Write("Pick a name: ");
@@ -86,7 +86,7 @@ namespace SaleAdventure3000
             }
             if (found == false && !(chosenName == null || chosenName.Length < 3))
             {
-                StreamWriter stream = new StreamWriter(@"../../../Login.txt", true);
+                StreamWriter stream = new(@"../../../Login.txt", true);
                 stream.WriteLine($"Name : {chosenName}");
                 Console.WriteLine("Registering succeed!");
                 Console.ReadLine();
@@ -108,7 +108,7 @@ namespace SaleAdventure3000
             {
                 if (username != null && 
                     username != "" && 
-                    username != blank &&
+                    username != blank ||
                     lines[i].Contains(username))
                 {
                     found = true;
@@ -121,7 +121,7 @@ namespace SaleAdventure3000
                     break;
                 }
             }
-            if (found == true)
+            if (username != null && found == true)
             {
                 Console.WriteLine("\n\tLogin success");
                 LoadingGame();
@@ -143,7 +143,7 @@ namespace SaleAdventure3000
         public static int PrintChoiceMenu(string choice1, string choice2, string choice3, string choice4)
         {
             // Dictionary för att koppla ihop respektive val med en siffra.
-            Dictionary<string, int> choice = new Dictionary<string, int>()
+            Dictionary<string, int> choice = new()
             { {choice1, 1},
               {choice2, 2 },
               {choice3, 3 },
@@ -168,10 +168,11 @@ namespace SaleAdventure3000
          */
         internal static void ScoreBoardReg(Player player)
         {
-            StreamReader reader = new StreamReader(@"../../../Scoreboard.txt");
-            string line = "";
-            List<string> lines = new List<string>();
-            List<string> newLines = new List<string>();
+            StreamReader reader = new(@"../../../Scoreboard.txt");
+            string line;
+            List<string> lines = new();
+            List<string> newLines = new();
+
 
             while ((line = reader.ReadLine()) != null)
             {
@@ -180,7 +181,7 @@ namespace SaleAdventure3000
             }
             reader.Close();
 
-            StreamWriter writer = new StreamWriter(@"../../../Scoreboard.txt");
+            StreamWriter writer = new(@"../../../Scoreboard.txt");
 
             if (lines.Count > 0)
             {
@@ -266,7 +267,7 @@ namespace SaleAdventure3000
         {
             // Dictionary med två bools som key, den första representerar ifall föremålet är wearable eller ej,
             // den andra representerar ifall föremålet är equipped eller ej.
-            Dictionary <Tuple<bool, bool>, string> gameMessages = new Dictionary<Tuple< bool, bool>, string> ()
+            Dictionary <Tuple<bool, bool>, string> gameMessages = new()
             {
                 {Tuple.Create(true, true) , $"{player.Name, 10}".Trim() + " " + $"{"equips", 8}".Trim() + " " + $"{t.item.Name, 8}".Trim() + ", " +
                                             $"gaining [green]{t.item.HpBoost}[/] HP and [green]{t.item.PowerAdded}[/] power."
@@ -302,9 +303,7 @@ namespace SaleAdventure3000
                                     Tuple<bool, bool> value, Player player)
         {
             const int maxLength = 84;
-            string truncatedMessage = gameMessages[value].Length > maxLength
-                                    ? gameMessages[value].Substring(0, maxLength)
-                                    : gameMessages[value];
+            
             AnsiConsole.WriteLine($"==================================================================");
             AnsiConsole.MarkupLine($"|                 [blue]Use WASD or arrow keys to move[/]                 |");
             AnsiConsole.MarkupLine($"|                        [cyan]B[/] to open Bag                           |");
@@ -312,7 +311,7 @@ namespace SaleAdventure3000
             AnsiConsole.WriteLine($"|                                                                |");
             AnsiConsole.MarkupLine($"|                     HP remaining: {ReturnHpWithColor(player)}                        |");
             AnsiConsole.WriteLine($"|                                                                |");
-            AnsiConsole.MarkupLine($"|{truncatedMessage, - maxLength}|");
+            AnsiConsole.MarkupLine($"|        {gameMessages[value], -maxLength}");
             AnsiConsole.WriteLine($"|                                                                |");
             AnsiConsole.WriteLine($"==================================================================");
         }
@@ -320,16 +319,16 @@ namespace SaleAdventure3000
         public static string ReturnHpWithColor (Player player)
         {
             return player.HP > 60 
-                   ? $"[green]{player.HP.ToString("F1"),-5}[/]" 
-                   : $"[red]{player.HP.ToString("F1"),-5}[/]";
+                   ? $"[green]{player.HP,-5:F1}[/]" 
+                   : $"[red]{player.HP,-5:F1}[/]";
         }
         public static string ReturnHealingWithColor (Player player, (Item item, double heal) t)
         {
             return t.heal < 1 
                    ? "    " + $"{player.Name, 10}".Trim() + " eats a "+ $"{t.item.Name, 9}".Trim() + ". " +
-                   $"It heals for [red]{t.heal.ToString("F0"), 2}[/] HP." 
+                   $"It heals for [red]{t.heal, 2:F0}[/] HP." 
                    : "    " + $"{player.Name, 10}".Trim() + $" eats a " + $"{t.item.Name, 9}".Trim() + ". " +
-                   $"It heals for [green]{t.heal.ToString("F0"), 2}[/] HP.";
+                   $"It heals for [green]{t.heal, 2:F0}[/] HP.";
         }
         // Loadingscreen
         public static void LoadingGame ()

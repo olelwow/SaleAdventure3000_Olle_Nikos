@@ -7,9 +7,9 @@ namespace SaleAdventure3000
         public static void StartGame (string username)
         {
             Console.Clear();
-            Entities.Grid gameGrid = new Entities.Grid();
+            Grid gameGrid = new();
             // Skapar nytt player objekt med det namn man loggat in med.
-            Player player = new Player(username);
+            Player player = new(username);
 
             // Fyller gameBoard och ritar upp gameBoard.
             gameGrid.FillGrid(gameGrid.gameBoard);

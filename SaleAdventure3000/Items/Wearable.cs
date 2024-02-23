@@ -7,7 +7,7 @@ namespace SaleAdventure3000.Items
         
         private readonly string[] symbols = [" H ", " B ", " N "];
         private readonly string[] names = ["Hat", "Boots", "Necklace"];
-        private readonly Dictionary<string, int[]> wearableProperties = new Dictionary<string, int[]>()
+        private readonly Dictionary<string, int[]> wearableProperties = new()
         {
             {" H ", [20, 6]},
             {" B ", [15, 10]},
@@ -54,6 +54,7 @@ namespace SaleAdventure3000.Items
                               );
 
             player.HP += item.HpBoost;
+            player.BoostedHP += item.HpBoost;
             player.Power += item.PowerAdded;
             item.Equipped = true;
             AddToBag(item, player);
