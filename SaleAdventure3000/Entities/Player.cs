@@ -6,6 +6,9 @@ namespace SaleAdventure3000.Entities
     public class Player : Creature
     {
         public bool Run = true;
+        private int evasion;
+        private int armor;
+        private int luck;
 
         // Bag som lagrar objekt av typen Item som key, och en int som indikerar antal av
         // detta item som spelaren har i bagen.
@@ -17,6 +20,9 @@ namespace SaleAdventure3000.Entities
             this.Symbol = " 0 ";
             this.Name = name;
             this.HP = 100;
+            this.armor = 5;
+            this.luck = 5;
+            this.evasion = 5;
             this.Power = 15;
             this.score = 0;
             this.BackgroundColor = "#968c4a";
@@ -252,6 +258,9 @@ namespace SaleAdventure3000.Entities
             player.HP -= item.HpBoost;
             player.boostedHP -= item.HpBoost;
             player.Power -= item.PowerAdded;
+            player.Evasion -= item.Evasion;
+            player.Armor -= item.Armor;
+            player.Luck -= item.Luck;
         }
         public static void Equip(Player player, Item item)
         {
@@ -260,6 +269,9 @@ namespace SaleAdventure3000.Entities
             player.HP += item.HpBoost;
             player.boostedHP += item.HpBoost;
             player.Power += item.PowerAdded;
+            player.Evasion += item.Evasion;
+            player.Armor += item.Armor;
+            player.Luck += item.Luck;
         }
 
         // Getter för spelarens bag, eftersom bagen är private och inte synlig utanför
@@ -272,6 +284,21 @@ namespace SaleAdventure3000.Entities
         {
             get { return this.boostedHP; }
             set { this.boostedHP = value;}
+        }
+        public int Evasion
+        {
+            get { return this.evasion; }
+            set { this.evasion = value;}
+        }
+        public int Armor
+        {
+            get { return this.armor; }
+            set { this.armor = value; }
+        }
+        public int Luck
+        {
+            get { return this.luck; }
+            set { this.luck = value; }
         }
     }
 }

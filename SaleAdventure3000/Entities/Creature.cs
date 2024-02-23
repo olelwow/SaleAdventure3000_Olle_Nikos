@@ -4,8 +4,12 @@
     {
         private double hP;
         private int power;
+        
         public Creature() { }
-        public override void EntitySelection(string type)
+        public override void EntitySelection(string name, string type)
+        {
+        }
+        public override void EntitySelection(string name)
         {
         }
         public double HP

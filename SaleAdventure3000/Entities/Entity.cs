@@ -6,14 +6,15 @@ namespace SaleAdventure3000.Entities
     {
         private int posX;
         private int posY;
-        private string symbol = "   ";
+        private string? symbol;
         private string name = "Entity";
         private string symbolColor = "#ffffff";
         private string backgroundColor = "000000";
 
         public bool CanPass = true;
 
-        public abstract void EntitySelection(string type);
+        public abstract void EntitySelection(string name, string type);
+        public abstract void EntitySelection(string name);
 
         // Override metod som gör det möjligt att betrakta två objekt som lika
         // Ifall de delar samma Name.
@@ -52,7 +53,14 @@ namespace SaleAdventure3000.Entities
         }
         public string Symbol
         {
-            get { return this.Symbol; }
+            get 
+            { 
+                if (this.symbol != null)
+                {
+                    return this.symbol;
+                }
+                return "   "; 
+            }
             set { this.symbol = value; }
         }
         public string SymbolColor
