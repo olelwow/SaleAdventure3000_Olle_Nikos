@@ -4,7 +4,7 @@ using SaleAdventure3000.Items;
 
 public abstract class Mechanics
 {
-    public static void ControlCollision(Entity[,] gameBoard, Player player, SaleAdventure3000.Entities.Grid grid)
+    public static int ControlCollision(Entity[,] gameBoard, Player player, Grid grid)
     {
         // Tar in arrays från Grid som innehåller alla objekt och deras positioner.
         List<Entity[]> entities = new List<Entity[]>()
@@ -44,7 +44,11 @@ public abstract class Mechanics
                 {
                     if (gameBoard[player.PosX, player.PosY] == npcs)
                     {
-                        Encounter(npcs, player);
+                        int playerEscape = Encounter(npcs, player);
+                        if (playerEscape == 3)
+                        {
+                            return 3;
+                        }
                         break;
                     }
                 }
@@ -57,6 +61,7 @@ public abstract class Mechanics
                 }
             }
         }
+        return 1;
     }
 
     public static void GameWon (Player player)
@@ -69,7 +74,7 @@ public abstract class Mechanics
         player.Run = false;
     }
 
-    public static void Encounter(NPC npc, Player player)
+    public static int Encounter(NPC npc, Player player)
     {
         bool run = true;
         while (run)
@@ -116,8 +121,7 @@ public abstract class Mechanics
                         Console.WriteLine($"{player.Name} runs for his life...");
                         Console.ReadLine();
                         Console.Clear();
-                        run = false;
-                    break;
+                    return 3;
 
                     case 4:
                         string bagChoice = MenuOperations.PrintBagMenuAndReturnChoice(player);
@@ -137,7 +141,6 @@ public abstract class Mechanics
                             string computerResult = (choice == 2) ?
                                                      Block(player, npc) :
                                                      Attack(npc, player);
-
                             Console.WriteLine(computerResult);
                             Console.ReadLine();
                         }
@@ -154,6 +157,7 @@ public abstract class Mechanics
                 }
             }
         }
+        return 1;
     }
     
     // Denna metod tar in gameboard samt position,
