@@ -261,6 +261,8 @@ namespace SaleAdventure3000
         }
         public static void PrintGameInfo (Player player, (Item item, double heal) t)
         {
+            // Dictionary med två bools som key, den första representerar ifall föremålet är wearable eller ej,
+            // den andra representerar ifall föremålet är equipped eller ej.
             Dictionary <Tuple<bool, bool>, string> gameMessages = new Dictionary<Tuple< bool, bool>, string> ()
             {
                 {Tuple.Create(true, true) , $"Player {player.Name} equips {t.item.Name}," +
@@ -273,21 +275,21 @@ namespace SaleAdventure3000
                                              $" It heals for {t.heal.ToString("F0")}."
                 }
             };
-            foreach (var condition in gameMessages) 
+            foreach (var message in gameMessages) 
             {
-                if ((condition.Key.Item1 == true && condition.Key.Item2 == true) &&
+                if ((message.Key.Item1 == true && message.Key.Item2 == true) &&
                     (t.item.Wear == true && t.item.Equipped == true))
                 {
                     var value = Tuple.Create(true, true);
                     InfoText(gameMessages, value, player);
                 }
-                else if ((condition.Key.Item1 == true && condition.Key.Item2 == false) &&
+                else if ((message.Key.Item1 == true && message.Key.Item2 == false) &&
                     (t.item.Wear == true && t.item.Equipped == false ))
                 {
                     var value = Tuple.Create(true, false);
                     InfoText(gameMessages, value, player);
                 }
-                else if ((condition.Key.Item1 == false && condition.Key.Item2 == false) &&
+                else if ((message.Key.Item1 == false && message.Key.Item2 == false) &&
                             (t.item.Wear == false && t.item.Equipped == false))
                 {
                     var value = Tuple.Create(false, false);

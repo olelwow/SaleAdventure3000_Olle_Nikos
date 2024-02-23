@@ -31,6 +31,7 @@ namespace SaleAdventure3000.Entities
             Console.WriteLine();
             MenuOperations.PrintGameInfo(player);
 
+            (int, int) oldPos;
             string color = "#968c4a";
             string bagChoice;
             (Item, double) chosenItem = (new(), 0.0);
@@ -41,7 +42,7 @@ namespace SaleAdventure3000.Entities
                 ConsoleKeyInfo keyInfo = Console.ReadKey(true);
                 Console.Clear();
                 string line = "¤¤¤";
-                
+                oldPos = (player.PosX, player.PosY);
                 if (gameBoard[PosX, PosY].CanPass == true)
                 {
                     // Ersätter spelarens gamla position med ett -
@@ -130,12 +131,21 @@ namespace SaleAdventure3000.Entities
                         }
                     }
                 }
-                // Tar endast in player objektet istället för PosX, PosY 
-                // Eftersom man kommer åt dessa genom player. Samma för ChangePosition.
-                Mechanics.ControlCollision(gameBoard, player, grid);
-                // Ändrar spelarens position och ritar upp gameBoard igen.
-                gameBoard = Mechanics.ChangePosition(gameBoard, player);
-                
+                // Ifall man springer från ett encounter får man tillbaka siffran 3, som används
+                // nedan för att ta tillbaka spelaren till sin gamla position och NPC står kvar.
+                int playerEscape = Mechanics.ControlCollision(gameBoard, player, grid);
+                if (playerEscape != 3)
+                {
+                    // Ändrar spelarens position och ritar upp gameBoard igen.
+                    gameBoard = Mechanics.ChangePosition(gameBoard, player);
+                }
+                else
+                {
+                    // Hoppar tillbaka till gammal position.
+                    player.PosX = oldPos.Item1;
+                    player.PosY = oldPos.Item2;
+                    gameBoard = Mechanics.ChangePosition(gameBoard, player);
+                }
                 if (bagChoice == "")
                 {
                     // Ifall bagChoice är tom så vet vi att vi inte valt något item från Bag.
