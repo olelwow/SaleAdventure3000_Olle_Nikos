@@ -10,7 +10,7 @@ namespace SaleAdventure3000.Entities
         // Array som innehåller alla NPCs på kartan, samt deras positioner. Samma för Wearables samt Consumables nedan.
         public NPC[] npcs =
         [
-            new("Nikos", 4, 1),
+            new("Nikos", 4, 1), 
             new("Olle", 1, 10),
             new("Jonas", 10, 20),
             new("Ragnar", 16, 11),
@@ -24,7 +24,7 @@ namespace SaleAdventure3000.Entities
             new("Olle", 8, 9),
             new("Ragnar", 20, 5),
             new("Nikos", 6, 5),
-            new("Tintin", 20, 8), 
+            new("Tintin", 20, 8),
         ];
 
         public Wearable[] wears =
