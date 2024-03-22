@@ -7,6 +7,7 @@ namespace SaleAdventure3000.Entities
     {
         public Entity[,] gameBoard = new Entity[22, 22];
 
+        // Array som innehåller alla NPCs på kartan, samt deras positioner. Samma för Wearables samt Consumables nedan.
         public NPC[] npcs =
         [
             new("Nikos", 4, 1),
@@ -23,7 +24,7 @@ namespace SaleAdventure3000.Entities
             new("Olle", 8, 9),
             new("Ragnar", 20, 5),
             new("Nikos", 6, 5),
-            new("Tintin", 20, 8), //20, 8
+            new("Tintin", 20, 8),
         ];
 
         public Wearable[] wears =
@@ -51,7 +52,7 @@ namespace SaleAdventure3000.Entities
             new("Pie", 18, 7),
             new("Egg", 1, 14),
         ];
-        public Entity[] goal = 
+        public Entity[] goal = // "Målet" som gör att man vinner spelet.
             [new Obstacle("[+]") { PosX = 20, PosY = 7, SymbolColor = "#000000" } ];
         
         // Koordinater för "labyrinten", key representerar rad, values representerar kolumn.
@@ -80,7 +81,7 @@ namespace SaleAdventure3000.Entities
 
         public Grid(){ }
 
-        public void FillGrid(Entity[,] gameBoard)
+        public void FillGrid(Entity[,] gameBoard) // Fyller gameboard
         {
             for (int i = 0; i < gameBoard.GetLength(0); i++)
             {
@@ -126,8 +127,7 @@ namespace SaleAdventure3000.Entities
                     };
                 }
             }
-            // GOAL
-            gameBoard[20, 7] = goal[0];
+            gameBoard[20, 7] = goal[0]; // GOAL
         }
         // Metod som ritar upp det GameBoard man skickat in som parameter.
         public static void DrawGameBoard(Entity[,] gameBoard)

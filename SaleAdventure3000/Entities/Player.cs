@@ -6,6 +6,8 @@ namespace SaleAdventure3000.Entities
     public class Player : Creature
     {
         public bool Run = true;
+
+        // Variabler för stats, halvfärdigt.
         private int evasion;
         private int armor;
         private int luck;
@@ -28,6 +30,7 @@ namespace SaleAdventure3000.Entities
             this.BackgroundColor = "#968c4a";
         }
 
+        // Metod för att röra spelaren, kollar bland annat kollision med fiender/items, kallar metoder för att plocka upp items till bag samt 
         public void MovePlayer(Entity[,] gameBoard, int firstX, int firstY, Player player, Grid grid)
         {
             // Startposition för spelaren anges när metoden anropas.
@@ -47,8 +50,6 @@ namespace SaleAdventure3000.Entities
             string horizontalWall = "===";
             string verticalWall = " | ";
 
-
-
             while (Run)
             {
                 bagChoice = "";
@@ -58,19 +59,20 @@ namespace SaleAdventure3000.Entities
                 oldPos = (player.PosX, player.PosY);
                 if (gameBoard[PosX, PosY].CanPass == true)
                 {
-                    // Ersätter spelarens gamla position med ett -
-                    gameBoard[PosX, PosY] = new Obstacle(" - ")
+                    gameBoard[PosX, PosY] = new Obstacle(" - ") // Ersätter spelarens gamla position med ett -
                     {
                         BackgroundColor = pathColor
                     };
                 }
                 if (keyInfo.Key == ConsoleKey.Q)
                 {
+                    // Avslutar loopen, sätter Run till false vilket gör så man kommer till huvudmeny.
                     player.Run = false;
                     break;
                 }
                 else if (keyInfo.Key == ConsoleKey.B)
                 {
+                    // Printar bag meny, valet skickas tillbaka som sträng till variabeln bagChoice.
                     bagChoice = MenuOperations.
                         PrintBagMenuAndReturnChoice(player);
                     if (bagChoice == "Close Bag")
@@ -79,6 +81,7 @@ namespace SaleAdventure3000.Entities
                     }
                     chosenItem = OpenBag(player, bagChoice);
                 }
+                // Spagetti för movement följer nedan.
                 else if ((keyInfo.Key == ConsoleKey.UpArrow ||
                     keyInfo.Key == ConsoleKey.W) && PosX > 1)
                 {
@@ -152,31 +155,29 @@ namespace SaleAdventure3000.Entities
                         }
                     }
                 }
+
                 // Ifall man springer från ett encounter får man tillbaka siffran 3, som används
                 // nedan för att ta tillbaka spelaren till sin gamla position och NPC står kvar.
                 int playerEscape = Mechanics.ControlCollision(gameBoard, player, grid);
                 if (playerEscape != 3)
                 {
-                    // Ändrar spelarens position och ritar upp gameBoard igen.
+                    // Lyckad förflyttning. Ändrar spelarens position och ritar upp gameBoard igen.
                     gameBoard = Mechanics.ChangePosition(gameBoard, player);
                 }
-                else
+                else // Hoppar tillbaka till gammal position.
                 {
-                    // Hoppar tillbaka till gammal position.
                     player.PosX = oldPos.Item1;
                     player.PosY = oldPos.Item2;
                     gameBoard = Mechanics.ChangePosition(gameBoard, player);
                 }
-                if (bagChoice == "")
+                if (bagChoice == "") // Ifall bagChoice är tom så vet vi att vi inte valt något item från Bag.
                 {
-                    // Ifall bagChoice är tom så vet vi att vi inte valt något item från Bag.
-                    Grid.DrawGameBoard(gameBoard);
+                    Grid.DrawGameBoard(gameBoard); 
                     Console.WriteLine("");
                     MenuOperations.PrintGameInfo(player);
                 }
-                else
+                else // Annars skickas det valda itemet in i metoden nedan.
                 {
-                    // Annars skickas det valda itemet in i metoden nedan.
                     Grid.DrawGameBoard(gameBoard);
                     Console.WriteLine("");
                     MenuOperations.PrintGameInfo(player, chosenItem);
@@ -218,10 +219,11 @@ namespace SaleAdventure3000.Entities
             }
             return (new Item(), 0.0);
         }
+        // Metod som sköter vad som händer när man äter en Consumable.
         public static double Consume(Player player, Item item)
         {
             double healedHP = player.HP;
-            double maxHP = 100 + player.boostedHP;
+            double maxHP = 100 + player.boostedHP; // HP kan inte överstiga spelarens maxhp.
             if (player.HP <= 100)
             {
                 player.HP = Math.Min(100, player.HP + item.HealAmount);
@@ -251,9 +253,8 @@ namespace SaleAdventure3000.Entities
             // grundvärde för HealAmount.
             return healedHP;
         }
-        public static void Unequip(Player player, Item item)
+        public static void Unequip(Player player, Item item) // Ta av wearable.
         {
-            //MenuOperations.PrintGameInfo(player, "Unequip", item);
             item.Equipped = false;
             player.HP -= item.HpBoost;
             player.boostedHP -= item.HpBoost;
@@ -262,9 +263,8 @@ namespace SaleAdventure3000.Entities
             player.Armor -= item.Armor;
             player.Luck -= item.Luck;
         }
-        public static void Equip(Player player, Item item)
+        public static void Equip(Player player, Item item) // Ta på wearable.
         {
-            //MenuOperations.PrintGameInfo(player, "Equip", item);
             item.Equipped = true;
             player.HP += item.HpBoost;
             player.boostedHP += item.HpBoost;
@@ -273,9 +273,7 @@ namespace SaleAdventure3000.Entities
             player.Armor += item.Armor;
             player.Luck += item.Luck;
         }
-
-        // Getter för spelarens bag, eftersom bagen är private och inte synlig utanför
-        // klassen player.
+        // Get/Set
         public Dictionary<Item, int> GetBag()
         {
             return this.Bag;

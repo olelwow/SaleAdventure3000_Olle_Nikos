@@ -6,12 +6,15 @@
         private int power;
         
         public Creature() { }
+
+        // Metoder som underlättar vid skapandet av Entities.
         public override void EntitySelection(string name, string type)
         {
         }
         public override void EntitySelection(string name)
         {
         }
+        // Get/Set
         public double HP
         {
             get { return this.hP; }

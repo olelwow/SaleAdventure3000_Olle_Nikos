@@ -17,7 +17,7 @@ namespace SaleAdventure3000.Entities
         public abstract void EntitySelection(string name);
 
         // Override metod som gör det möjligt att betrakta två objekt som lika
-        // Ifall de delar samma Name.
+        // Ifall de delar samma Symbol.
         public override bool Equals(object? obj)
         {
             if (obj == null || GetType() != obj.GetType())
@@ -30,12 +30,16 @@ namespace SaleAdventure3000.Entities
         }
         public override int GetHashCode()
         {
-            if (symbol != null)
+            // Med unchecked så kastas ett exception ifall värdet går över maxvärde för int.
+            unchecked
             {
-                return symbol.GetHashCode();
+                int hash = 17;
+                // Ifall Symbol inte är null returneras hash * 23 + symbolens hashcode, annars returneras 0 vilket innebär inte lika.
+                hash = hash * 23 + (symbol != null ? symbol.GetHashCode() : 0);
+                return hash;
             }
-            return -1;
         }
+        // Get/Set
         public int PosX
         {
             get { return this.posX ; }
