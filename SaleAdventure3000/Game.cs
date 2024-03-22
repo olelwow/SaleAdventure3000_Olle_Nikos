@@ -8,11 +8,10 @@ namespace SaleAdventure3000
         {
             Console.Clear();
             Grid gameGrid = new();
-            // Skapar nytt player objekt med det namn man loggat in med.
-            Player player = new(username);
+            Player player = new(username); // Skapar nytt player objekt med det namn man loggat in med.
 
-            // Fyller gameBoard och ritar upp gameBoard.
-            gameGrid.FillGrid(gameGrid.gameBoard);
+            gameGrid.FillGrid(gameGrid.gameBoard); // Fyller gameBoard och ritar upp gameBoard.
+
             // Loop som körs tills man trycker på q vilket ändrar variabeln Run till false.
             while (player.Run)
             {

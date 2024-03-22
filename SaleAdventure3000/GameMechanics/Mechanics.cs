@@ -4,6 +4,7 @@ using SaleAdventure3000.Items;
 
 namespace SaleAdventure3000.GameMechanics
 {
+    // Abstrakt klass som håller spelets Mechanics såsom kollision, encounters osv.
     public abstract class Mechanics
     {
         public static int ControlCollision(Entity[,] gameBoard, Player player, Grid grid)
@@ -65,8 +66,7 @@ namespace SaleAdventure3000.GameMechanics
             }
             return 1;
         }
-
-        public static void GameWon(Player player)
+        public static void GameWon(Player player) // Kallas när spelaren når målet.
         {
             MenuOperations.ScoreBoardReg(player);
             Console.Clear();
@@ -75,18 +75,18 @@ namespace SaleAdventure3000.GameMechanics
             Console.ReadLine();
             player.Run = false;
         }
-
-        public static int Encounter(NPC npc, Player player)
+        public static int Encounter(NPC npc, Player player) // Metod för encounter med fiender.
         {
             bool run = true;
             while (run)
             {
-                // Kontrollerar med hjälp av metoden Death i Operations ifall antingen spelare
+                // Kontrollerar med hjälp av metoden Death ifall antingen spelare
                 // eller NPC har dött och skickar tillbaka rätt sträng för utskrift.
                 string? death = npc.HP < 1 || player.HP < 1
                                  ? Death(player, npc)
                                  : null;
-                if (death != null)
+
+                if (death != null) // Ifall spelaren dött så avslutas spelet..
                 {
                     Console.Clear();
                     MenuOperations.DisplayFightImages(death, player, npc);
@@ -114,7 +114,7 @@ namespace SaleAdventure3000.GameMechanics
                     {
                         case 1:
                             string playerResult = computerChoice == 2
-                                                  ? Block(npc, player)
+                                                  ? Block(npc, player) // Kollar om NPC blockerar eller ej.
                                                   : Attack(player, npc);
 
                             Console.WriteLine(playerResult);
@@ -133,22 +133,21 @@ namespace SaleAdventure3000.GameMechanics
                             return 3;
 
                         case 4:
-                            string bagChoice = MenuOperations.PrintBagMenuAndReturnChoice(player);
+                            string bagChoice = MenuOperations.PrintBagMenuAndReturnChoice(player); // Öppna bag under fighten.
                             Player.OpenBag(player, bagChoice);
                             break;
                     }
-                    //NPCs tur att agera mot spelaren
-                    switch (computerChoice)
+                    switch (computerChoice) //NPCs tur att agera mot spelaren
                     {
                         case 1:
-                            if (choice == 3)
+                            if (choice == 3) // Om spelaren flyr, break.
                             {
                                 break;
                             }
                             else
                             {
-                                string computerResult = choice == 2
-                                                        ? Block(player, npc)
+                                string computerResult = choice == 2 
+                                                        ? Block(player, npc) // Kollar om Player blockerar eller ej.
                                                         : Attack(npc, player);
                                 Console.WriteLine(computerResult);
                                 Console.ReadLine();
@@ -170,7 +169,7 @@ namespace SaleAdventure3000.GameMechanics
         }
 
         // Denna metod tar in gameboard samt position,
-        // och returnerar ett nytt gameboard med spelarens nya position.
+        // och returnerar ett gameboard med spelarens nya position.
         public static Entity[,] ChangePosition(Entity[,] gameBoard, Player player)
         {
             gameBoard[player.PosX, player.PosY] = player;
@@ -179,7 +178,8 @@ namespace SaleAdventure3000.GameMechanics
 
         /* Attack metoderna tar in player stats och npc stats
          * och tar bort HP från resp karaktär.
-         * Första Attack är spelarens metod och andra är Npcs metod 
+         * Första Attack är spelarens metod och andra är Npcs metod
+         * Vilken som används beror alltså på vilket objekt som skickas först i parametrarna.
          */
         public static string Attack(Player player, NPC npc)
         {
@@ -199,9 +199,8 @@ namespace SaleAdventure3000.GameMechanics
             }
             return "";
         }
-        public static string Attack(NPC npc, Player player)
+        public static string Attack(NPC npc, Player player) // Metod som sköter NPCs attack, ifall npc redan dött returneras en tom sträng.
         {
-            // Metod som sköter NPCs attack, ifall npc redan dött returneras en tom sträng.
             if (npc.HP > 0)
             {
                 double powerAfterRoll;
