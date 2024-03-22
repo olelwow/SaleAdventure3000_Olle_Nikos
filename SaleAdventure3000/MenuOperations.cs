@@ -59,7 +59,7 @@ namespace SaleAdventure3000
             bool run = true;
             Console.Write("Pick a name: ");
             string? chosenName = Console.ReadLine();
-            while (chosenName == null || chosenName.Length < 3)
+            while (chosenName == null || chosenName.Length < 3) // vilkor för namn att bli godkänd 
             {
                 Console.WriteLine("Invalid name, must be at least 3 characters long");
                 Console.Write("Pick a name: ");
@@ -69,7 +69,7 @@ namespace SaleAdventure3000
             {
                 for (int i = 0; i < lines.Length; i++)
                 {
-                    if (chosenName != null && lines[i].Contains(chosenName))
+                    if (chosenName != null && lines[i].Contains(chosenName)) // kontroll om namnet finns redan i filen
                     {
                         Console.WriteLine("Name is already taken");
                         Console.Write("Pick a name: ");
@@ -84,7 +84,7 @@ namespace SaleAdventure3000
                     }
                 }
             }
-            if (found == false && !(chosenName == null || chosenName.Length < 3))
+            if (found == false && !(chosenName == null || chosenName.Length < 3)) // Skriver in namnet i filen 
             {
                 StreamWriter stream = new(@"../../../Login.txt", true);
                 stream.WriteLine($"Name : {chosenName}");
@@ -94,7 +94,7 @@ namespace SaleAdventure3000
             }
         }
 
-        // i denna metod kontrolleras om spelarens namn finns redan i txt filen och börjar spelet
+        // Metod som kontrollerar om spelarens namn finns redan i txt filen och börjar spelet
         public static void Login()
         {
             Console.Clear();
@@ -126,10 +126,10 @@ namespace SaleAdventure3000
                 Console.WriteLine("\n\tLogin success");
                 LoadingGame();
                 Thread.Sleep(1300);
-                Game.StartGame(username);
+                Game.StartGame(username); // username följer spelaren tills man kommer ut i main meny
             }
         }
-        //Scoreboard metoden skriver ut scoreboard av alla spelare som har spelat
+        //Scoreboard metoden skriver ut scoreboard av alla spelare som har spelat med den högsta score
         internal static void Scoreboard()
         {
             string[] lines = File.ReadAllLines(@"../../../Scoreboard.txt");
@@ -160,7 +160,7 @@ namespace SaleAdventure3000
             return choice[displayMenu];
         }
 
-        /*I denna metod hämtar vi registrerat scoreboard.
+        /*I denna metod (vvv) hämtar vi registrerat scoreboard.
          *Populerar vi 2 listor med scoreboard och itererar en av de.
          *Sen händer jämförelse mellan nuvarande score och registrerat score.
          *I den icke-iterations lista ersätter vi data enligt jämförelse och 
@@ -277,7 +277,8 @@ namespace SaleAdventure3000
                 },
                 {Tuple.Create(false, false), ReturnHealingWithColor(player, t)}
             };
-            foreach (var message in gameMessages) 
+            // Loop som går genom Dictionary och skriver ut rätt egenskaper efter item
+            foreach (var message in gameMessages)
             {
                 if ((message.Key.Item1 == true && message.Key.Item2 == true) &&
                     (t.item.Wear == true && t.item.Equipped == true))
@@ -330,7 +331,7 @@ namespace SaleAdventure3000
                    : "    " + $"{player.Name, 10}".Trim() + $" eats a " + $"{t.item.Name, 9}".Trim() + ". " +
                    $"It heals for [green]{t.heal, 2:F0}[/] HP.";
         }
-        // Loadingscreen
+        // Loadingscreen som använder Spectre.Console att simulera Loading skärm.
         public static void LoadingGame ()
         {
             string[] values = ["[grey]   LOG:[/] [gold3]Loading npcs...[/]", "[grey]   LOG:[/] [greenyellow]Increasing difficulty...[/]",
@@ -354,6 +355,8 @@ namespace SaleAdventure3000
             });
             Console.CursorVisible = true;
         }
+
+        // Resten av metoderna nedanför är för att rita ut bilder och iconer.
         public static void DisplayFightImages (Player player, NPC npc)
         {
             // Skapar nytt table med kolumner för spelare och NPC.
