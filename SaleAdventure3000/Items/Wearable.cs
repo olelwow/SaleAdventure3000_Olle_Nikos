@@ -4,7 +4,9 @@ namespace SaleAdventure3000.Items
 {
     public class Wearable : Item
     {
-        
+        // Arrays för Wearables som innehåller deras symboler, namn och typ.
+        // Dictionary används för att avgöra vilken kombination har plockats
+        // och assigna relevanta stats som Luck, Evasion och Armor.
         private readonly string[] symbols = [" H ", " B ", " L "];
         private readonly string[] names = ["Helmet", "Body", "Legs"];
         private readonly string[] types = ["Leather", "Plate", "Cloth"];
@@ -20,11 +22,14 @@ namespace SaleAdventure3000.Items
             {"LeatherBody", [10, 10] },
             {"LeatherLegs", [7, 7] },
         };
-       
+
+       // Kontrollerar om Wearable är på spelaren(eq = equiped)
         public Wearable(bool eq) 
         {
             this.Equipped = eq;
         }
+        
+        // Constructor som assigna symbolens färg.
         public Wearable(string name, string type, int posX, int posY)
         {
             EntitySelection(name, type);
@@ -44,15 +49,12 @@ namespace SaleAdventure3000.Items
             }
             this.Wear = true;
         }
-        public Wearable (string name, string type)
-        {
-            EntitySelection(name, type);
-            this.Wear = true;
-        }
+        
         public override void EntitySelection(string name, string type)
         {
             string typeName = type + name;
             // Metod som väljer rätt egenskaper beroende på vilket namn man skrivit in i konstruktorn.
+            // Val av typen och namn sker genom att kolla i Dictionary
             for (int i = 0; i < names.Length; i++)
             {
                 if (name == names[i])
@@ -92,6 +94,7 @@ namespace SaleAdventure3000.Items
             }
         }
 
+        //Metoden som skriver ut vad spelaren har plockat upp och adderar Items stats till spelaren
         public override void OnPickup (Item item, Player player)
         {
             Console.WriteLine($"{player.Name} equips " +
@@ -106,7 +109,7 @@ namespace SaleAdventure3000.Items
             player.Evasion += item.Evasion;
             player.Armor += item.Armor;
             item.Equipped = true;
-            AddToBag(item, player);
+            AddToBag(item, player); // Item kommer i in inventory/bag
         }
         
     }

@@ -22,6 +22,8 @@ namespace SaleAdventure3000.Items
         public virtual void OnPickup (Item item, Player player)
         {
         }
+
+        // Metod som addera item till inventory/bag
         public static void AddToBag (Item item, Player player)
         {
             Dictionary<Item,int> bag = player.GetBag();
@@ -39,6 +41,8 @@ namespace SaleAdventure3000.Items
                 */
             }
         }
+
+        // Override metoder som kommer från Entity classen
         public override void EntitySelection(string name, string type)
         {
         }
@@ -46,6 +50,7 @@ namespace SaleAdventure3000.Items
         {
         }
 
+        //Getters/Setters
         public int HealAmount
         {
             get { return this.healAmount; }
